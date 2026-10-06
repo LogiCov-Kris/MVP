@@ -1,0 +1,11 @@
+{
+  "logicov": {
+    "host": "0.0.0.0",
+    "port": 8300,
+    "db": {
+      "url": "jdbc:postgresql://127.0.0.1:25432/logicov",
+      "user": "logicov",
+      "password": "logicov-dev"
+    }
+  }
+}

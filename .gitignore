@@ -1,0 +1,13 @@
+target/
+.bsp/
+.idea/
+.metals/
+.bloop/
+.vscode/
+logs/
+app/out/
+poc/samples/
+poc/out/
+*.log
+quote/
+docs/
