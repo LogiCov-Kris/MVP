@@ -1,0 +1,91 @@
+{
+  "ticker": "WLK",
+  "cik": 1262823,
+  "support": "ControllingHolder",
+  "supportBasis": "Chao family, about 72.5% voting control through TTWF LP and TTWFGP LLC (discovery call); not a guarantee",
+  "priceLinkedSegments": [
+    "Performance and Essential Materials"
+  ],
+  "commodityModifier": null,
+  "customerOverTenPercent": false,
+  "concentration": null,
+  "ebitda": {
+    "ltmField": null,
+    "releaseLabel": "EBITDA excl. Identified Items",
+    "spread": null
+  },
+  "covenantIndicative": true,
+  "ratingOverride": null,
+  "stressScenarios": [
+    {
+      "name": "Base — FY2025 EBITDA excluding Identified Items",
+      "ebitdaChange": 0,
+      "ebitdaDelta": 0,
+      "addedDebt": 0,
+      "reverseToCovenant": false
+    },
+    {
+      "name": "Severe — housing stall and trough spreads, FY2025 less 20%",
+      "ebitdaChange": -0.2,
+      "ebitdaDelta": 0,
+      "addedDebt": 0,
+      "reverseToCovenant": false
+    },
+    {
+      "name": "Combined — severe plus $1.0 bn debt-funded bolt-on",
+      "ebitdaChange": -0.2,
+      "ebitdaDelta": 0,
+      "addedDebt": 1000,
+      "reverseToCovenant": false
+    },
+    {
+      "name": "Reverse stress to the indicative 3.5x",
+      "ebitdaChange": 0,
+      "ebitdaDelta": 0,
+      "addedDebt": 0,
+      "reverseToCovenant": true
+    },
+    {
+      "name": "EBITDA down 30%",
+      "ebitdaChange": -0.3,
+      "ebitdaDelta": 0,
+      "addedDebt": 0,
+      "reverseToCovenant": false
+    },
+    {
+      "name": "EBITDA down 40%",
+      "ebitdaChange": -0.4,
+      "ebitdaDelta": 0,
+      "addedDebt": 0,
+      "reverseToCovenant": false
+    }
+  ],
+  "proForma": {
+    "event": "S&P 2026E EBITDA path (agency forecast, about $1,650 million)",
+    "cashChange": 0,
+    "debtChange": 0,
+    "ebitda": 1650,
+    "source": {
+      "document": "S&P research update, 18 Feb 2026",
+      "type": "Source.Filing"
+    }
+  },
+  "peers": [
+    {
+      "ticker": "LYB",
+      "ratings": "—"
+    },
+    {
+      "ticker": "EMN",
+      "ratings": "—"
+    }
+  ],
+  "agencyUpdates": [
+    {
+      "house": "Moody's",
+      "outlook": null,
+      "asOf": "November 2025 notes issuance",
+      "source": "Discovery call transcript"
+    }
+  ]
+}

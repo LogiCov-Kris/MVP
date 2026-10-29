@@ -1,0 +1,118 @@
+name: Build and verify
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  verify:
+    if: github.ref == 'refs/heads/master'
+    environment: dev
+    concurrency:
+      group: deploy-dev
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: logicov_m1_test
+          POSTGRES_USER: logicov
+          POSTGRES_PASSWORD: logicov-ci
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U logicov -d logicov_m1_test"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+      GCP_PROJECT_ID: logicov
+      GCP_REGION: us-central1
+      GCP_SERVICE: logicov-dev
+      IMAGE_REPOSITORY: us-central1-docker.pkg.dev/logicov/logicov-dev/server
+      LOGICOV_AUTH_TESTS: '1'
+      LOGICOV_DB_URL: jdbc:postgresql://127.0.0.1:5432/logicov_m1_test
+      LOGICOV_DB_USER: logicov
+      LOGICOV_DB_PASSWORD: logicov-ci
+    steps:
+      - uses: actions/checkout@v4
+      - uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: projects/469625584366/locations/global/workloadIdentityPools/logicov-dev-github/providers/github
+          service_account: logicov-dev-deploy@logicov.iam.gserviceaccount.com
+          project_id: logicov
+      - uses: google-github-actions/setup-gcloud@v3
+      - name: Install reviewed binary dependencies
+        env:
+          DEPENDENCIES_SHA256: be83d66dad6f046b042b1d0e58659b7e90cc17272221bf589c2e9e20aa84afe4
+        run: |
+          mkdir -p target/build-dependencies
+          gcloud storage cp "gs://logicov-logicov-dev-build-dependencies/$DEPENDENCIES_SHA256.tar.gz" target/build-dependencies/dependencies.tar.gz
+          python3 deploy/install-dependencies.py target/build-dependencies/dependencies.tar.gz "$DEPENDENCIES_SHA256" "$HOME/.ivy2"
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: sbt/setup-sbt@v1
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: '1.14.0'
+      - name: Infrastructure validation
+        run: |
+          terraform -chdir=deploy/terraform fmt -check
+          terraform -chdir=deploy/terraform init -backend=false -lockfile=readonly
+          terraform -chdir=deploy/terraform validate
+          terraform -chdir=deploy/terraform test
+          for script in deploy/*.sh; do bash -n "$script"; done
+      - name: Compile and test
+        run: sbt --server -batch 'coreJs/compile; server/testFull; app/compile'
+      - name: Package frontend and backend
+        run: ./deploy/package.sh
+      - name: Build runtime image
+        run: docker build --file deploy/Dockerfile --tag "logicov:$GITHUB_SHA" target/runtime
+      - name: Install browser test tooling
+        run: |
+          npm install --prefix target/browser playwright@1.64.1
+          target/browser/node_modules/.bin/playwright install --with-deps chromium
+      - name: Provision test account
+        run: |
+          printf '%s\n' 'Local-smoke-password-123!' | target/runtime/bin/logicov-server -main logicov.auth.ProvisionApp 'Smoke tenant' 'smoke@example.test'
+          printf '%s\n' 'Local-smoke-password-123!' | target/runtime/bin/logicov-server -main logicov.auth.ProvisionApp 'Isolation tenant' 'isolation@example.test'
+      - name: Create ephemeral test encryption key
+        run: echo "LOGICOV_MASTER_KEY=$(openssl rand -base64 32)" >> "$GITHUB_ENV"
+      - name: Verify container login
+        env:
+          LOGICOV_OTHER_EMAIL: isolation@example.test
+          LOGICOV_TEST_EMAIL: smoke@example.test
+          LOGICOV_TEST_PASSWORD: Local-smoke-password-123!
+          LOGICOV_TEST_URL: http://127.0.0.1:18300
+          NODE_PATH: ./target/browser/node_modules
+        run: |
+          docker run -d --name logicov-smoke --network host -e PORT=18300 \
+            -e LOGICOV_DB_URL -e LOGICOV_DB_USER -e LOGICOV_DB_PASSWORD -e LOGICOV_MASTER_KEY "logicov:$GITHUB_SHA"
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent "$LOGICOV_TEST_URL/api/ready" >/dev/null; then break; fi
+            sleep 2
+          done
+          python3 deploy/smoke.py
+          node deploy/browser-smoke.cjs
+          node deploy/workspace-smoke.cjs
+          node deploy/profile-ui-smoke.cjs
+          docker stop logicov-smoke
+      - name: Container logs on failure
+        if: failure()
+        run: docker logs logicov-smoke 2>/dev/null || true
+      - name: Publish tested image privately
+        run: |
+          gcloud auth configure-docker "$GCP_REGION-docker.pkg.dev" --quiet
+          docker tag "logicov:$GITHUB_SHA" "$IMAGE_REPOSITORY:$GITHUB_SHA"
+          docker push "$IMAGE_REPOSITORY:$GITHUB_SHA"
+          digest=$(docker inspect "$IMAGE_REPOSITORY:$GITHUB_SHA" --format '{{json .RepoDigests}}' | python3 -c 'import json,os,sys; print(next(d for d in json.load(sys.stdin) if d.startswith(os.environ["IMAGE_REPOSITORY"] + "@")))')
+          echo "RELEASE_IMAGE=$digest" >> "$GITHUB_ENV"
+      - name: Migrate development database
+        run: |
+          gcloud run jobs update "$GCP_SERVICE-migrate" --image="$RELEASE_IMAGE" --project="$GCP_PROJECT_ID" --region="$GCP_REGION" --quiet
+          gcloud run jobs execute "$GCP_SERVICE-migrate" --project="$GCP_PROJECT_ID" --region="$GCP_REGION" --wait --quiet
+      - name: Deploy development service
+        run: ./deploy/release.sh "$RELEASE_IMAGE"

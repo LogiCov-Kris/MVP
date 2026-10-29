@@ -1,0 +1,3080 @@
+<?xml version='1.0' encoding='utf-8'?>
+<xbrl xmlns="http://www.xbrl.org/2003/instance" xmlns:dei="http://xbrl.sec.gov/dei/2025" xmlns:link="http://www.xbrl.org/2003/linkbase" xmlns:oxy="http://www.oxy.com/20251231" xmlns:us-gaap="http://fasb.org/us-gaap/2025" xmlns:xbrldi="http://xbrl.org/2006/xbrldi" xmlns:xlink="http://www.w3.org/1999/xlink" xml:lang="en-US">
+    <link:schemaRef xlink:href="oxy-20251231.xsd" xlink:type="simple" />
+    <context id="c-1">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-6">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-7">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-14">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-15">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-24">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:StatementEquityComponentsAxis">us-gaap:RetainedEarningsMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-39">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:StatementEquityComponentsAxis">us-gaap:RetainedEarningsMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-40">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:StatementEquityComponentsAxis">us-gaap:NoncontrollingInterestMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-52">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:StatementEquityComponentsAxis">us-gaap:RetainedEarningsMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-53">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:StatementEquityComponentsAxis">us-gaap:NoncontrollingInterestMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-73">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">oxy:OutsideOfNorthAmericaMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-95">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:OilReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-96">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:OilReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">us-gaap:NonUsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-97">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:OilReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-98">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:OilReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-99">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:NaturalGasLiquidsReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-100">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:NaturalGasLiquidsReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">us-gaap:NonUsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-101">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:NaturalGasLiquidsReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-102">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:NaturalGasLiquidsReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-103">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:NaturalGasReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-104">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:NaturalGasReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">us-gaap:NonUsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-105">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:NaturalGasReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-106">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:NaturalGasReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-107">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">us-gaap:ProductAndServiceOtherMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-108">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">us-gaap:ProductAndServiceOtherMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">us-gaap:NonUsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-109">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">us-gaap:ProductAndServiceOtherMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-110">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">us-gaap:ProductAndServiceOtherMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-111">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-112">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">us-gaap:NonUsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-113">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-114">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-115">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:MidstreamAndMarketingMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-116">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">us-gaap:NonUsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:MidstreamAndMarketingMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-117">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:MidstreamAndMarketingMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-118">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:MidstreamAndMarketingMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-119">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-120">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">us-gaap:NonUsMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-121">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-122">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-123">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">us-gaap:NonUsMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-124">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-125">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:OilReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-126">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:OilReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">us-gaap:NonUsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-127">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:OilReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-128">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:OilReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-129">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:NaturalGasLiquidsReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-130">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:NaturalGasLiquidsReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">us-gaap:NonUsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-131">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:NaturalGasLiquidsReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-132">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:NaturalGasLiquidsReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-133">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:NaturalGasReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-134">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:NaturalGasReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">us-gaap:NonUsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-135">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:NaturalGasReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-136">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:NaturalGasReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-137">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">us-gaap:ProductAndServiceOtherMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-138">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">us-gaap:ProductAndServiceOtherMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">us-gaap:NonUsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-139">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">us-gaap:ProductAndServiceOtherMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-140">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">us-gaap:ProductAndServiceOtherMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-141">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-142">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">us-gaap:NonUsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-143">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-144">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-145">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:MidstreamAndMarketingMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-146">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">us-gaap:NonUsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:MidstreamAndMarketingMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-147">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:MidstreamAndMarketingMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-148">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:MidstreamAndMarketingMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-149">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-150">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">us-gaap:NonUsMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-151">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-152">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-153">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">us-gaap:NonUsMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-154">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-155">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:OilReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-156">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:OilReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">us-gaap:NonUsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-157">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:OilReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-158">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:OilReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-159">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:NaturalGasLiquidsReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-160">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:NaturalGasLiquidsReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">us-gaap:NonUsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-161">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:NaturalGasLiquidsReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-162">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:NaturalGasLiquidsReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-163">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:NaturalGasReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-164">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:NaturalGasReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">us-gaap:NonUsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-165">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:NaturalGasReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-166">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">srt:NaturalGasReservesMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-167">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">us-gaap:ProductAndServiceOtherMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-168">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">us-gaap:ProductAndServiceOtherMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">us-gaap:NonUsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-169">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">us-gaap:ProductAndServiceOtherMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-170">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:ProductOrServiceAxis">us-gaap:ProductAndServiceOtherMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-171">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-172">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">us-gaap:NonUsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-173">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-174">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-175">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:MidstreamAndMarketingMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-176">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">us-gaap:NonUsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:MidstreamAndMarketingMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-177">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:MidstreamAndMarketingMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-178">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:MidstreamAndMarketingMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-179">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-180">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">us-gaap:NonUsMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-181">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:IntersegmentEliminationMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-182">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">country:US</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-183">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="srt:StatementGeographicalAxis">us-gaap:NonUsMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-184">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-197">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:EquityMethodInvestmentNonconsolidatedInvesteeAxis">us-gaap:EquityMethodInvestmentNonconsolidatedInvesteeOrGroupOfInvesteesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-198">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:EquityMethodInvestmentNonconsolidatedInvesteeAxis">us-gaap:EquityMethodInvestmentNonconsolidatedInvesteeOrGroupOfInvesteesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-199">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:EquityMethodInvestmentNonconsolidatedInvesteeAxis">us-gaap:EquityMethodInvestmentNonconsolidatedInvesteeOrGroupOfInvesteesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-203">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:RelatedPartyTransactionsByRelatedPartyAxis">us-gaap:RelatedPartyMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-204">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:RelatedPartyTransactionsByRelatedPartyAxis">us-gaap:RelatedPartyMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-205">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:RelatedPartyTransactionsByRelatedPartyAxis">us-gaap:RelatedPartyMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-247">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes5875PercentDue2025Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-248">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes5875PercentDue2025Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-249">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes5500PercentDue2025Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-250">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes5500PercentDue2025Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-251">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes5550PercentDue2026Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-252">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes5550PercentDue2026Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-253">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes3.400PercentDue2026Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-254">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes3.400PercentDue2026Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-257">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:TwoYearTermLoanDue2026Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SecuredDebtMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-258">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:TwoYearTermLoanDue2026Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SecuredDebtMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-259">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes3.200PercentDue2026Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-260">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes3.200PercentDue2026Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-261">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:Debentures7.500PercentDue2026Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">oxy:DebenturesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-262">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:Debentures7.500PercentDue2026Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">oxy:DebenturesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-263">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes8500PercentDue2027Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-264">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes8500PercentDue2027Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-265">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes3.000PercentDue2027Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-266">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes3.000PercentDue2027Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-267">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:Debentures7.125PercentDue2027Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">oxy:DebenturesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-268">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:Debentures7.125PercentDue2027Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">oxy:DebenturesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-269">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:Debentures7.000PercentDue2027Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">oxy:DebenturesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-270">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:Debentures7.000PercentDue2027Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">oxy:DebenturesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-271">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes5.000PercentDue2027Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-272">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes5.000PercentDue2027Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-273">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:Debentures6.625PercentDue2028Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">oxy:DebenturesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-274">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:Debentures6.625PercentDue2028Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">oxy:DebenturesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-275">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:Debentures7.150PercentDue2028Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">oxy:DebenturesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-276">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:Debentures7.150PercentDue2028Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">oxy:DebenturesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-277">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorDebentures7.200PercentDue2028Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-278">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorDebentures7.200PercentDue2028Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-279">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes6375PercentDue2028Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-280">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes6375PercentDue2028Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-281">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:Debentures7.200PercentDue2029Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">oxy:DebenturesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-282">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:Debentures7.200PercentDue2029Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">oxy:DebenturesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-283">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:Debentures7.950PercentDue2029Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">oxy:DebenturesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-284">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:Debentures7.950PercentDue2029Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">oxy:DebenturesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-285">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorDebentures8.450PercentDue2029Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-286">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorDebentures8.450PercentDue2029Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-287">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes3.500PercentDue2029Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-288">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes3.500PercentDue2029Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-289">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes5.200PercentDue2029Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-290">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes5.200PercentDue2029Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-291">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:VariableRateBondsDue2030Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">oxy:VariableRateBondsMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-292">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:VariableRateBondsDue2030Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">oxy:VariableRateBondsMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-293">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes8875PercentDue2030Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-294">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes8875PercentDue2030Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-295">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes6625PercentDue2030Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-296">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes6625PercentDue2030Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-297">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes6125PercentDue2031Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-298">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes6125PercentDue2031Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-299">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes7.500PercentDue2031Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-300">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes7.500PercentDue2031Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-301">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes7.875PercentDue2031Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-302">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes7.875PercentDue2031Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-303">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes5.375PercentDue2032Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-304">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes5.375PercentDue2032Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-305">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes5.550PercentDue2034Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-306">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes5.550PercentDue2034Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-307">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes6.450PercentDue2036Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-308">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes6.450PercentDue2036Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-309">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:ZeroCouponSeniorNotesDue2036Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-310">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:ZeroCouponSeniorNotesDue2036Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-311">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:A0.000PercentLoanDue2039Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SecuredDebtMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-312">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:A0.000PercentLoanDue2039Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SecuredDebtMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-313">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:A0.000PercentLoanDue2039Member</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-314">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:A0.000PercentLoanDue2039Member</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-315">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes4.300PercentDue2039Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-316">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes4.300PercentDue2039Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-317">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes7.950PercentDue2039Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-318">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes7.950PercentDue2039Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-319">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes6.200PercentDue2040Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-320">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes6.200PercentDue2040Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-321">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes4.500PercentDue2044Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-322">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes4.500PercentDue2044Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-323">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes4.625PercentDue2045Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-324">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes4.625PercentDue2045Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-325">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes6.600PercentDue2046Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-326">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes6.600PercentDue2046Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-327">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes4.400PercentDue2046Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-328">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes4.400PercentDue2046Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-329">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes4.100PercentDue2047Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-330">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes4.100PercentDue2047Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-331">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes4.200PercentDue2048Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-332">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes4.200PercentDue2048Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-333">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes4.400PercentDue2049Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-334">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes4.400PercentDue2049Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-335">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes6.050PercentDue2054Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-336">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:SeniorNotes6.050PercentDue2054Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:SeniorNotesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-337">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:Debentures7.730PercentDue2096Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">oxy:DebenturesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-338">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:Debentures7.730PercentDue2096Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">oxy:DebenturesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-339">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:Debentures7.500PercentDue2096Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">oxy:DebenturesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-340">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:Debentures7.500PercentDue2096Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">oxy:DebenturesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-341">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:Debentures7.250PercentDue2096Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">oxy:DebenturesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2025-12-31</instant>
+        </period>
+    </context>
+    <context id="c-342">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:DebtInstrumentAxis">oxy:Debentures7.250PercentDue2096Member</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">oxy:DebenturesMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-12-31</instant>
+        </period>
+    </context>
+    <context id="c-354">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="us-gaap:CreditFacilityAxis">us-gaap:RevolvingCreditFacilityMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:LongtermDebtTypeAxis">us-gaap:LineOfCreditMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <instant>2024-05-31</instant>
+        </period>
+    </context>
+    <context id="c-590">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">oxy:CorporateAndEliminationsMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-591">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">oxy:CorporateAndEliminationsMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-592">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">oxy:CorporateAndEliminationsMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-593">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">oxy:OtherOperatingSegmentsAndIntersegmentEliminationsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-594">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">oxy:OtherOperatingSegmentsAndIntersegmentEliminationsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-595">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">oxy:OtherOperatingSegmentsAndIntersegmentEliminationsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:OilAndGasSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-596">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">oxy:OtherOperatingSegmentsAndIntersegmentEliminationsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:MidstreamAndMarketingMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-597">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">oxy:OtherOperatingSegmentsAndIntersegmentEliminationsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:MidstreamAndMarketingMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-598">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000797468</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">oxy:OtherOperatingSegmentsAndIntersegmentEliminationsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">oxy:MidstreamAndMarketingMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <unit id="usd">
+        <measure>iso4217:USD</measure>
+    </unit>
+    <unit id="number">
+        <measure>pure</measure>
+    </unit>
+    <dei:DocumentPeriodEndDate contextRef="c-1" id="f-5">2025-12-31</dei:DocumentPeriodEndDate>
+    <us-gaap:Revenues contextRef="c-1" decimals="-6" id="f-147" unitRef="usd">21593000000</us-gaap:Revenues>
+    <us-gaap:Revenues contextRef="c-14" decimals="-6" id="f-148" unitRef="usd">22019000000</us-gaap:Revenues>
+    <us-gaap:Revenues contextRef="c-15" decimals="-6" id="f-149" unitRef="usd">23156000000</us-gaap:Revenues>
+    <us-gaap:DepreciationDepletionAndAmortization contextRef="c-1" decimals="-6" id="f-177" unitRef="usd">7533000000</us-gaap:DepreciationDepletionAndAmortization>
+    <us-gaap:DepreciationDepletionAndAmortization contextRef="c-14" decimals="-6" id="f-178" unitRef="usd">6951000000</us-gaap:DepreciationDepletionAndAmortization>
+    <us-gaap:DepreciationDepletionAndAmortization contextRef="c-15" decimals="-6" id="f-179" unitRef="usd">6449000000</us-gaap:DepreciationDepletionAndAmortization>
+    <oxy:PretaxAssetImpairmentAndRelatedItems contextRef="c-1" decimals="-6" id="f-180" unitRef="usd">60000000</oxy:PretaxAssetImpairmentAndRelatedItems>
+    <oxy:PretaxAssetImpairmentAndRelatedItems contextRef="c-14" decimals="-6" id="f-181" unitRef="usd">356000000</oxy:PretaxAssetImpairmentAndRelatedItems>
+    <oxy:PretaxAssetImpairmentAndRelatedItems contextRef="c-15" decimals="-6" id="f-182" unitRef="usd">209000000</oxy:PretaxAssetImpairmentAndRelatedItems>
+    <us-gaap:ExplorationExpense contextRef="c-1" decimals="-6" id="f-186" unitRef="usd">249000000</us-gaap:ExplorationExpense>
+    <us-gaap:ExplorationExpense contextRef="c-14" decimals="-6" id="f-187" unitRef="usd">275000000</us-gaap:ExplorationExpense>
+    <us-gaap:ExplorationExpense contextRef="c-15" decimals="-6" id="f-188" unitRef="usd">441000000</us-gaap:ExplorationExpense>
+    <us-gaap:InterestAndDebtExpense contextRef="c-1" decimals="-6" id="f-189" unitRef="usd">1079000000</us-gaap:InterestAndDebtExpense>
+    <us-gaap:InterestAndDebtExpense contextRef="c-14" decimals="-6" id="f-190" unitRef="usd">1169000000</us-gaap:InterestAndDebtExpense>
+    <us-gaap:InterestAndDebtExpense contextRef="c-15" decimals="-6" id="f-191" unitRef="usd">957000000</us-gaap:InterestAndDebtExpense>
+    <us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest contextRef="c-1" decimals="-6" id="f-204" unitRef="usd">3128000000</us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest>
+    <us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest contextRef="c-14" decimals="-6" id="f-205" unitRef="usd">4024000000</us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest>
+    <us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest contextRef="c-15" decimals="-6" id="f-206" unitRef="usd">4662000000</us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest>
+    <us-gaap:ProfitLoss contextRef="c-1" decimals="-6" id="f-216" unitRef="usd">2369000000</us-gaap:ProfitLoss>
+    <us-gaap:ProfitLoss contextRef="c-14" decimals="-6" id="f-217" unitRef="usd">3078000000</us-gaap:ProfitLoss>
+    <us-gaap:ProfitLoss contextRef="c-15" decimals="-6" id="f-218" unitRef="usd">4696000000</us-gaap:ProfitLoss>
+    <us-gaap:ProfitLoss contextRef="c-1" decimals="-6" id="f-246" unitRef="usd">2369000000</us-gaap:ProfitLoss>
+    <us-gaap:ProfitLoss contextRef="c-14" decimals="-6" id="f-247" unitRef="usd">3078000000</us-gaap:ProfitLoss>
+    <us-gaap:ProfitLoss contextRef="c-15" decimals="-6" id="f-248" unitRef="usd">4696000000</us-gaap:ProfitLoss>
+    <us-gaap:ProfitLoss contextRef="c-24" decimals="-6" id="f-278" unitRef="usd">4696000000</us-gaap:ProfitLoss>
+    <us-gaap:ProfitLoss contextRef="c-15" decimals="-6" id="f-279" unitRef="usd">4696000000</us-gaap:ProfitLoss>
+    <us-gaap:ProfitLoss contextRef="c-39" decimals="-6" id="f-315" unitRef="usd">3056000000</us-gaap:ProfitLoss>
+    <us-gaap:ProfitLoss contextRef="c-40" decimals="-6" id="f-316" unitRef="usd">22000000</us-gaap:ProfitLoss>
+    <us-gaap:ProfitLoss contextRef="c-14" decimals="-6" id="f-317" unitRef="usd">3078000000</us-gaap:ProfitLoss>
+    <us-gaap:ProfitLoss contextRef="c-52" decimals="-6" id="f-346" unitRef="usd">2326000000</us-gaap:ProfitLoss>
+    <us-gaap:ProfitLoss contextRef="c-53" decimals="-6" id="f-347" unitRef="usd">43000000</us-gaap:ProfitLoss>
+    <us-gaap:ProfitLoss contextRef="c-1" decimals="-6" id="f-348" unitRef="usd">2369000000</us-gaap:ProfitLoss>
+    <us-gaap:ProfitLoss contextRef="c-1" decimals="-6" id="f-373" unitRef="usd">2369000000</us-gaap:ProfitLoss>
+    <us-gaap:ProfitLoss contextRef="c-14" decimals="-6" id="f-374" unitRef="usd">3078000000</us-gaap:ProfitLoss>
+    <us-gaap:ProfitLoss contextRef="c-15" decimals="-6" id="f-375" unitRef="usd">4696000000</us-gaap:ProfitLoss>
+    <us-gaap:DepreciationDepletionAndAmortization contextRef="c-1" decimals="-6" id="f-379" unitRef="usd">7533000000</us-gaap:DepreciationDepletionAndAmortization>
+    <us-gaap:DepreciationDepletionAndAmortization contextRef="c-14" decimals="-6" id="f-380" unitRef="usd">6951000000</us-gaap:DepreciationDepletionAndAmortization>
+    <us-gaap:DepreciationDepletionAndAmortization contextRef="c-15" decimals="-6" id="f-381" unitRef="usd">6449000000</us-gaap:DepreciationDepletionAndAmortization>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-73" decimals="-8" id="f-529" unitRef="usd">4200000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-1" decimals="-6" id="f-683" unitRef="usd">21569000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-14" decimals="-6" id="f-684" unitRef="usd">22710000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-15" decimals="-6" id="f-685" unitRef="usd">23230000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:Revenues contextRef="c-1" decimals="-6" id="f-689" unitRef="usd">21593000000</us-gaap:Revenues>
+    <us-gaap:Revenues contextRef="c-14" decimals="-6" id="f-690" unitRef="usd">22019000000</us-gaap:Revenues>
+    <us-gaap:Revenues contextRef="c-15" decimals="-6" id="f-691" unitRef="usd">23156000000</us-gaap:Revenues>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-95" decimals="-6" id="f-693" unitRef="usd">14459000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-96" decimals="-6" id="f-694" unitRef="usd">2715000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-97" decimals="-6" id="f-695" unitRef="usd">0</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-98" decimals="-6" id="f-696" unitRef="usd">17174000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-99" decimals="-6" id="f-697" unitRef="usd">1897000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-100" decimals="-6" id="f-698" unitRef="usd">352000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-101" decimals="-6" id="f-699" unitRef="usd">0</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-102" decimals="-6" id="f-700" unitRef="usd">2249000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-103" decimals="-6" id="f-701" unitRef="usd">1017000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-104" decimals="-6" id="f-702" unitRef="usd">352000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-105" decimals="-6" id="f-703" unitRef="usd">0</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-106" decimals="-6" id="f-704" unitRef="usd">1369000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-107" decimals="-6" id="f-705" unitRef="usd">105000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-108" decimals="-6" id="f-706" unitRef="usd">5000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-109" decimals="-6" id="f-707" unitRef="usd">0</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-110" decimals="-6" id="f-708" unitRef="usd">110000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-111" decimals="-6" id="f-709" unitRef="usd">17478000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-112" decimals="-6" id="f-710" unitRef="usd">3424000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-113" decimals="-6" id="f-711" unitRef="usd">0</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-114" decimals="-6" id="f-712" unitRef="usd">20902000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-115" decimals="-6" id="f-713" unitRef="usd">546000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-116" decimals="-6" id="f-714" unitRef="usd">709000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-117" decimals="-6" id="f-715" unitRef="usd">0</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-118" decimals="-6" id="f-716" unitRef="usd">1255000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-119" decimals="-6" id="f-717" unitRef="usd">0</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-120" decimals="-6" id="f-718" unitRef="usd">0</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-121" decimals="-6" id="f-719" unitRef="usd">-588000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-121" decimals="-6" id="f-720" unitRef="usd">-588000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-122" decimals="-6" id="f-721" unitRef="usd">18024000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-123" decimals="-6" id="f-722" unitRef="usd">4133000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-121" decimals="-6" id="f-723" unitRef="usd">-588000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-124" decimals="-6" id="f-724" unitRef="usd">21569000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-125" decimals="-6" id="f-725" unitRef="usd">15604000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-126" decimals="-6" id="f-726" unitRef="usd">2940000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-127" decimals="-6" id="f-727" unitRef="usd">0</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-128" decimals="-6" id="f-728" unitRef="usd">18544000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-129" decimals="-6" id="f-729" unitRef="usd">1865000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-130" decimals="-6" id="f-730" unitRef="usd">390000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-131" decimals="-6" id="f-731" unitRef="usd">0</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-132" decimals="-6" id="f-732" unitRef="usd">2255000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-133" decimals="-6" id="f-733" unitRef="usd">514000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-134" decimals="-6" id="f-734" unitRef="usd">361000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-135" decimals="-6" id="f-735" unitRef="usd">0</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-136" decimals="-6" id="f-736" unitRef="usd">875000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-137" decimals="-6" id="f-737" unitRef="usd">29000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-138" decimals="-6" id="f-738" unitRef="usd">2000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-139" decimals="-6" id="f-739" unitRef="usd">0</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-140" decimals="-6" id="f-740" unitRef="usd">31000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-141" decimals="-6" id="f-741" unitRef="usd">18012000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-142" decimals="-6" id="f-742" unitRef="usd">3693000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-143" decimals="-6" id="f-743" unitRef="usd">0</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-144" decimals="-6" id="f-744" unitRef="usd">21705000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-145" decimals="-6" id="f-745" unitRef="usd">1164000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-146" decimals="-6" id="f-746" unitRef="usd">413000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-147" decimals="-6" id="f-747" unitRef="usd">0</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-148" decimals="-6" id="f-748" unitRef="usd">1577000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-149" decimals="-6" id="f-749" unitRef="usd">0</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-150" decimals="-6" id="f-750" unitRef="usd">0</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-151" decimals="-6" id="f-751" unitRef="usd">-572000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-151" decimals="-6" id="f-752" unitRef="usd">-572000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-152" decimals="-6" id="f-753" unitRef="usd">19176000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-153" decimals="-6" id="f-754" unitRef="usd">4106000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-151" decimals="-6" id="f-755" unitRef="usd">-572000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-154" decimals="-6" id="f-756" unitRef="usd">22710000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-155" decimals="-6" id="f-757" unitRef="usd">14893000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-156" decimals="-6" id="f-758" unitRef="usd">3057000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-157" decimals="-6" id="f-759" unitRef="usd">0</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-158" decimals="-6" id="f-760" unitRef="usd">17950000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-159" decimals="-6" id="f-761" unitRef="usd">1619000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-160" decimals="-6" id="f-762" unitRef="usd">372000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-161" decimals="-6" id="f-763" unitRef="usd">0</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-162" decimals="-6" id="f-764" unitRef="usd">1991000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-163" decimals="-6" id="f-765" unitRef="usd">970000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-164" decimals="-6" id="f-766" unitRef="usd">335000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-165" decimals="-6" id="f-767" unitRef="usd">0</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-166" decimals="-6" id="f-768" unitRef="usd">1305000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-167" decimals="-6" id="f-769" unitRef="usd">36000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-168" decimals="-6" id="f-770" unitRef="usd">2000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-169" decimals="-6" id="f-771" unitRef="usd">0</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-170" decimals="-6" id="f-772" unitRef="usd">38000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-171" decimals="-6" id="f-773" unitRef="usd">17518000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-172" decimals="-6" id="f-774" unitRef="usd">3766000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-173" decimals="-6" id="f-775" unitRef="usd">0</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-174" decimals="-6" id="f-776" unitRef="usd">21284000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-175" decimals="-6" id="f-777" unitRef="usd">2098000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-176" decimals="-6" id="f-778" unitRef="usd">409000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-177" decimals="-6" id="f-779" unitRef="usd">0</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-178" decimals="-6" id="f-780" unitRef="usd">2507000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-179" decimals="-6" id="f-781" unitRef="usd">0</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-180" decimals="-6" id="f-782" unitRef="usd">0</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-181" decimals="-6" id="f-783" unitRef="usd">-561000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-181" decimals="-6" id="f-784" unitRef="usd">-561000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-182" decimals="-6" id="f-785" unitRef="usd">19616000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-183" decimals="-6" id="f-786" unitRef="usd">4175000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-181" decimals="-6" id="f-787" unitRef="usd">-561000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax contextRef="c-184" decimals="-6" id="f-788" unitRef="usd">23230000000</us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax>
+    <us-gaap:ProfitLoss contextRef="c-197" decimals="-6" id="f-826" unitRef="usd">-342000000</us-gaap:ProfitLoss>
+    <us-gaap:ProfitLoss contextRef="c-198" decimals="-6" id="f-827" unitRef="usd">1555000000</us-gaap:ProfitLoss>
+    <us-gaap:ProfitLoss contextRef="c-199" decimals="-6" id="f-828" unitRef="usd">867000000</us-gaap:ProfitLoss>
+    <us-gaap:Revenues contextRef="c-203" decimals="-6" id="f-848" unitRef="usd">128000000</us-gaap:Revenues>
+    <us-gaap:Revenues contextRef="c-204" decimals="-6" id="f-849" unitRef="usd">146000000</us-gaap:Revenues>
+    <us-gaap:Revenues contextRef="c-205" decimals="-6" id="f-850" unitRef="usd">153000000</us-gaap:Revenues>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-247" decimals="INF" id="f-1051" unitRef="number">0.05875</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-248" decimals="INF" id="f-1052" unitRef="number">0.05875</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-247" decimals="-6" id="f-1053" unitRef="usd">0</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-248" decimals="-6" id="f-1054" unitRef="usd">536000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-249" decimals="INF" id="f-1055" unitRef="number">0.05500</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-250" decimals="INF" id="f-1056" unitRef="number">0.05500</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-250" decimals="-6" id="f-1057" unitRef="usd">0</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-249" decimals="-6" id="f-1058" unitRef="usd">465000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-251" decimals="INF" id="f-1059" unitRef="number">0.05550</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-252" decimals="INF" id="f-1060" unitRef="number">0.05550</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-251" decimals="-6" id="f-1061" unitRef="usd">0</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-252" decimals="-6" id="f-1062" unitRef="usd">870000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-253" decimals="INF" id="f-1063" unitRef="number">0.03400</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-254" decimals="INF" id="f-1064" unitRef="number">0.03400</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-253" decimals="-6" id="f-1065" unitRef="usd">0</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-254" decimals="-6" id="f-1066" unitRef="usd">284000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-257" decimals="INF" id="f-1069" unitRef="number">0.05475</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-258" decimals="INF" id="f-1070" unitRef="number">0.06249</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-257" decimals="-6" id="f-1071" unitRef="usd">1280000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-258" decimals="-6" id="f-1072" unitRef="usd">2700000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-259" decimals="INF" id="f-1073" unitRef="number">0.03200</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-260" decimals="INF" id="f-1074" unitRef="number">0.03200</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-260" decimals="-6" id="f-1075" unitRef="usd">182000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-259" decimals="-6" id="f-1076" unitRef="usd">182000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-261" decimals="INF" id="f-1077" unitRef="number">0.07500</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-262" decimals="INF" id="f-1078" unitRef="number">0.07500</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-262" decimals="-6" id="f-1079" unitRef="usd">112000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-261" decimals="-6" id="f-1080" unitRef="usd">112000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-263" decimals="INF" id="f-1081" unitRef="number">0.08500</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-264" decimals="INF" id="f-1082" unitRef="number">0.08500</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-263" decimals="-6" id="f-1083" unitRef="usd">489000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-264" decimals="-6" id="f-1084" unitRef="usd">489000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-265" decimals="INF" id="f-1085" unitRef="number">0.03000</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-266" decimals="INF" id="f-1086" unitRef="number">0.03000</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-265" decimals="-6" id="f-1087" unitRef="usd">216000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-266" decimals="-6" id="f-1088" unitRef="usd">216000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-267" decimals="INF" id="f-1089" unitRef="number">0.07125</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-268" decimals="INF" id="f-1090" unitRef="number">0.07125</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-268" decimals="-6" id="f-1091" unitRef="usd">150000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-267" decimals="-6" id="f-1092" unitRef="usd">150000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-269" decimals="INF" id="f-1093" unitRef="number">0.07000</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-270" decimals="INF" id="f-1094" unitRef="number">0.07000</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-269" decimals="-6" id="f-1095" unitRef="usd">48000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-270" decimals="-6" id="f-1096" unitRef="usd">48000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-271" decimals="INF" id="f-1097" unitRef="number">0.05000</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-272" decimals="INF" id="f-1098" unitRef="number">0.05000</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-272" decimals="-6" id="f-1099" unitRef="usd">600000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-271" decimals="-6" id="f-1100" unitRef="usd">600000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-273" decimals="INF" id="f-1101" unitRef="number">0.06625</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-274" decimals="INF" id="f-1102" unitRef="number">0.06625</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-273" decimals="-6" id="f-1103" unitRef="usd">14000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-274" decimals="-6" id="f-1104" unitRef="usd">14000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-275" decimals="INF" id="f-1105" unitRef="number">0.07150</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-276" decimals="INF" id="f-1106" unitRef="number">0.07150</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-275" decimals="-6" id="f-1107" unitRef="usd">232000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-276" decimals="-6" id="f-1108" unitRef="usd">232000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-277" decimals="INF" id="f-1109" unitRef="number">0.07200</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-278" decimals="INF" id="f-1110" unitRef="number">0.07200</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-278" decimals="-6" id="f-1111" unitRef="usd">82000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-277" decimals="-6" id="f-1112" unitRef="usd">82000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-279" decimals="INF" id="f-1113" unitRef="number">0.06375</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-280" decimals="INF" id="f-1114" unitRef="number">0.06375</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-279" decimals="-6" id="f-1115" unitRef="usd">578000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-280" decimals="-6" id="f-1116" unitRef="usd">578000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-281" decimals="INF" id="f-1117" unitRef="number">0.07200</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-282" decimals="INF" id="f-1118" unitRef="number">0.07200</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-282" decimals="-6" id="f-1119" unitRef="usd">135000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-281" decimals="-6" id="f-1120" unitRef="usd">135000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-283" decimals="INF" id="f-1121" unitRef="number">0.07950</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-284" decimals="INF" id="f-1122" unitRef="number">0.07950</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-283" decimals="-6" id="f-1123" unitRef="usd">116000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-284" decimals="-6" id="f-1124" unitRef="usd">116000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-285" decimals="INF" id="f-1125" unitRef="number">0.08450</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-286" decimals="INF" id="f-1126" unitRef="number">0.08450</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-285" decimals="-6" id="f-1127" unitRef="usd">116000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-286" decimals="-6" id="f-1128" unitRef="usd">116000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-287" decimals="INF" id="f-1129" unitRef="number">0.03500</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-288" decimals="INF" id="f-1130" unitRef="number">0.03500</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-288" decimals="-6" id="f-1131" unitRef="usd">286000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-287" decimals="-6" id="f-1132" unitRef="usd">286000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-289" decimals="INF" id="f-1133" unitRef="number">0.05200</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-290" decimals="INF" id="f-1134" unitRef="number">0.05200</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-289" decimals="-6" id="f-1135" unitRef="usd">1200000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-290" decimals="-6" id="f-1136" unitRef="usd">1200000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-291" decimals="-6" id="f-1139" unitRef="usd">68000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-292" decimals="-6" id="f-1140" unitRef="usd">68000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-293" decimals="INF" id="f-1141" unitRef="number">0.08875</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-294" decimals="INF" id="f-1142" unitRef="number">0.08875</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-294" decimals="-6" id="f-1143" unitRef="usd">1000000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-293" decimals="-6" id="f-1144" unitRef="usd">1000000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-295" decimals="INF" id="f-1145" unitRef="number">0.06625</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-296" decimals="INF" id="f-1146" unitRef="number">0.06625</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-295" decimals="-6" id="f-1147" unitRef="usd">1449000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-296" decimals="-6" id="f-1148" unitRef="usd">1449000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-297" decimals="INF" id="f-1149" unitRef="number">0.06125</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-298" decimals="INF" id="f-1150" unitRef="number">0.06125</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-297" decimals="-6" id="f-1151" unitRef="usd">1143000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-298" decimals="-6" id="f-1152" unitRef="usd">1143000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-299" decimals="INF" id="f-1153" unitRef="number">0.07500</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-300" decimals="INF" id="f-1154" unitRef="number">0.07500</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-300" decimals="-6" id="f-1155" unitRef="usd">900000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-299" decimals="-6" id="f-1156" unitRef="usd">900000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-301" decimals="INF" id="f-1157" unitRef="number">0.07875</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-302" decimals="INF" id="f-1158" unitRef="number">0.07875</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-302" decimals="-6" id="f-1159" unitRef="usd">500000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-301" decimals="-6" id="f-1160" unitRef="usd">500000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-303" decimals="INF" id="f-1161" unitRef="number">0.05375</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-304" decimals="INF" id="f-1162" unitRef="number">0.05375</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-304" decimals="-6" id="f-1163" unitRef="usd">1000000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-303" decimals="-6" id="f-1164" unitRef="usd">1000000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-305" decimals="INF" id="f-1165" unitRef="number">0.05550</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-306" decimals="INF" id="f-1166" unitRef="number">0.05550</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-305" decimals="-6" id="f-1167" unitRef="usd">1200000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-306" decimals="-6" id="f-1168" unitRef="usd">1200000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-307" decimals="INF" id="f-1169" unitRef="number">0.06450</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-308" decimals="INF" id="f-1170" unitRef="number">0.06450</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-308" decimals="-6" id="f-1171" unitRef="usd">1727000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-307" decimals="-6" id="f-1172" unitRef="usd">1727000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-309" decimals="-6" id="f-1173" unitRef="usd">285000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-310" decimals="-6" id="f-1174" unitRef="usd">673000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-311" decimals="INF" id="f-1175" unitRef="number">0.00000</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-312" decimals="INF" id="f-1176" unitRef="number">0.00000</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-313" decimals="-6" id="f-1177" unitRef="usd">17000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-314" decimals="-6" id="f-1178" unitRef="usd">18000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-315" decimals="INF" id="f-1179" unitRef="number">0.04300</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-316" decimals="INF" id="f-1180" unitRef="number">0.04300</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-316" decimals="-6" id="f-1181" unitRef="usd">247000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-315" decimals="-6" id="f-1182" unitRef="usd">247000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-317" decimals="INF" id="f-1183" unitRef="number">0.07950</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-318" decimals="INF" id="f-1184" unitRef="number">0.07950</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-317" decimals="-6" id="f-1185" unitRef="usd">325000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-318" decimals="-6" id="f-1186" unitRef="usd">325000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-319" decimals="INF" id="f-1187" unitRef="number">0.06200</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-320" decimals="INF" id="f-1188" unitRef="number">0.06200</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-319" decimals="-6" id="f-1189" unitRef="usd">737000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-320" decimals="-6" id="f-1190" unitRef="usd">737000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-321" decimals="INF" id="f-1191" unitRef="number">0.04500</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-322" decimals="INF" id="f-1192" unitRef="number">0.04500</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-321" decimals="-6" id="f-1193" unitRef="usd">191000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-322" decimals="-6" id="f-1194" unitRef="usd">191000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-323" decimals="INF" id="f-1195" unitRef="number">0.04625</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-324" decimals="INF" id="f-1196" unitRef="number">0.04625</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-324" decimals="-6" id="f-1197" unitRef="usd">296000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-323" decimals="-6" id="f-1198" unitRef="usd">296000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-325" decimals="INF" id="f-1199" unitRef="number">0.06600</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-326" decimals="INF" id="f-1200" unitRef="number">0.06600</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-325" decimals="-6" id="f-1201" unitRef="usd">1117000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-326" decimals="-6" id="f-1202" unitRef="usd">1117000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-327" decimals="INF" id="f-1203" unitRef="number">0.04400</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-328" decimals="INF" id="f-1204" unitRef="number">0.04400</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-327" decimals="-6" id="f-1205" unitRef="usd">424000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-328" decimals="-6" id="f-1206" unitRef="usd">424000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-329" decimals="INF" id="f-1207" unitRef="number">0.04100</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-330" decimals="INF" id="f-1208" unitRef="number">0.04100</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-330" decimals="-6" id="f-1209" unitRef="usd">258000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-329" decimals="-6" id="f-1210" unitRef="usd">258000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-331" decimals="INF" id="f-1211" unitRef="number">0.04200</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-332" decimals="INF" id="f-1212" unitRef="number">0.04200</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-332" decimals="-6" id="f-1213" unitRef="usd">304000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-331" decimals="-6" id="f-1214" unitRef="usd">304000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-333" decimals="INF" id="f-1215" unitRef="number">0.04400</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-334" decimals="INF" id="f-1216" unitRef="number">0.04400</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-333" decimals="-6" id="f-1217" unitRef="usd">280000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-334" decimals="-6" id="f-1218" unitRef="usd">280000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-335" decimals="INF" id="f-1219" unitRef="number">0.06050</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-336" decimals="INF" id="f-1220" unitRef="number">0.06050</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-336" decimals="-6" id="f-1221" unitRef="usd">1000000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-335" decimals="-6" id="f-1222" unitRef="usd">1000000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-337" decimals="INF" id="f-1223" unitRef="number">0.07730</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-338" decimals="INF" id="f-1224" unitRef="number">0.07730</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-337" decimals="-6" id="f-1225" unitRef="usd">58000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-338" decimals="-6" id="f-1226" unitRef="usd">58000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-339" decimals="INF" id="f-1227" unitRef="number">0.07500</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-340" decimals="INF" id="f-1228" unitRef="number">0.07500</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-339" decimals="-6" id="f-1229" unitRef="usd">60000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-340" decimals="-6" id="f-1230" unitRef="usd">60000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-341" decimals="INF" id="f-1231" unitRef="number">0.07250</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-342" decimals="INF" id="f-1232" unitRef="number">0.07250</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-341" decimals="-6" id="f-1233" unitRef="usd">5000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-342" decimals="-6" id="f-1234" unitRef="usd">5000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-6" decimals="-6" id="f-1235" unitRef="usd">20427000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-7" decimals="-6" id="f-1236" unitRef="usd">24391000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-7" decimals="-6" id="f-1260" unitRef="usd">24391000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-247" decimals="INF" id="f-1261" unitRef="number">0.05875</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-248" decimals="INF" id="f-1262" unitRef="number">0.05875</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-249" decimals="INF" id="f-1264" unitRef="number">0.05500</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-250" decimals="INF" id="f-1265" unitRef="number">0.05500</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-251" decimals="INF" id="f-1267" unitRef="number">0.05550</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-252" decimals="INF" id="f-1268" unitRef="number">0.05550</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-253" decimals="INF" id="f-1270" unitRef="number">0.03400</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentInterestRateStatedPercentage contextRef="c-254" decimals="INF" id="f-1271" unitRef="number">0.03400</us-gaap:DebtInstrumentInterestRateStatedPercentage>
+    <us-gaap:DebtInstrumentCarryingAmount contextRef="c-6" decimals="-6" id="f-1279" unitRef="usd">20427000000</us-gaap:DebtInstrumentCarryingAmount>
+    <us-gaap:LineOfCreditFacilityMaximumBorrowingCapacity contextRef="c-354" decimals="-7" id="f-1294" unitRef="usd">4150000000</us-gaap:LineOfCreditFacilityMaximumBorrowingCapacity>
+    <us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest contextRef="c-1" decimals="-6" id="f-1439" unitRef="usd">3128000000</us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest>
+    <us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest contextRef="c-14" decimals="-6" id="f-1440" unitRef="usd">4024000000</us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest>
+    <us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest contextRef="c-15" decimals="-6" id="f-1441" unitRef="usd">4662000000</us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest>
+    <us-gaap:ProfitLoss contextRef="c-1" decimals="-6" id="f-2121" unitRef="usd">2369000000</us-gaap:ProfitLoss>
+    <us-gaap:ProfitLoss contextRef="c-14" decimals="-6" id="f-2122" unitRef="usd">3078000000</us-gaap:ProfitLoss>
+    <us-gaap:ProfitLoss contextRef="c-15" decimals="-6" id="f-2123" unitRef="usd">4696000000</us-gaap:ProfitLoss>
+    <us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest contextRef="c-114" decimals="-6" id="f-2311" unitRef="usd">4586000000</us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest>
+    <us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest contextRef="c-144" decimals="-6" id="f-2312" unitRef="usd">5214000000</us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest>
+    <us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest contextRef="c-174" decimals="-6" id="f-2313" unitRef="usd">6240000000</us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest>
+    <us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest contextRef="c-118" decimals="-6" id="f-2314" unitRef="usd">252000000</us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest>
+    <us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest contextRef="c-148" decimals="-6" id="f-2315" unitRef="usd">563000000</us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest>
+    <us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest contextRef="c-178" decimals="-6" id="f-2316" unitRef="usd">-35000000</us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest>
+    <us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest contextRef="c-590" decimals="-6" id="f-2317" unitRef="usd">-631000000</us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest>
+    <us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest contextRef="c-591" decimals="-6" id="f-2318" unitRef="usd">-584000000</us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest>
+    <us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest contextRef="c-592" decimals="-6" id="f-2319" unitRef="usd">-586000000</us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest>
+    <us-gaap:InterestAndDebtExpense contextRef="c-1" decimals="-6" id="f-2320" unitRef="usd">1079000000</us-gaap:InterestAndDebtExpense>
+    <us-gaap:InterestAndDebtExpense contextRef="c-14" decimals="-6" id="f-2321" unitRef="usd">1169000000</us-gaap:InterestAndDebtExpense>
+    <us-gaap:InterestAndDebtExpense contextRef="c-15" decimals="-6" id="f-2322" unitRef="usd">957000000</us-gaap:InterestAndDebtExpense>
+    <us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest contextRef="c-1" decimals="-6" id="f-2323" unitRef="usd">3128000000</us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest>
+    <us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest contextRef="c-14" decimals="-6" id="f-2324" unitRef="usd">4024000000</us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest>
+    <us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest contextRef="c-15" decimals="-6" id="f-2325" unitRef="usd">4662000000</us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest>
+    <us-gaap:ProfitLoss contextRef="c-1" decimals="-6" id="f-2335" unitRef="usd">2369000000</us-gaap:ProfitLoss>
+    <us-gaap:ProfitLoss contextRef="c-14" decimals="-6" id="f-2336" unitRef="usd">3078000000</us-gaap:ProfitLoss>
+    <us-gaap:ProfitLoss contextRef="c-15" decimals="-6" id="f-2337" unitRef="usd">4696000000</us-gaap:ProfitLoss>
+    <us-gaap:Revenues contextRef="c-593" decimals="-6" id="f-2348" unitRef="usd">20902000000</us-gaap:Revenues>
+    <us-gaap:Revenues contextRef="c-594" decimals="-6" id="f-2349" unitRef="usd">21705000000</us-gaap:Revenues>
+    <us-gaap:Revenues contextRef="c-595" decimals="-6" id="f-2350" unitRef="usd">21284000000</us-gaap:Revenues>
+    <us-gaap:DepreciationDepletionAndAmortization contextRef="c-593" decimals="-6" id="f-2369" unitRef="usd">7115000000</us-gaap:DepreciationDepletionAndAmortization>
+    <us-gaap:DepreciationDepletionAndAmortization contextRef="c-594" decimals="-6" id="f-2370" unitRef="usd">6565000000</us-gaap:DepreciationDepletionAndAmortization>
+    <us-gaap:DepreciationDepletionAndAmortization contextRef="c-595" decimals="-6" id="f-2371" unitRef="usd">6112000000</us-gaap:DepreciationDepletionAndAmortization>
+    <us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest contextRef="c-593" decimals="-6" id="f-2384" unitRef="usd">4586000000</us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest>
+    <us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest contextRef="c-594" decimals="-6" id="f-2385" unitRef="usd">5214000000</us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest>
+    <us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest contextRef="c-595" decimals="-6" id="f-2386" unitRef="usd">6240000000</us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest>
+    <us-gaap:Revenues contextRef="c-596" decimals="-6" id="f-2387" unitRef="usd">1279000000</us-gaap:Revenues>
+    <us-gaap:Revenues contextRef="c-597" decimals="-6" id="f-2388" unitRef="usd">886000000</us-gaap:Revenues>
+    <us-gaap:Revenues contextRef="c-598" decimals="-6" id="f-2389" unitRef="usd">2433000000</us-gaap:Revenues>
+    <us-gaap:DepreciationDepletionAndAmortization contextRef="c-596" decimals="-6" id="f-2402" unitRef="usd">294000000</us-gaap:DepreciationDepletionAndAmortization>
+    <us-gaap:DepreciationDepletionAndAmortization contextRef="c-597" decimals="-6" id="f-2403" unitRef="usd">273000000</us-gaap:DepreciationDepletionAndAmortization>
+    <us-gaap:DepreciationDepletionAndAmortization contextRef="c-598" decimals="-6" id="f-2404" unitRef="usd">266000000</us-gaap:DepreciationDepletionAndAmortization>
+    <us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest contextRef="c-596" decimals="-6" id="f-2417" unitRef="usd">252000000</us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest>
+    <us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest contextRef="c-597" decimals="-6" id="f-2418" unitRef="usd">563000000</us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest>
+    <us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest contextRef="c-598" decimals="-6" id="f-2419" unitRef="usd">-35000000</us-gaap:IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest>
+    </xbrl>

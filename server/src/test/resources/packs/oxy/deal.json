@@ -1,0 +1,122 @@
+{
+  "ticker": "OXY",
+  "cik": 797468,
+  "support": "ControllingHolder",
+  "supportBasis": "Berkshire Hathaway preferred, $8.287 billion, 22.6% of total equity at YE2025 (discovery call); not a guarantee",
+  "priceLinkedSegments": [
+    "Oil and Gas",
+    "Midstream and Marketing"
+  ],
+  "commodityModifier": "hydrocarbons (crude oil, NGLs and natural gas)",
+  "customerOverTenPercent": false,
+  "concentration": {
+    "field": "2025 volumes",
+    "marker": "Permian",
+    "label": "Largest geographic concentration (Permian share of 2025 sales volumes)"
+  },
+  "ebitda": {
+    "ltmField": null,
+    "releaseLabel": null,
+    "spread": {
+      "base": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+      "addBacks": [
+        "InterestAndDebtExpense",
+        "DepreciationDepletionAndAmortization",
+        "ExplorationExpense",
+        "PretaxAssetImpairmentAndRelatedItems"
+      ]
+    }
+  },
+  "covenantIndicative": false,
+  "ratingOverride": {
+    "notches": -1,
+    "component": "Leverage and FCF; Industry",
+    "reason": "Two notches above S&P's BB+ is too great while the $10 billion principal-debt target is unmet ($11.818 billion at June 30, 2026), the Berkshire preferred is outstanding to 2029, and S&P's 45 percent FFO-to-debt condition is not yet shown",
+    "approvedBy": "Credit manager",
+    "date": "2026-10-07"
+  },
+  "stressScenarios": [
+    {
+      "name": "Base — FY2025 EBITDA",
+      "ebitdaChange": 0,
+      "ebitdaDelta": 0,
+      "addedDebt": 0,
+      "reverseToCovenant": false
+    },
+    {
+      "name": "WTI −$10/bbl (about $0.25 billion of EBITDA per $1/bbl, from the 2025 Form 10-K revenue bridge; pre-hedge, pre-tax)",
+      "ebitdaChange": 0,
+      "ebitdaDelta": -2500,
+      "addedDebt": 0,
+      "reverseToCovenant": false
+    },
+    {
+      "name": "WTI −$20/bbl (same bridge)",
+      "ebitdaChange": 0,
+      "ebitdaDelta": -5000,
+      "addedDebt": 0,
+      "reverseToCovenant": false
+    },
+    {
+      "name": "EBITDA down 20%",
+      "ebitdaChange": -0.2,
+      "ebitdaDelta": 0,
+      "addedDebt": 0,
+      "reverseToCovenant": false
+    },
+    {
+      "name": "EBITDA down 30%",
+      "ebitdaChange": -0.3,
+      "ebitdaDelta": 0,
+      "addedDebt": 0,
+      "reverseToCovenant": false
+    },
+    {
+      "name": "EBITDA down 40%",
+      "ebitdaChange": -0.4,
+      "ebitdaDelta": 0,
+      "addedDebt": 0,
+      "reverseToCovenant": false
+    }
+  ],
+  "proForma": {
+    "event": "Repay $1,818 million of face borrowings to the $10 billion target from cash",
+    "cashChange": -1818,
+    "debtChange": -1818,
+    "ebitda": null,
+    "source": {
+      "field": "Cash hierarchy",
+      "type": "Source.CallScript"
+    }
+  },
+  "peers": [
+    {
+      "ticker": "XOM",
+      "ratings": "—",
+      "cik": 34088
+    },
+    {
+      "ticker": "CVX",
+      "ratings": "AA- / — / —",
+      "ratingsSource": "S&P affirmation June 3, 2026 (source pack)"
+    },
+    {
+      "ticker": "COP",
+      "ratings": "—"
+    }
+  ],
+  "narrativeNotes": {
+    "Financial Analysis": "Explain the CrownRock acquisition, the OxyChem disposal, the debt reduction and the change in commodity prices.",
+    "Covenant Evaluation": "The maintenance covenant is total debt to total capitalization; there is no EBITDA maintenance covenant.",
+    "Stress Testing": "There is no EBITDA maintenance covenant; do not describe one.",
+    "Key Risk Factors and Mitigants": "Order the risks: commodity-price and cash-flow exposure; residual debt and preferred cash claims; geographic and operating concentration; retained environmental liabilities; leadership execution; low-carbon investment and policy."
+  },
+  "agencyUpdates": [
+    {
+      "house": "Moody's",
+      "outlook": null,
+      "asOf": "Per June 30, 2026 Form 10-Q; no 2026 action found",
+      "source": "Source pack (Forms 10-Q)"
+    }
+  ]
+}

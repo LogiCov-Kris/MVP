@@ -8,8 +8,6 @@ import java.util.List as JList
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
 
-case class PdfLine(page: Int, x: Double, y: Double, fontSize: Double, text: String)
-
 object PdfText {
   def lines(file: File): List[PdfLine] = {
     val document = Loader.loadPDF(file)

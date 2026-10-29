@@ -1,0 +1,104 @@
+{
+  "cik": 797468,
+  "filings": [
+    {
+      "role": "AnnualReport",
+      "form": "10-K",
+      "accession": "0001628280-26-009059",
+      "filed": "2026-02-18",
+      "periodEnd": "2025-12-31",
+      "file": "oxy-20251231.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/797468/000162828026009059/oxy-20251231.htm"
+    },
+    {
+      "role": "AnnualXbrl",
+      "form": "10-K",
+      "accession": "0001628280-26-009059",
+      "filed": "2026-02-18",
+      "periodEnd": "2025-12-31",
+      "file": "oxy-20251231_htm.xml",
+      "url": "https://www.sec.gov/Archives/edgar/data/797468/000162828026009059/oxy-20251231_htm.xml"
+    },
+    {
+      "role": "AnnualLabels",
+      "form": "10-K",
+      "accession": "0001628280-26-009059",
+      "filed": "2026-02-18",
+      "periodEnd": "2025-12-31",
+      "file": "oxy-20251231_lab.xml",
+      "url": "https://www.sec.gov/Archives/edgar/data/797468/000162828026009059/oxy-20251231_lab.xml"
+    },
+    {
+      "role": "InterimXbrl",
+      "form": "10-Q",
+      "accession": "0001628280-26-053388",
+      "filed": "2026-08-05",
+      "periodEnd": "2026-06-30",
+      "file": "oxy-20260630_htm.xml",
+      "url": "https://www.sec.gov/Archives/edgar/data/797468/000162828026053388/oxy-20260630_htm.xml"
+    },
+    {
+      "role": "InterimLabels",
+      "form": "10-Q",
+      "accession": "0001628280-26-053388",
+      "filed": "2026-08-05",
+      "periodEnd": "2026-06-30",
+      "file": "oxy-20260630_lab.xml",
+      "url": "https://www.sec.gov/Archives/edgar/data/797468/000162828026053388/oxy-20260630_lab.xml"
+    },
+    {
+      "role": "EarningsRelease",
+      "form": "8-K",
+      "accession": "0000797468-24-000003",
+      "filed": "2024-01-10",
+      "periodEnd": "2023-12-31",
+      "file": "release-FY2023.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/797468/000079746824000003/oxyex991123123preearningsr.htm"
+    },
+    {
+      "role": "EarningsRelease",
+      "form": "8-K",
+      "accession": "0000797468-25-000003",
+      "filed": "2025-01-10",
+      "periodEnd": "2024-12-31",
+      "file": "release-FY2024.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/797468/000079746825000003/oxyex991123124preearningsr.htm"
+    },
+    {
+      "role": "EarningsRelease",
+      "form": "8-K",
+      "accession": "0001628280-26-002483",
+      "filed": "2026-01-20",
+      "periodEnd": "2025-12-31",
+      "file": "release-FY2025.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/797468/000162828026002483/oxyex991123125preearningsr.htm"
+    },
+    {
+      "role": "PeerAnnualXbrl",
+      "form": "10-K",
+      "accession": "0000034088-26-000045",
+      "filed": "2026-02-18",
+      "periodEnd": "2025-12-31",
+      "file": "peers/XOM-annual.xml",
+      "url": "https://www.sec.gov/Archives/edgar/data/34088/000003408826000045/xom-20251231_htm.xml"
+    },
+    {
+      "role": "PeerAnnualXbrl",
+      "form": "10-K",
+      "accession": "0000093410-26-000078",
+      "filed": "2026-02-24",
+      "periodEnd": "2025-12-31",
+      "file": "peers/CVX-annual.xml",
+      "url": "https://www.sec.gov/Archives/edgar/data/93410/000009341026000078/cvx-20251231_htm.xml"
+    },
+    {
+      "role": "PeerAnnualXbrl",
+      "form": "10-K",
+      "accession": "0001163165-26-000009",
+      "filed": "2026-02-17",
+      "periodEnd": "2025-12-31",
+      "file": "peers/COP-annual.xml",
+      "url": "https://www.sec.gov/Archives/edgar/data/1163165/000116316526000009/cop-20251231_htm.xml"
+    }
+  ]
+}

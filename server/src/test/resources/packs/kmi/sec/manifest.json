@@ -1,0 +1,104 @@
+{
+  "cik": 1506307,
+  "filings": [
+    {
+      "role": "AnnualReport",
+      "form": "10-K",
+      "accession": "0001506307-26-000011",
+      "filed": "2026-02-13",
+      "periodEnd": "2025-12-31",
+      "file": "kmi-20251231.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/1506307/000150630726000011/kmi-20251231.htm"
+    },
+    {
+      "role": "AnnualXbrl",
+      "form": "10-K",
+      "accession": "0001506307-26-000011",
+      "filed": "2026-02-13",
+      "periodEnd": "2025-12-31",
+      "file": "kmi-20251231_htm.xml",
+      "url": "https://www.sec.gov/Archives/edgar/data/1506307/000150630726000011/kmi-20251231_htm.xml"
+    },
+    {
+      "role": "AnnualLabels",
+      "form": "10-K",
+      "accession": "0001506307-26-000011",
+      "filed": "2026-02-13",
+      "periodEnd": "2025-12-31",
+      "file": "kmi-20251231_lab.xml",
+      "url": "https://www.sec.gov/Archives/edgar/data/1506307/000150630726000011/kmi-20251231_lab.xml"
+    },
+    {
+      "role": "InterimXbrl",
+      "form": "10-Q",
+      "accession": "0001506307-26-000085",
+      "filed": "2026-07-24",
+      "periodEnd": "2026-06-30",
+      "file": "kmi-20260630_htm.xml",
+      "url": "https://www.sec.gov/Archives/edgar/data/1506307/000150630726000085/kmi-20260630_htm.xml"
+    },
+    {
+      "role": "InterimLabels",
+      "form": "10-Q",
+      "accession": "0001506307-26-000085",
+      "filed": "2026-07-24",
+      "periodEnd": "2026-06-30",
+      "file": "kmi-20260630_lab.xml",
+      "url": "https://www.sec.gov/Archives/edgar/data/1506307/000150630726000085/kmi-20260630_lab.xml"
+    },
+    {
+      "role": "EarningsRelease",
+      "form": "8-K",
+      "accession": "0001506307-24-000004",
+      "filed": "2024-01-17",
+      "periodEnd": "2023-12-31",
+      "file": "release-FY2023.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/1506307/000150630724000004/kmi2023q48-kex991.htm"
+    },
+    {
+      "role": "EarningsRelease",
+      "form": "8-K",
+      "accession": "0001506307-25-000002",
+      "filed": "2025-01-22",
+      "periodEnd": "2024-12-31",
+      "file": "release-FY2024.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/1506307/000150630725000002/kmi2024q48-kex991.htm"
+    },
+    {
+      "role": "EarningsRelease",
+      "form": "8-K",
+      "accession": "0001506307-26-000002",
+      "filed": "2026-01-21",
+      "periodEnd": "2025-12-31",
+      "file": "release-FY2025.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/1506307/000150630726000002/kmi2025q48-kex991.htm"
+    },
+    {
+      "role": "Proxy",
+      "form": "DEF 14A",
+      "accession": "0001506307-26-000024",
+      "filed": "2026-04-02",
+      "periodEnd": "2026-05-13",
+      "file": "kmi-20260401.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/1506307/000150630726000024/kmi-20260401.htm"
+    },
+    {
+      "role": "PeerAnnualXbrl",
+      "form": "10-K",
+      "accession": "0000107263-26-000006",
+      "filed": "2026-02-24",
+      "periodEnd": "2025-12-31",
+      "file": "peers/WMB-annual.xml",
+      "url": "https://www.sec.gov/Archives/edgar/data/107263/000010726326000006/wmb-20251231_htm.xml"
+    },
+    {
+      "role": "PeerAnnualXbrl",
+      "form": "10-K",
+      "accession": "0001039684-26-000006",
+      "filed": "2026-02-24",
+      "periodEnd": "2025-12-31",
+      "file": "peers/OKE-annual.xml",
+      "url": "https://www.sec.gov/Archives/edgar/data/1039684/000103968426000006/oke-20251231_htm.xml"
+    }
+  ]
+}

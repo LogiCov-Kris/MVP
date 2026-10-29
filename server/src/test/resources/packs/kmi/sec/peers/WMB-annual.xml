@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='utf-8'?>
+<xbrl xmlns="http://www.xbrl.org/2003/instance" xmlns:link="http://www.xbrl.org/2003/linkbase" xmlns:wmb="http://co.williams.com/20251231" xmlns:xbrldi="http://xbrl.org/2006/xbrldi" xmlns:xlink="http://www.w3.org/1999/xlink" xml:lang="en-US">
+    <link:schemaRef xlink:href="wmb-20251231.xsd" xlink:type="simple" />
+    <context id="c-1">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000107263</identifier>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-2">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000107263</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="dei:LegalEntityAxis">wmb:TranscontinentalGasPipeLineCompanyLLCMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-3">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000107263</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="dei:LegalEntityAxis">wmb:NorthwestPipelineLLCMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-22">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000107263</identifier>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-23">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000107263</identifier>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-104">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000107263</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="dei:LegalEntityAxis">wmb:TranscontinentalGasPipeLineCompanyLLCMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-105">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000107263</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="dei:LegalEntityAxis">wmb:TranscontinentalGasPipeLineCompanyLLCMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-134">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000107263</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="dei:LegalEntityAxis">wmb:NorthwestPipelineLLCMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-135">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0000107263</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="dei:LegalEntityAxis">wmb:NorthwestPipelineLLCMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <unit id="usd">
+        <measure>iso4217:USD</measure>
+    </unit>
+    <wmb:IncreaseDecreaseInAccountsPayableAndAccruedLiabilitiesRelatedToCapitalExpendituresIncurredButNotYetPaid contextRef="c-1" decimals="-6" id="f-768" unitRef="usd">482000000</wmb:IncreaseDecreaseInAccountsPayableAndAccruedLiabilitiesRelatedToCapitalExpendituresIncurredButNotYetPaid>
+    <wmb:IncreaseDecreaseInAccountsPayableAndAccruedLiabilitiesRelatedToCapitalExpendituresIncurredButNotYetPaid contextRef="c-22" decimals="-6" id="f-769" unitRef="usd">8000000</wmb:IncreaseDecreaseInAccountsPayableAndAccruedLiabilitiesRelatedToCapitalExpendituresIncurredButNotYetPaid>
+    <wmb:IncreaseDecreaseInAccountsPayableAndAccruedLiabilitiesRelatedToCapitalExpendituresIncurredButNotYetPaid contextRef="c-23" decimals="-6" id="f-770" unitRef="usd">48000000</wmb:IncreaseDecreaseInAccountsPayableAndAccruedLiabilitiesRelatedToCapitalExpendituresIncurredButNotYetPaid>
+    <wmb:IncreaseDecreaseInAccountsPayableAndAccruedLiabilitiesRelatedToCapitalExpenditures contextRef="c-2" decimals="-6" id="f-1011" unitRef="usd">-47000000</wmb:IncreaseDecreaseInAccountsPayableAndAccruedLiabilitiesRelatedToCapitalExpenditures>
+    <wmb:IncreaseDecreaseInAccountsPayableAndAccruedLiabilitiesRelatedToCapitalExpenditures contextRef="c-104" decimals="-6" id="f-1012" unitRef="usd">-28000000</wmb:IncreaseDecreaseInAccountsPayableAndAccruedLiabilitiesRelatedToCapitalExpenditures>
+    <wmb:IncreaseDecreaseInAccountsPayableAndAccruedLiabilitiesRelatedToCapitalExpenditures contextRef="c-105" decimals="-6" id="f-1013" unitRef="usd">97000000</wmb:IncreaseDecreaseInAccountsPayableAndAccruedLiabilitiesRelatedToCapitalExpenditures>
+    <wmb:IncreaseDecreaseInAccountsPayableAndAccruedLiabilitiesRelatedToCapitalExpenditures contextRef="c-3" decimals="-6" id="f-1236" unitRef="usd">-11000000</wmb:IncreaseDecreaseInAccountsPayableAndAccruedLiabilitiesRelatedToCapitalExpenditures>
+    <wmb:IncreaseDecreaseInAccountsPayableAndAccruedLiabilitiesRelatedToCapitalExpenditures contextRef="c-134" decimals="-6" id="f-1237" unitRef="usd">0</wmb:IncreaseDecreaseInAccountsPayableAndAccruedLiabilitiesRelatedToCapitalExpenditures>
+    <wmb:IncreaseDecreaseInAccountsPayableAndAccruedLiabilitiesRelatedToCapitalExpenditures contextRef="c-135" decimals="-6" id="f-1238" unitRef="usd">15000000</wmb:IncreaseDecreaseInAccountsPayableAndAccruedLiabilitiesRelatedToCapitalExpenditures>
+    </xbrl>

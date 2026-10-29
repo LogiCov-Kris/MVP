@@ -4,6 +4,9 @@ import everyui.app.screen.ScreenManager
 
 object LogiCovApp extends ScreenManager {
   lazy val home: HomeScreen = new HomeScreen
-}
 
-@main def main(): Unit = LogiCovApp.run(LogiCovApp.home)
+  def main(args: Array[String]): Unit = {
+    WorkspaceStyle.initialize()
+    run(home)
+  }
+}

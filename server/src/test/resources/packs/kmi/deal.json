@@ -1,0 +1,106 @@
+{
+  "ticker": "KMI",
+  "cik": 1506307,
+  "support": "Neutral",
+  "supportBasis": "No support-bearing holder",
+  "priceLinkedSegments": [
+    "CO2"
+  ],
+  "commodityModifier": null,
+  "customerOverTenPercent": false,
+  "concentration": null,
+  "ebitda": {
+    "ltmField": "LTM adjusted EBITDA at 30 Jun 2026",
+    "releaseLabel": "Adjusted EBITDA",
+    "spread": null
+  },
+  "covenantIndicative": false,
+  "ratingOverride": null,
+  "stressScenarios": [
+    {
+      "name": "Base — LTM at Jun 30, 2026",
+      "ebitdaChange": 0,
+      "ebitdaDelta": 0,
+      "addedDebt": 0,
+      "reverseToCovenant": false
+    },
+    {
+      "name": "Severe — 15% EBITDA decline",
+      "ebitdaChange": -0.15,
+      "ebitdaDelta": 0,
+      "addedDebt": 0,
+      "reverseToCovenant": false
+    },
+    {
+      "name": "Combined — severe plus $5.0 bn debt-funded acquisition",
+      "ebitdaChange": -0.15,
+      "ebitdaDelta": 0,
+      "addedDebt": 5000,
+      "reverseToCovenant": false
+    },
+    {
+      "name": "Reverse stress to the covenant at constant debt",
+      "ebitdaChange": 0,
+      "ebitdaDelta": 0,
+      "addedDebt": 0,
+      "reverseToCovenant": true
+    },
+    {
+      "name": "EBITDA down 20%",
+      "ebitdaChange": -0.2,
+      "ebitdaDelta": 0,
+      "addedDebt": 0,
+      "reverseToCovenant": false
+    },
+    {
+      "name": "EBITDA down 30%",
+      "ebitdaChange": -0.3,
+      "ebitdaDelta": 0,
+      "addedDebt": 0,
+      "reverseToCovenant": false
+    },
+    {
+      "name": "EBITDA down 40%",
+      "ebitdaChange": -0.4,
+      "ebitdaDelta": 0,
+      "addedDebt": 0,
+      "reverseToCovenant": false
+    }
+  ],
+  "proForma": {
+    "event": "Aug 6, 2026 notes settlement, proceeds held as cash",
+    "cashChange": 1750,
+    "debtChange": 1750,
+    "ebitda": null,
+    "source": {
+      "field": "July 2026 notes",
+      "type": "Source.CallScript"
+    }
+  },
+  "peers": [
+    {
+      "ticker": "WMB",
+      "ratings": "BBB+ Stable / Baa2 Positive / BBB Positive",
+      "ratingsSource": "S&P affirmation April 16, 2026; Williams 2025 Form 10-K for Moody's and Fitch (source pack)"
+    },
+    {
+      "ticker": "OKE",
+      "ratings": "— / Baa2 Stable / —",
+      "ratingsSource": "Moody's affirmation August 31, 2026 (source pack); S&P and Fitch not in the source pack"
+    }
+  ],
+  "agencyUpdates": [
+    {
+      "house": "S&P",
+      "outlook": "Stable",
+      "asOf": null,
+      "source": "Discovery call transcript: July 28, 2026 term sheet expected ratings, each Stable"
+    },
+    {
+      "house": "Fitch",
+      "outlook": null,
+      "asOf": "July 28, 2026 term sheet",
+      "source": "Discovery call transcript"
+    }
+  ]
+}

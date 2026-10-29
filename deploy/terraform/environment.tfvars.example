@@ -1,0 +1,16 @@
+project_id        = "YOUR_CLIENT_PROJECT"
+environment       = "dev"
+region            = "us-central1"
+github_owner_id   = "NUMERIC_GITHUB_ORGANIZATION_ID"
+# First apply: leave image empty to create the foundation.
+# After pushing the first image, set its digest and apply again.
+image             = ""
+# Optional project-level billing alerts. Budget alerts do not cap spending.
+billing_account_id = ""
+
+# Set after the first service bootstrap, or use the final HTTPS application origin.
+public_url = ""
+# Enable only with a verified client-owned, zero-retention provider account.
+narratives_enabled = false
+narrative_model = ""
+provider_key_version = ""

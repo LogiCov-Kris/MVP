@@ -3,11 +3,11 @@ package logicov.server
 import logicov.App
 import logicov.server.service.SystemServices
 import rapid.Task
-import spice.http.server.CORSSupport
 import spice.http.server.config.HttpServerListener
 import spice.openapi.server.{OpenAPIHttpServer, Service}
 
-object Server extends OpenAPIHttpServer with CORSSupport {
+object Server extends OpenAPIHttpServer {
+  handler.wrap(WebEndpoint)
   override def title: String = "LogiCov API"
   override def version: String = logicov.BuildInfo.version
   override def description: Option[String] = Some("LogiCov backend")

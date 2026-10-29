@@ -1,0 +1,41 @@
+[
+  {
+    "house": "Fitch",
+    "rating": "A",
+    "outlook": "Stable",
+    "asOf": "10-K filed Feb 17, 2026",
+    "source": {
+      "form": "10-K",
+      "accession": "0001163165-26-000009",
+      "document": "credit ratings",
+      "item": "as disclosed by the company",
+      "type": "Source.Exhibit"
+    }
+  },
+  {
+    "house": "S&P",
+    "rating": "A-",
+    "outlook": "Stable",
+    "asOf": "10-K filed Feb 17, 2026",
+    "source": {
+      "form": "10-K",
+      "accession": "0001163165-26-000009",
+      "document": "credit ratings",
+      "item": "as disclosed by the company",
+      "type": "Source.Exhibit"
+    }
+  },
+  {
+    "house": "Moody's",
+    "rating": "A2",
+    "outlook": "Stable",
+    "asOf": "10-K filed Feb 17, 2026",
+    "source": {
+      "form": "10-K",
+      "accession": "0001163165-26-000009",
+      "document": "credit ratings",
+      "item": "as disclosed by the company",
+      "type": "Source.Exhibit"
+    }
+  }
+]

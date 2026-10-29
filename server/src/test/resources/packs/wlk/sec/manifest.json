@@ -1,0 +1,104 @@
+{
+  "cik": 1262823,
+  "filings": [
+    {
+      "role": "AnnualReport",
+      "form": "10-K",
+      "accession": "0001262823-26-000016",
+      "filed": "2026-02-26",
+      "periodEnd": "2025-12-31",
+      "file": "wlk-20251231.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/1262823/000126282326000016/wlk-20251231.htm"
+    },
+    {
+      "role": "AnnualXbrl",
+      "form": "10-K",
+      "accession": "0001262823-26-000016",
+      "filed": "2026-02-26",
+      "periodEnd": "2025-12-31",
+      "file": "wlk-20251231_htm.xml",
+      "url": "https://www.sec.gov/Archives/edgar/data/1262823/000126282326000016/wlk-20251231_htm.xml"
+    },
+    {
+      "role": "AnnualLabels",
+      "form": "10-K",
+      "accession": "0001262823-26-000016",
+      "filed": "2026-02-26",
+      "periodEnd": "2025-12-31",
+      "file": "wlk-20251231_lab.xml",
+      "url": "https://www.sec.gov/Archives/edgar/data/1262823/000126282326000016/wlk-20251231_lab.xml"
+    },
+    {
+      "role": "InterimXbrl",
+      "form": "10-Q",
+      "accession": "0001262823-26-000032",
+      "filed": "2026-08-05",
+      "periodEnd": "2026-06-30",
+      "file": "wlk-20260630_htm.xml",
+      "url": "https://www.sec.gov/Archives/edgar/data/1262823/000126282326000032/wlk-20260630_htm.xml"
+    },
+    {
+      "role": "InterimLabels",
+      "form": "10-Q",
+      "accession": "0001262823-26-000032",
+      "filed": "2026-08-05",
+      "periodEnd": "2026-06-30",
+      "file": "wlk-20260630_lab.xml",
+      "url": "https://www.sec.gov/Archives/edgar/data/1262823/000126282326000032/wlk-20260630_lab.xml"
+    },
+    {
+      "role": "EarningsRelease",
+      "form": "8-K",
+      "accession": "0001262823-25-000005",
+      "filed": "2025-02-24",
+      "periodEnd": "2024-12-31",
+      "file": "release-FY2024.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/1262823/000126282325000005/ex991_20241231earningsrele.htm"
+    },
+    {
+      "role": "EarningsRelease",
+      "form": "8-K",
+      "accession": "0001262823-26-000008",
+      "filed": "2026-02-24",
+      "periodEnd": "2025-12-31",
+      "file": "release-FY2025.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/1262823/000126282326000008/ex991_20251231earningsrele.htm"
+    },
+    {
+      "role": "PeerAnnualXbrl",
+      "form": "10-K",
+      "accession": "0001489393-26-000012",
+      "filed": "2026-02-20",
+      "periodEnd": "2025-12-31",
+      "file": "peers/LYB-annual.xml",
+      "url": "https://www.sec.gov/Archives/edgar/data/1489393/000148939326000012/lyb-20251231_htm.xml"
+    },
+    {
+      "role": "PeerAnnualXbrl",
+      "form": "10-K",
+      "accession": "0000915389-26-000013",
+      "filed": "2026-02-13",
+      "periodEnd": "2025-12-31",
+      "file": "peers/EMN-annual.xml",
+      "url": "https://www.sec.gov/Archives/edgar/data/915389/000091538926000013/emn-20251231_htm.xml"
+    },
+    {
+      "role": "PeerRatingsOffering",
+      "form": "FWP",
+      "accession": "0001193125-26-054610",
+      "filed": "2026-02-17",
+      "periodEnd": "2026-02-17",
+      "file": "peers/EMN-ratings-fwp.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/915389/000119312526054610/emn_-_feb_2026_fwp.htm"
+    },
+    {
+      "role": "PeerRatingsOffering",
+      "form": "FWP",
+      "accession": "0001104659-25-109261",
+      "filed": "2025-11-10",
+      "periodEnd": "2025-11-10",
+      "file": "peers/LYB-ratings-fwp.htm",
+      "url": "https://www.sec.gov/Archives/edgar/data/1489393/000110465925109261/tm2530154d2_fwp.htm"
+    }
+  ]
+}

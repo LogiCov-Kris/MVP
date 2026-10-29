@@ -1,0 +1,287 @@
+{
+  "name": "LogiCov public-company revolver (Golden Source v2.2)",
+  "title": "Credit Memorandum — {{borrower}}",
+  "header": "Credit Memorandum · CONFIDENTIAL — Sample Output",
+  "footer": "Prepared for credit committee · {{reference}} · {{date}}",
+  "coverStrip": [
+    "Recommendation|{{recommendation}}",
+    "Facility|{{facility.summary}}",
+    "Facility action|{{facility.action}}",
+    "Risk rating|{{rating.internal}}",
+    "External ratings|{{agencies}}",
+    "PD|{{rating.pd}}"
+  ],
+  "sections": [
+    {
+      "title": "Executive Summary",
+      "blocks": [
+        {
+          "type": "MemoBlock.Narrative",
+          "author": "AI draft from retained evidence",
+          "guidance": "Write a committee-ready executive summary in at most 260 words, written in the third person as the analyst's recommendation (\"The analyst recommends\"; never \"I\" or \"we\"). Lead with the recommendation and the proposed facility action; if a rating review is pending, say so instead of recommending approval. Explain the material transaction or business change, what it did to repayment capacity and the balance sheet, and the remaining exposure. Distinguish continuing operations from disposal gains. Give the agency ratings with dates where given. End with the final risk rating, any override, the one-sentence differential to the agencies, and the maintenance covenant with its threshold. State ratios plainly. Do not repeat the full scorecard, PD or LGD. Use the retained discovery transcript for business context; numerical tables govern computed ratios. Discuss disposals only when one actually occurred. Leave adjacent-notch thresholds to Section 6. Avoid restating every term in the cover."
+        }
+      ]
+    },
+    {
+      "title": "Financial Analysis",
+      "blocks": [
+        {
+          "type": "MemoBlock.Subheading",
+          "text": "2.1 Summary and Historical Trends"
+        },
+        {
+          "type": "MemoBlock.Narrative",
+          "author": "AI draft from retained evidence",
+          "guidance": "Explain historical and interim performance in 180-240 words with business causes from the retained transcript, not a list of numbers. Distinguish continuing operations, discontinued operations and gains. No unsupported causal claims. If no continuing/discontinued split is extracted, omit that split rather than claiming it is not reported. Do not discuss absent disposals or compare against an unavailable company-defined metric."
+        },
+        {
+          "type": "MemoBlock.Table",
+          "dataset": "financials"
+        },
+        {
+          "type": "MemoBlock.Subheading",
+          "text": "2.2 Income Statement and Segments"
+        },
+        {
+          "type": "MemoBlock.Narrative",
+          "author": "AI draft from retained evidence",
+          "guidance": "Explain earnings quality, segment mix and the drivers of revenue and profitability in 180-240 words. Use the computed segment shares, clearly identifying their denominator. Describe commodity-price-linked exposure by the commodities the company sells. Avoid obvious claims such as repayment rests on Oil and Gas. Explain consolidation adjustments without implying they are another business. If no continuing/discontinued split is extracted, omit that split rather than claiming it is not reported. Do not discuss absent disposals or compare against an unavailable company-defined metric."
+        },
+        {
+          "type": "MemoBlock.Table",
+          "dataset": "income-statement"
+        },
+        {
+          "type": "MemoBlock.Table",
+          "dataset": "segments"
+        },
+        {
+          "type": "MemoBlock.Table",
+          "dataset": "interim-segments"
+        },
+        {
+          "type": "MemoBlock.Subheading",
+          "text": "2.3 Balance Sheet and Capital Structure"
+        },
+        {
+          "type": "MemoBlock.Narrative",
+          "author": "AI draft from retained evidence",
+          "guidance": "Explain the latest balance sheet before the table in 170-220 words. Discuss material asset and liability changes, liquidity, disposals or acquisitions, debt paydown, preferred claims and retained obligations using the transcript and tables. Distinguish face debt, carrying debt and the ratio basis. Explain material changes rather than reciting every row. If no continuing/discontinued split is extracted, omit that split rather than claiming it is not reported. Do not discuss absent disposals or compare against an unavailable company-defined metric."
+        },
+        {
+          "type": "MemoBlock.Table",
+          "dataset": "balance-sheet"
+        },
+        {
+          "type": "MemoBlock.Subheading",
+          "text": "2.4 Funded Debt by Source"
+        },
+        {
+          "type": "MemoBlock.Narrative",
+          "author": "AI draft from retained evidence",
+          "guidance": "Before the funded-debt table, summarize the debt stack in 90-130 words: the main instruments, the maturity profile and the next material maturity, the revolver's role and drawn status, and any post-period issuance or repayment. Do not restate the balance-sheet discussion."
+        },
+        {
+          "type": "MemoBlock.Table",
+          "dataset": "funded-debt"
+        },
+        {
+          "type": "MemoBlock.Subheading",
+          "text": "2.5 Cash Flow"
+        },
+        {
+          "type": "MemoBlock.Narrative",
+          "author": "AI draft from retained evidence",
+          "guidance": "Explain operating cash conversion, capital spending, dividends and funding priorities in 150-200 words before the cash-flow table. Distinguish company-defined free cash flow from the Grid calculation and continuing-operations cash flow from other measures. Separate interim results from annual results. If no continuing/discontinued split is extracted, omit that split rather than claiming it is not reported. Do not discuss absent disposals or compare against an unavailable company-defined metric."
+        },
+        {
+          "type": "MemoBlock.Table",
+          "dataset": "cash-flow"
+        },
+        {
+          "type": "MemoBlock.Table",
+          "dataset": "cash-movements"
+        },
+        {
+          "type": "MemoBlock.Subheading",
+          "text": "2.6 Key Ratios and Forward Outlook"
+        },
+        {
+          "type": "MemoBlock.Narrative",
+          "author": "AI draft from retained evidence",
+          "guidance": "Explain the forward outlook in 180-240 words, covering each available future horizon, company guidance, named business drivers and the debt/capital allocation plan. Attribute all projections and their source date. Do not create a forecast. Explain the separately computed pro forma action as an illustration, not a complete forecast. Do not imply management-reported agency forecasts were independently verified. If no continuing/discontinued split is extracted, omit that split rather than claiming it is not reported. Do not discuss absent disposals or compare against an unavailable company-defined metric."
+        },
+        {
+          "type": "MemoBlock.Table",
+          "dataset": "key-ratios"
+        },
+        {
+          "type": "MemoBlock.Table",
+          "dataset": "outlook"
+        },
+        {
+          "type": "MemoBlock.Table",
+          "dataset": "pro-forma"
+        }
+      ]
+    },
+    {
+      "title": "Company Leadership and Management Team",
+      "blocks": [
+        {
+          "type": "MemoBlock.Narrative",
+          "author": "AI draft from retained evidence",
+          "guidance": "Assess management experience, succession, continuity, strategy and execution risk in 180-240 words, before the leadership table. Use the officers' backgrounds in the table and the retained transcript for tenure and changes since the annual filing. Explain any controlling or large holder without equating ownership to a guarantee. Keep claims proportional to the evidence and distinguish management intentions from achieved results."
+        },
+        {
+          "type": "MemoBlock.Table",
+          "dataset": "leadership"
+        }
+      ]
+    },
+    {
+      "title": "Industry and Competitive Analysis",
+      "blocks": [
+        {
+          "type": "MemoBlock.Narrative",
+          "author": "AI draft from retained evidence",
+          "guidance": "Provide substantive industry and competitive analysis in 220-300 words. Explain the business economics, commodity or contractual exposures, competitive position and relevant operating constraints using retained source evidence. Compare peers on comparable periods and distinguish differing debt bases. Do not explain XBRL or tagging to the reader. Where a peer figure is shown as —, do not discuss it. Do not invent industry forecasts or agency conclusions."
+        },
+        {
+          "type": "MemoBlock.Table",
+          "dataset": "peers"
+        }
+      ]
+    },
+    {
+      "title": "Covenant Evaluation",
+      "blocks": [
+        {
+          "type": "MemoBlock.Narrative",
+          "author": "AI draft from retained evidence",
+          "guidance": "Explain the actual maintenance covenant and threshold, calculation basis, current position and headroom before the table, in 120-170 words. Identify any proxy or indicative threshold and distinguish it from a verified agreement definition. Name the covenant ratio exactly as defined; if there is no EBITDA-based maintenance covenant, say so. Avoid repetition."
+        },
+        {
+          "type": "MemoBlock.Table",
+          "dataset": "covenant"
+        }
+      ]
+    },
+    {
+      "title": "Risk Rating",
+      "blocks": [
+        {
+          "type": "MemoBlock.Paragraph",
+          "text": "{{rating.review}}"
+        },
+        {
+          "type": "MemoBlock.Paragraph",
+          "text": "The analyst assigns {{borrower}} a risk rating of {{rating.mapping}}, {{rating.class}}, under Risk Rating Guidance v2.2. The composite of {{rating.composite}} gives a calculated risk rating of {{rating.calculated}}. One-year PD is {{rating.pd}}, LGD is {{rating.lgd}}, exposure at full draw is {{rating.ead}}, and expected loss is {{rating.el}}."
+        },
+        {
+          "type": "MemoBlock.Table",
+          "dataset": "scorecard"
+        },
+        {
+          "type": "MemoBlock.Paragraph",
+          "text": "Override: {{rating.override}} Internal outlook: {{rating.outlook}}. The outlook is a market assessment; it does not move the risk rating, the PD or the limit."
+        },
+        {
+          "type": "MemoBlock.Subheading",
+          "text": "6.1 Mapping to Agency Ratings and Differential"
+        },
+        {
+          "type": "MemoBlock.Paragraph",
+          "text": "Alignment. {{rating.differential}} Agency ratings are not an input to the risk rating."
+        },
+        {
+          "type": "MemoBlock.Narrative",
+          "author": "AI draft from retained evidence",
+          "guidance": "Reconcile the final risk rating to each agency, in 150-220 words, following Risk Rating Guidance v2.2 Section 5. Write one short paragraph per agency, in the order S&P, Moody's, Fitch: state the notch difference, then name the facts that explain it, using that agency's stated view, conditions, forecasts or action dates where the evidence gives them, and the scorecard components that score stronger or weaker than the risk rating. Where an override applies, say how it moves the final risk rating relative to that agency. Separate geographic or segment concentration from commodity-price-linked industry exposure. Do not label ownership support a guarantee. Do not restate the adjacent-notch thresholds; they follow in their own paragraph."
+        },
+        {
+          "type": "MemoBlock.Table",
+          "dataset": "agency-map"
+        },
+        {
+          "type": "MemoBlock.Paragraph",
+          "text": "Why not the adjacent notch. {{rating.adjacent}}"
+        }
+      ]
+    },
+    {
+      "title": "Loan Structure and Pricing Rationale",
+      "blocks": [
+        {
+          "type": "MemoBlock.Narrative",
+          "author": "AI draft from retained evidence",
+          "guidance": "Explain proposed facility structure, tenor, use, ranking, drawn status and pricing rationale in 150-200 words. Distinguish existing pricing grid, management indicative terms and unverified executed agreement terms. Quote available terms; never say no pricing is published simply because agreement extraction is incomplete. Do not invent fees or recommend an unsupported margin."
+        },
+        {
+          "type": "MemoBlock.Paragraph",
+          "text": "{{facility.feeNote}}"
+        },
+        {
+          "type": "MemoBlock.Table",
+          "dataset": "facility"
+        }
+      ]
+    },
+    {
+      "title": "Stress Testing",
+      "blocks": [
+        {
+          "type": "MemoBlock.Narrative",
+          "author": "AI draft from retained evidence",
+          "guidance": "Explain the sensitivity assumptions and results in 180-230 words. Identify the actual covenant and its threshold. EBITDA down 20%, 30%, 40% are sensitivities, not forecasts. For debt-to-capitalization, show why EBITDA changes alone leave the covenant unchanged when debt and equity are fixed, and explain the reverse equity stress. Cash-flow deterioration is separate repayment risk. Explain any indicative covenant and no more than two illustrative scenario results. Discuss only the maintenance covenant identified in covenant.description. For a leverage covenant, do not discuss debt-to-capitalization or reverse equity stress, even if a capitalization ratio appears elsewhere in the facts."
+        },
+        {
+          "type": "MemoBlock.Table",
+          "dataset": "stress"
+        }
+      ]
+    },
+    {
+      "title": "Key Risk Factors and Mitigants",
+      "blocks": [
+        {
+          "type": "MemoBlock.Narrative",
+          "author": "AI draft from retained evidence",
+          "guidance": "Exactly six paragraphs, each containing one Risk: sentence group followed by its matching Mitigant: sentence group, 450-550 words total. No headings or numbering. Order by repayment impact. Follow the analyst's ordering when one is given. Use the retained transcript. Commodity exposure is to multiple commodities. Never treat a sensitivity as a forecast. Each mitigant must address its own risk and remain proportionate, with no invented assurance."
+        }
+      ]
+    },
+    {
+      "title": "Recommendation",
+      "blocks": [
+        {
+          "type": "MemoBlock.Paragraph",
+          "text": "{{recommendation}}. The analyst recommends that the bank {{facility.recommendation}}, with a maintenance covenant of {{covenant.description}}, at a final risk rating of {{rating.mapping}}, PD {{rating.pd}}, LGD {{rating.lgd}} and expected loss of {{rating.el}} on the full commitment. {{rating.review}}"
+        },
+        {
+          "type": "MemoBlock.Narrative",
+          "author": "AI draft from retained evidence",
+          "guidance": "State the conditions to approval in 100-150 words. A condition is something the bank confirms in the facility documentation or the borrower's compliance reporting before closing: the executed agreement terms, the covenant definition and threshold, and the pricing step. Never make obtaining or verifying agency research, analyst reports or other third-party information a condition. If a rating review is pending, say approval is deferred until it is complete. Then state what would move the risk rating one notch in either direction, naming the ratio thresholds given in Section 6. Do not repeat the numerical recommendation."
+        }
+      ]
+    },
+    {
+      "title": "Source Appendix",
+      "blocks": [
+        {
+          "type": "MemoBlock.Table",
+          "dataset": "analyst-inputs"
+        },
+        {
+          "type": "MemoBlock.Table",
+          "dataset": "rating-map"
+        },
+        {
+          "type": "MemoBlock.Paragraph",
+          "text": "Supporting source documents, calculation details and narrative provenance are available through the links throughout this memo. Keep the accompanying audit and source files with this document."
+        }
+      ]
+    }
+  ],
+  "disclaimer": "Sample output for analyst review, not an approved credit decision or commitment to lend. Figures and ratios are calculated from retained filings, discovery-call statements and identified analyst judgments. Narrative drafts require analyst review. Historical and forecast as-of dates are stated in the supporting evidence. Amounts in tables are in millions of U.S. dollars unless noted."
+}

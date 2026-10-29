@@ -1,0 +1,328 @@
+<?xml version='1.0' encoding='utf-8'?>
+<xbrl xmlns="http://www.xbrl.org/2003/instance" xmlns:cop="http://www.conocophillips.com/20251231" xmlns:link="http://www.xbrl.org/2003/linkbase" xmlns:xbrldi="http://xbrl.org/2006/xbrldi" xmlns:xlink="http://www.w3.org/1999/xlink" xml:lang="en-US">
+    <link:schemaRef xlink:href="cop-20251231.xsd" xlink:type="simple" />
+    <context id="c-1">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001163165</identifier>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-6">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001163165</identifier>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-7">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001163165</identifier>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-758">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001163165</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">cop:AlaskaSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-759">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001163165</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">cop:AlaskaSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-760">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001163165</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">cop:AlaskaSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-761">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001163165</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">cop:LowerFortyEightSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-762">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001163165</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">cop:LowerFortyEightSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-763">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001163165</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">cop:LowerFortyEightSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-764">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001163165</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">cop:CanadaOperatingSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-765">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001163165</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">cop:CanadaOperatingSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-766">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001163165</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">cop:CanadaOperatingSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-767">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001163165</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">cop:EuropeMiddleEastAndNorthAfricaSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-768">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001163165</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">cop:EuropeMiddleEastAndNorthAfricaSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-769">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001163165</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">cop:EuropeMiddleEastAndNorthAfricaSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-770">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001163165</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">cop:AsiaPacificOperatingSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-771">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001163165</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">cop:AsiaPacificOperatingSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-772">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001163165</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">cop:AsiaPacificOperatingSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-773">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001163165</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">cop:TotalSegmentsMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-774">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001163165</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">cop:TotalSegmentsMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-775">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001163165</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:OperatingSegmentsMember</xbrldi:explicitMember>
+                <xbrldi:explicitMember dimension="us-gaap:StatementBusinessSegmentsAxis">cop:TotalSegmentsMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-802">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001163165</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:CorporateNonSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2025-01-01</startDate>
+            <endDate>2025-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-832">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001163165</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:CorporateNonSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2024-01-01</startDate>
+            <endDate>2024-12-31</endDate>
+        </period>
+    </context>
+    <context id="c-862">
+        <entity>
+            <identifier scheme="http://www.sec.gov/CIK">0001163165</identifier>
+            <segment>
+                <xbrldi:explicitMember dimension="srt:ConsolidationItemsAxis">us-gaap:CorporateNonSegmentMember</xbrldi:explicitMember>
+            </segment>
+        </entity>
+        <period>
+            <startDate>2023-01-01</startDate>
+            <endDate>2023-12-31</endDate>
+        </period>
+    </context>
+    <unit id="usd">
+        <measure>iso4217:USD</measure>
+    </unit>
+    <cop:SegmentReportingInformationCapitalExpendituresAndInvestments contextRef="c-758" decimals="INF" id="f-2666" unitRef="usd">3607000000</cop:SegmentReportingInformationCapitalExpendituresAndInvestments>
+    <cop:SegmentReportingInformationCapitalExpendituresAndInvestments contextRef="c-761" decimals="INF" id="f-2667" unitRef="usd">6702000000</cop:SegmentReportingInformationCapitalExpendituresAndInvestments>
+    <cop:SegmentReportingInformationCapitalExpendituresAndInvestments contextRef="c-764" decimals="INF" id="f-2668" unitRef="usd">593000000</cop:SegmentReportingInformationCapitalExpendituresAndInvestments>
+    <cop:SegmentReportingInformationCapitalExpendituresAndInvestments contextRef="c-767" decimals="INF" id="f-2669" unitRef="usd">1194000000</cop:SegmentReportingInformationCapitalExpendituresAndInvestments>
+    <cop:SegmentReportingInformationCapitalExpendituresAndInvestments contextRef="c-770" decimals="INF" id="f-2670" unitRef="usd">342000000</cop:SegmentReportingInformationCapitalExpendituresAndInvestments>
+    <cop:SegmentReportingInformationCapitalExpendituresAndInvestments contextRef="c-773" decimals="INF" id="f-2671" unitRef="usd">12438000000</cop:SegmentReportingInformationCapitalExpendituresAndInvestments>
+    <cop:SegmentReportingInformationCapitalExpendituresAndInvestments contextRef="c-802" decimals="INF" id="f-2672" unitRef="usd">115000000</cop:SegmentReportingInformationCapitalExpendituresAndInvestments>
+    <cop:SegmentReportingInformationCapitalExpendituresAndInvestments contextRef="c-1" decimals="INF" id="f-2673" unitRef="usd">12553000000</cop:SegmentReportingInformationCapitalExpendituresAndInvestments>
+    <cop:SegmentReportingInformationCapitalExpendituresAndInvestments contextRef="c-759" decimals="INF" id="f-2799" unitRef="usd">3194000000</cop:SegmentReportingInformationCapitalExpendituresAndInvestments>
+    <cop:SegmentReportingInformationCapitalExpendituresAndInvestments contextRef="c-762" decimals="INF" id="f-2800" unitRef="usd">6510000000</cop:SegmentReportingInformationCapitalExpendituresAndInvestments>
+    <cop:SegmentReportingInformationCapitalExpendituresAndInvestments contextRef="c-765" decimals="INF" id="f-2801" unitRef="usd">551000000</cop:SegmentReportingInformationCapitalExpendituresAndInvestments>
+    <cop:SegmentReportingInformationCapitalExpendituresAndInvestments contextRef="c-768" decimals="INF" id="f-2802" unitRef="usd">1021000000</cop:SegmentReportingInformationCapitalExpendituresAndInvestments>
+    <cop:SegmentReportingInformationCapitalExpendituresAndInvestments contextRef="c-771" decimals="INF" id="f-2803" unitRef="usd">370000000</cop:SegmentReportingInformationCapitalExpendituresAndInvestments>
+    <cop:SegmentReportingInformationCapitalExpendituresAndInvestments contextRef="c-774" decimals="INF" id="f-2804" unitRef="usd">11646000000</cop:SegmentReportingInformationCapitalExpendituresAndInvestments>
+    <cop:SegmentReportingInformationCapitalExpendituresAndInvestments contextRef="c-832" decimals="INF" id="f-2805" unitRef="usd">472000000</cop:SegmentReportingInformationCapitalExpendituresAndInvestments>
+    <cop:SegmentReportingInformationCapitalExpendituresAndInvestments contextRef="c-6" decimals="INF" id="f-2806" unitRef="usd">12118000000</cop:SegmentReportingInformationCapitalExpendituresAndInvestments>
+    <cop:SegmentReportingInformationCapitalExpendituresAndInvestments contextRef="c-760" decimals="INF" id="f-2932" unitRef="usd">1705000000</cop:SegmentReportingInformationCapitalExpendituresAndInvestments>
+    <cop:SegmentReportingInformationCapitalExpendituresAndInvestments contextRef="c-763" decimals="INF" id="f-2933" unitRef="usd">6487000000</cop:SegmentReportingInformationCapitalExpendituresAndInvestments>
+    <cop:SegmentReportingInformationCapitalExpendituresAndInvestments contextRef="c-766" decimals="INF" id="f-2934" unitRef="usd">456000000</cop:SegmentReportingInformationCapitalExpendituresAndInvestments>
+    <cop:SegmentReportingInformationCapitalExpendituresAndInvestments contextRef="c-769" decimals="INF" id="f-2935" unitRef="usd">1111000000</cop:SegmentReportingInformationCapitalExpendituresAndInvestments>
+    <cop:SegmentReportingInformationCapitalExpendituresAndInvestments contextRef="c-772" decimals="INF" id="f-2936" unitRef="usd">354000000</cop:SegmentReportingInformationCapitalExpendituresAndInvestments>
+    <cop:SegmentReportingInformationCapitalExpendituresAndInvestments contextRef="c-775" decimals="INF" id="f-2937" unitRef="usd">10113000000</cop:SegmentReportingInformationCapitalExpendituresAndInvestments>
+    <cop:SegmentReportingInformationCapitalExpendituresAndInvestments contextRef="c-862" decimals="INF" id="f-2938" unitRef="usd">1135000000</cop:SegmentReportingInformationCapitalExpendituresAndInvestments>
+    <cop:SegmentReportingInformationCapitalExpendituresAndInvestments contextRef="c-7" decimals="INF" id="f-2939" unitRef="usd">11248000000</cop:SegmentReportingInformationCapitalExpendituresAndInvestments>
+    </xbrl>
