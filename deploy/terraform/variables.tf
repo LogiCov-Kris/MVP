@@ -94,3 +94,9 @@ variable "email_region" {
     error_message = "Email region must be US or EU."
   }
 }
+
+variable "github_repository_id" {
+  type        = string
+  default     = "1406452220"
+  description = "Numeric repository ID used by immutable GitHub identity subjects."
+}

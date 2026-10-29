@@ -132,7 +132,7 @@ resource "google_iam_workload_identity_pool_provider" "github" {
     "google.subject"       = "assertion.sub"
     "attribute.repository" = "assertion.repository"
   }
-  attribute_condition = "assertion.repository == '${var.github_repository}' && assertion.repository_owner_id == '${var.github_owner_id}' && assertion.ref == 'refs/heads/master' && assertion.sub == 'repo:${var.github_repository}:environment:${var.environment}'"
+  attribute_condition = "assertion.repository == '${var.github_repository}' && assertion.repository_owner_id == '${var.github_owner_id}' && assertion.ref == 'refs/heads/master' && assertion.sub == 'repo:${split("/", var.github_repository)[0]}@${var.github_owner_id}/${split("/", var.github_repository)[1]}@${var.github_repository_id}:environment:${var.environment}'"
   oidc { issuer_uri = "https://token.actions.githubusercontent.com" }
 }
 resource "google_service_account_iam_member" "federation" {
