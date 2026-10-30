@@ -6,7 +6,7 @@ import logicov.App
 import logicov.auth.{AuthService, LoginLimiter, EmailSignIn}
 import logicov.db.DB
 import logicov.ingest.{ImportRequest, StatementImporter}
-import logicov.model.{ApiError, EmptyRequest, LoginRequest, AuthOptions, EmailSignInRequest, EmailSignInConfirmation, PasswordResetConfirmation, UserRole, WorkspaceUser}
+import logicov.model.{ApiError, EmptyRequest, LoginRequest, AuthOptions, EmailSignInRequest, EmailSignInConfirmation, PasswordResetConfirmation}
 import rapid.Task
 import spice.http.{HttpExchange, HttpMethod, HttpStatus}
 import spice.http.content.Content
@@ -46,13 +46,7 @@ object WebEndpoint extends ConnectionFilter {
       case (HttpMethod.Post, "/api/auth/password/request") if mutationAllowed(exchange) => emailRequest(exchange, reset = true)
       case (HttpMethod.Post, "/api/auth/password/reset") if mutationAllowed(exchange) => passwordReset(exchange)
       case (HttpMethod.Post, "/api/auth/password/request" | "/api/auth/password/reset") => error(exchange, 403, "Request not permitted.")
-      case (HttpMethod.Get, "/api/admin/users") => AuthService.current(token(exchange)).flatMap {
-        case Some(session) if session.role == UserRole.Admin => DB.users.transaction(_.stream.toList).flatMap { users =>
-          json(exchange, 200, users.filter(_.tenantId.value == session.tenantId).map(u => WorkspaceUser(u.email, u.role, u.active)))
-        }
-        case Some(_) => error(exchange, 403, "Administrator access required.")
-        case _ => error(exchange, 401, "Please sign in.")
-      }
+      case (_, p) if p.startsWith("/api/admin/") => AdminEndpoint(exchange)
       case (HttpMethod.Get, "/api/session") => AuthService.current(token(exchange)).flatMap {
         case Some(session) => json(exchange, 200, session)
         case None => error(exchange, 401, "Please sign in.")

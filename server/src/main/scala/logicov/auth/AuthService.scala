@@ -2,7 +2,7 @@ package logicov.auth
 
 import lightdb.id.Id
 import logicov.db.DB
-import logicov.model.SessionView
+import logicov.model.{SessionView, UserRole}
 import rapid.Task
 
 import java.util.Locale
@@ -30,8 +30,18 @@ object AuthService {
       case Some(t) if t.active =>
         val token = SessionTokens.create()
         val session = Session(user._id, System.currentTimeMillis() + SessionSeconds * 1000,
-          _id = Id[Session](SessionTokens.digest(token)), credentialHash = SessionTokens.digest(user.passwordHash))
-        DB.sessions.transaction(_.insert(session)).map(_ => Some(token))
+          _id = Id[Session](SessionTokens.digest(token)), credentialHash = SessionTokens.digest(user.passwordHash), accessVersion = user.accessVersion)
+        DB.users.transaction { users =>
+          val lock = users.state.openConnection().prepareStatement(s"SELECT _id FROM ${users.store.fqn} WHERE _id = ? FOR UPDATE")
+          try { lock.setString(1, user._id.value); lock.executeQuery().close() } finally lock.close()
+          users.get(user._id).flatMap {
+            case Some(current) if current.active && current.passwordHash == user.passwordHash && current.accessVersion == user.accessVersion =>
+              users.upsert(current.copy(lastSignIn = Some(System.currentTimeMillis()))).flatMap { _ =>
+                DB.sessions.transaction.joining(users)(_.insert(session)).map(_ => Some(token))
+              }
+            case _ => Task.pure(None)
+          }
+        }
       case _ => Task.pure(None)
     }
   }
@@ -40,8 +50,8 @@ object AuthService {
     if (!token.matches("[A-Za-z0-9_-]{43}")) Task.pure(None)
     else DB.sessions.transaction(_.get(Id[Session](SessionTokens.digest(token)))).flatMap {
       case Some(s) if s.expiresAt > System.currentTimeMillis() => DB.users.transaction(_.get(s.userId)).flatMap {
-        case Some(u) if u.active && s.credentialHash == SessionTokens.digest(u.passwordHash) => DB.tenants.transaction(_.get(u.tenantId)).map {
-          case Some(t) if t.active => Some(SessionView(u.email, t._id.value, t.name, u.role))
+        case Some(u) if u.active && s.accessVersion == u.accessVersion && s.credentialHash == SessionTokens.digest(u.passwordHash) => DB.tenants.transaction(_.get(u.tenantId)).map {
+          case Some(t) if t.active => Some(SessionView(u.email, t._id.value, t.name, u.role, u.platformAdmin && u.role == UserRole.Admin))
           case _ => None
         }
         case _ => Task.pure(None)
@@ -59,7 +69,7 @@ object AuthService {
         statement.executeQuery().close()
       } finally statement.close()
       users.get(user._id).flatMap {
-        case Some(current) if current.active && current.passwordHash == user.passwordHash && current.created == user.created =>
+        case Some(current) if current.active && current.passwordHash == user.passwordHash && current.created == user.created && current.accessVersion == user.accessVersion =>
           users.upsert(current.copy(passwordHash = hash)).map(_ => true)
         case _ => Task.pure(false)
       }

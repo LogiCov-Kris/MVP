@@ -5,12 +5,23 @@ import everyui.component.{Button, ButtonStyle, Column, Component, Container, Tex
 import everyui.component.types.{FontWeight, Semantics, WhiteSpace}
 import everyui.font.MaterialIcon
 import everyui.theme.{Palette, Theme}
+import logicov.workspace.DealStage
 import reactify.*
 
 object WorkspaceStyle {
   val Navy: Color = Color.fromHex("142B3C")
   val Teal: Color = Color.fromHex("087F79")
   val Soft: Color = Color.fromHex("EFF6F5")
+
+  def quantity(count: Int, noun: String): String = s"$count $noun${if (count == 1) "" else "s"}"
+
+  def stageLabel(stage: DealStage): String = stage match {
+    case DealStage.Review => "Needs review"
+    case DealStage.Approved => "Ready to generate"
+    case DealStage.Generating => "Preparing memo"
+    case DealStage.Completed => "Memo ready"
+    case DealStage.Failed => "Needs attention"
+  }
 
   def initialize(): Unit = {
     Theme.palette @= Palette.light.copy(background = Color.fromHex("F5F7FA"), surface = Color.White,

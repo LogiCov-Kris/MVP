@@ -80,6 +80,8 @@ jobs:
           printf '%s\n' 'Local-smoke-password-123!' | target/runtime/bin/logicov-server -main logicov.auth.ProvisionApp 'Smoke tenant' 'smoke@example.test'
           printf '%s\n' 'Local-smoke-password-123!' | target/runtime/bin/logicov-server -main logicov.auth.ProvisionApp 'Isolation tenant' 'isolation@example.test'
           printf '%s\n' 'Local-smoke-password-123!' | target/runtime/bin/logicov-server -main logicov.auth.ProvisionApp 'Email test tenant' 'email-smoke@example.test'
+          printf '%s\n' 'Local-smoke-password-123!' | target/runtime/bin/logicov-server -main logicov.auth.ProvisionApp 'Administration test tenant' 'admin-smoke@example.test'
+          target/runtime/bin/logicov-server -main logicov.auth.AccountAdminApp 'admin-smoke@example.test' platform
       - name: Create ephemeral test encryption key
         run: echo "LOGICOV_MASTER_KEY=$(openssl rand -base64 32)" >> "$GITHUB_ENV"
       - name: Verify container login
@@ -120,6 +122,8 @@ jobs:
             sleep 2
           done
           node deploy/email-smoke.cjs
+          node deploy/admin-smoke.cjs
+          node deploy/workspace-admin-smoke.cjs
       - name: Container logs on failure
         if: failure()
         run: docker logs logicov-smoke 2>/dev/null || true

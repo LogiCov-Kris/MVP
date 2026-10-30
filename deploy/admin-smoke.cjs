@@ -1,0 +1,52 @@
+const {chromium}=require('playwright');
+const fs=require('node:fs/promises');
+const assert=require('node:assert/strict');
+
+(async()=>{
+  const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH || undefined,args:['--no-sandbox']});
+  const base=process.env.LOGICOV_ADMIN_TEST_URL || 'http://127.0.0.1:18302';
+  const headers={'X-LogiCov-Request':'1'};
+  const email=`admin-browser-${Date.now()}@example.test`;
+  try {
+    const page=await browser.newPage({viewport:{width:1440,height:1000}});
+    page.setDefaultTimeout(30000);
+    page.on('dialog',dialog=>dialog.accept());
+    await page.goto(base);
+    await page.getByRole('button',{name:'Use a password instead',exact:true}).click();
+    await page.locator('input[name=email]').fill('admin-smoke@example.test');
+    await page.locator('input[name=password]').fill('Local-smoke-password-123!');
+    await page.locator('input[name=password]').press('Enter');
+    await page.getByRole('button',{name:'Users',exact:true}).click();
+    await page.getByRole('textbox',{name:'Email',exact:true}).fill(email);
+    await page.getByRole('button',{name:'Create user',exact:true}).click();
+    await page.getByRole('button',{name:'Send invitation',exact:true}).waitFor();
+    await page.getByRole('button',{name:'Send invitation',exact:true}).click();
+    await page.getByText('Invitation accepted by the email provider. Inbox delivery is not yet confirmed.',{exact:true}).waitFor();
+    const invite=JSON.parse(await fs.readFile('target/email-smoke/message.json','utf8'));
+    assert.equal(invite.to,email);assert.equal(invite.subject,"You're invited to LogiCov");assert(invite.text.includes(base));
+    const member=await browser.newContext();
+    assert.equal((await member.request.post(base+'/api/auth/email/request',{headers,data:{email}})).status(),200);
+    const mail=JSON.parse(await fs.readFile('target/email-smoke/message.json','utf8'));
+    const token=mail.text.match(/#signin=([A-Za-z0-9_-]+)/)[1];
+    assert.equal((await member.request.post(base+'/api/auth/email/confirm',{headers,data:{email,token}})).status(),200);
+    assert.equal((await member.request.get(base+'/api/admin/users')).status(),403);
+    assert.equal((await member.request.post(base+'/api/admin/users',{headers,data:{action:'Create',email:'forbidden@example.test'}})).status(),403);
+    const memberPage=await member.newPage();await memberPage.goto(base);
+    await memberPage.getByRole('button',{name:'New financial review',exact:true}).waitFor();assert.equal(await memberPage.getByRole('button',{name:'Users',exact:true}).count(),0);
+    await page.getByRole('button',{name:'Refresh users',exact:true}).click();
+    await page.getByText(/Unexpired sessions: 1/).waitFor();
+    await page.getByRole('button',{name:'Revoke sessions',exact:true}).click();
+    await page.getByText('Existing sessions and outstanding sign-in links revoked',{exact:false}).waitFor();
+    assert.equal((await member.request.get(base+'/api/session')).status(),401);
+    await page.getByRole('combobox',{name:'Account access',exact:true}).selectOption({label:'Suspended'});
+    await page.getByRole('button',{name:'Save access',exact:true}).click();
+    await page.getByText('Analyst · Suspended',{exact:false}).waitFor();
+    const list=await (await page.request.get(base+'/api/admin/users')).json();const saved=list.find(u=>u.email===email);
+    assert.equal(saved.active,false);assert(saved.lastSignIn);assert(saved.history.length>=4);
+    assert.equal((await page.request.post(base+'/api/admin/users',{headers,data:{action:'Update',email,role:'Admin',active:true,revision:0}})).status(),400);
+    assert.equal((await page.request.post(base+'/api/admin/users',{data:{action:'Create',email:'csrf@example.test'}})).status(),403);
+    if(process.env.LOGICOV_ADMIN_SCREENSHOT) await page.screenshot({path:process.env.LOGICOV_ADMIN_SCREENSHOT});
+    await member.close();
+    console.log('Admin browser passed: create, captured invitation, invited sign-in, analyst denial, activity, revocation, suspension, stale edit and CSRF denial');
+  }finally{await browser.close();await fs.unlink('target/email-smoke/message.json').catch(error=>{if(error.code!=='ENOENT')throw error;});}
+})().catch(error=>{console.error(error);process.exitCode=1;});

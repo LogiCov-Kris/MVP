@@ -4,12 +4,19 @@ import fabric.io.{JsonFormatter, JsonParser}
 import fabric.rw.*
 import logicov.ingest.{ImportRequest, ImportResult}
 import logicov.workspace.*
-import logicov.model.{ApiError, EmptyRequest, LoginRequest, SessionView, AuthOptions, EmailSignInRequest, EmailSignInConfirmation, PasswordResetConfirmation}
+import logicov.model.{ApiError, EmptyRequest, LoginRequest, SessionView, WorkspaceUser, UserRequest, ManagedWorkspace, WorkspaceRequest, AuthOptions, EmailSignInRequest, EmailSignInConfirmation, PasswordResetConfirmation}
 import org.scalajs.dom.XMLHttpRequest
 
 import scala.util.Try
 
 object ApiClient {
+  def users(done: Either[String, List[WorkspaceUser]] => Unit): Unit = get("/api/admin/users")(done)
+  def workspaceUsers(id: String)(done: Either[String, List[WorkspaceUser]] => Unit): Unit = get(s"/api/admin/workspaces/$id/users")(done)
+  def manageUser(value: UserRequest, workspaceId: String = "")(done: Either[String, List[WorkspaceUser]] => Unit): Unit =
+    post(if (workspaceId.isEmpty) "/api/admin/users" else s"/api/admin/workspaces/$workspaceId/users", value)(done)
+  def workspaces(done: Either[String, List[ManagedWorkspace]] => Unit): Unit = get("/api/admin/workspaces")(done)
+  def manageWorkspace(value: WorkspaceRequest)(done: Either[String, List[ManagedWorkspace]] => Unit): Unit = post("/api/admin/workspaces", value)(done)
+
   def deals(done: Either[String, List[DealSummary]] => Unit): Unit = get("/api/deals")(done)
   def deal(id: String)(done: Either[String, WorkspaceDeal] => Unit): Unit = get(s"/api/deals/$id")(done)
   def create(value: CreateDealRequest)(done: Either[String, WorkspaceDeal] => Unit): Unit = post("/api/deals", value)(done)

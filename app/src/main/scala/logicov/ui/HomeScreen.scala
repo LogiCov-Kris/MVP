@@ -4,7 +4,7 @@ import everyui.Color
 import everyui.app.screen.{ScreenManager, UIScreen}
 import everyui.async.Task
 import everyui.component.{Column, Component, Container, Row, ScrollContainer, TextInput, TextView}
-import everyui.component.types.{Autofill, Semantics, WhiteSpace}
+import everyui.component.types.{Autofill, Semantics, TextOverflow, WhiteSpace}
 import everyui.net.URLPath
 import everyui.theme.Theme
 import logicov.model.{SessionView, UserRole}
@@ -251,7 +251,8 @@ class HomeScreen extends UIScreen {
     label.color @= Color.fromHex("90A7B6")
     label.position.left @= 26.0
     label.position.top @= 115.0
-    val active = WorkspaceStyle.card(() => 192.0, WorkspaceStyle.text("Deal workspace", 14.0, bold = true))
+    val activeLabel = WorkspaceStyle.text("Deal workspace", 14.0, bold = true)
+    val active = WorkspaceStyle.card(() => 192.0, activeLabel)
     active.padding @= 14.0
     active.backgroundColor @= Color.fromHex("DCEDEA")
     active.borderWidth @= 0.0
@@ -270,11 +271,15 @@ class HomeScreen extends UIScreen {
     header.semantics @= Semantics.banner
     val tenant = WorkspaceStyle.text(session.tenantName, 15.0, bold = true)
     tenant.content := (if (root.size.width() < 1000.0) s"LogiCov · ${session.tenantName}" else session.tenantName)
+    tenant.whiteSpace @= WhiteSpace.NoWrap
+    tenant.textOverflow @= TextOverflow.Ellipsis
     tenant.position.left @= 24.0
     tenant.position.top @= 19.0
     tenant.maxWidth := math.max(150.0, header.size.width() - 150.0)
     val identity = WorkspaceStyle.text(session.email, 11.0, muted = true)
-    identity.content @= (session.email + (if (session.role == UserRole.Admin) " · Administrator" else ""))
+    identity.content @= (session.email + (if (session.platformAdmin) " · Platform administrator" else if (session.role == UserRole.Admin) " · Administrator" else ""))
+    identity.whiteSpace @= WhiteSpace.NoWrap
+    identity.textOverflow @= TextOverflow.Ellipsis
     identity.position.left @= 24.0
     identity.position.top @= 43.0
     identity.maxWidth := math.max(150.0, header.size.width() - 150.0)
@@ -287,7 +292,41 @@ class HomeScreen extends UIScreen {
     val width = () => math.min(1120.0, scroll.size.width() - (if (scroll.size.width() < 600.0) 32.0 else 64.0))
     status.size.width := width()
     val panel = new WorkspacePanel(width)
-    val signOut = WorkspaceStyle.button("Sign out", () => if (panel.canLeave) {
+    var administration = Option.empty[UserAdminPanel]
+    var workspaceAdministration = Option.empty[WorkspaceAdminPanel]
+    val area = Var(WorkspaceArea.Deals)
+    def canLeaveWorkspace: Boolean = area() match {
+      case WorkspaceArea.Deals => panel.canLeave
+      case WorkspaceArea.Users => administration.forall(_.canLeave)
+      case WorkspaceArea.Workspaces => workspaceAdministration.forall(_.canLeave)
+    }
+    val page = Column(14.0)(panel)
+    val workspaceButton = WorkspaceStyle.button("Deals", () => if (canLeaveWorkspace) {
+      area @= WorkspaceArea.Deals
+      activeLabel.content @= "Deal workspace"
+      page.children @= Vector(panel)
+    })
+    val usersButton = WorkspaceStyle.button("Users", () => if (canLeaveWorkspace) {
+      val users = new UserAdminPanel(width, session)
+      administration = Some(users)
+      area @= WorkspaceArea.Users
+      activeLabel.content @= "User administration"
+      page.children @= Vector(users)
+    })
+    val workspacesButton = WorkspaceStyle.button("Workspaces", () => if (canLeaveWorkspace) {
+      val workspaces = new WorkspaceAdminPanel(width, session)
+      workspaceAdministration = Some(workspaces)
+      area @= WorkspaceArea.Workspaces
+      activeLabel.content @= "Workspaces"
+      page.children @= Vector(workspaces)
+    })
+    workspacesButton.visible @= session.platformAdmin
+    workspacesButton.backgroundColor := (if (area() == WorkspaceArea.Workspaces) WorkspaceStyle.Soft else Color.White)
+    workspaceButton.backgroundColor := (if (area() == WorkspaceArea.Deals) WorkspaceStyle.Soft else Color.White)
+    usersButton.backgroundColor := (if (area() == WorkspaceArea.Users) WorkspaceStyle.Soft else Color.White)
+    val navigation = Row(10.0)(workspaceButton, usersButton, workspacesButton)
+    navigation.visible @= session.role == UserRole.Admin
+    val signOut = WorkspaceStyle.button("Sign out", () => if (canLeaveWorkspace) {
       busy @= true
       ApiClient.logout { error =>
         busy @= false
@@ -300,8 +339,12 @@ class HomeScreen extends UIScreen {
     signOut.position.left := header.size.width() - signOut.size.width() - 24.0
     signOut.position.top @= 19.0
     header.children ++= Vector(tenant, identity, signOut)
-    signOut.enabled := !busy() && !panel.processing
-    val content = Column(14.0)(status, panel)
+    signOut.enabled := !busy() && (area() match {
+      case WorkspaceArea.Deals => !panel.processing
+      case WorkspaceArea.Users => administration.forall(!_.processing)
+      case WorkspaceArea.Workspaces => workspaceAdministration.forall(!_.processing)
+    })
+    val content = Column(14.0)(status, navigation, page)
     content.position.center := scroll.size.center()
     content.position.top @= 20.0
     scroll.content.children += content

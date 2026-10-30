@@ -3,7 +3,7 @@ package logicov.auth
 import lightdb.id.Id
 import logicov.config.LogiCovConfig
 import logicov.db.DB
-import logicov.model.UserRole
+import logicov.model.{UserRole, UserAction, UserRequest, SessionView, WorkspaceAction, WorkspaceRequest}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -182,6 +182,187 @@ class AuthIntegrationSpec extends AnyFlatSpec with Matchers with BeforeAndAfterA
     reset.request(user.email).sync()
     time += 600001
     reset.reset(user.email, resetToken, "Another-password-123!").sync() should be(false)
+  }
+
+  private def admin(): (User, SessionView) = {
+    val user = AuthService.provision("Managed workspace", address(), password).sync().copy(role = UserRole.Admin)
+    DB.users.transaction(_.upsert(user)).sync()
+    user -> AuthService.current(token(user.email)).sync().getOrElse(fail("Missing administrator session"))
+  }
+
+  "User administration" should "scope accounts, reject analysts and retain management evidence" in {
+    assume(enabled)
+    val (owner, actor) = admin()
+    val (other, outsider) = admin()
+    val email = address()
+    UserAdministration.change(actor, UserRequest(UserAction.Create, email)).sync()
+    val created = UserAdministration.list(actor).sync().find(_.email == email).getOrElse(fail("Missing created user"))
+    created.role should be(UserRole.Analyst)
+    created.history.head.actor should be(owner.email)
+    UserAdministration.list(outsider).sync().exists(_.email == email) should be(false)
+    intercept[NoSuchElementException](UserAdministration.change(outsider, UserRequest(UserAction.Update, email, revision = created.revision)).sync())
+    intercept[IllegalArgumentException](UserAdministration.change(actor, UserRequest(UserAction.Create, other.email)).sync())
+    val analyst = AuthService.addUser(owner.tenantId.value, address(), password).sync()
+    val analystSession = AuthService.current(token(analyst.email)).sync().getOrElse(fail("Missing analyst"))
+    intercept[IllegalArgumentException](UserAdministration.list(analystSession).sync())
+    intercept[IllegalArgumentException](UserAdministration.change(analystSession, UserRequest(UserAction.Create, address())).sync())
+    intercept[IllegalArgumentException](UserAdministration.change(actor, UserRequest(UserAction.Update, email, revision = 0)).sync())
+  }
+
+  it should "revoke sessions and links permanently across suspension and reactivation" in {
+    assume(enabled)
+    EmailSignIn.migrate()
+    val (owner, actor) = admin()
+    val user = AuthService.addUser(owner.tenantId.value, address(), password).sync()
+    val live = token(user.email)
+    var linkToken = ""
+    val links = new EmailLinks((_, link) => linkToken = link.split("#signin=").last, "https://example.test")
+    links.request(user.email).sync()
+    UserAdministration.list(actor).sync().find(_.email == user.email).map(_.activeSessions) should be(Some(1))
+    UserAdministration.change(actor, UserRequest(UserAction.Update, user.email, active = false)).sync()
+    AuthService.current(live).sync() should be(None)
+    UserAdministration.change(actor, UserRequest(UserAction.Update, user.email, active = true, revision = 1)).sync()
+    AuthService.current(live).sync() should be(None)
+    links.confirm(user.email, linkToken).sync() should be(None)
+    val fresh = token(user.email)
+    UserAdministration.change(actor, UserRequest(UserAction.RevokeSessions, user.email, revision = 2)).sync()
+    AuthService.current(fresh).sync() should be(None)
+    UserAdministration.list(actor).sync().find(_.email == user.email).exists(_.lastSignIn.nonEmpty) should be(true)
+  }
+
+  it should "prevent self lockout and reject stale concurrent administrator edits" in {
+    assume(enabled)
+    val (owner, actor) = admin()
+    intercept[IllegalArgumentException](UserAdministration.change(actor, UserRequest(UserAction.Update, owner.email, active = false)).sync())
+    val user = AuthService.addUser(owner.tenantId.value, address(), password).sync()
+    val pool = Executors.newFixedThreadPool(2)
+    try {
+      val calls = (1 to 2).map { _ => pool.submit(new Callable[Boolean] {
+        def call(): Boolean = try {
+          UserAdministration.change(actor, UserRequest(UserAction.Update, user.email, role = UserRole.Admin)).sync()
+          true
+        } catch { case _: IllegalArgumentException => false }
+      }) }
+      calls.count(_.get()) should be(1)
+    } finally pool.shutdownNow()
+  }
+
+  it should "retain an administrator during concurrent reciprocal suspensions" in {
+    assume(enabled)
+    val (owner, actor) = admin()
+    val second = AuthService.addUser(owner.tenantId.value, address(), password).sync().copy(role = UserRole.Admin)
+    DB.users.transaction(_.upsert(second)).sync()
+    val colleague = AuthService.current(token(second.email)).sync().getOrElse(fail("Missing administrator"))
+    val pool = Executors.newFixedThreadPool(2)
+    try {
+      val calls = List(actor -> second.email, colleague -> owner.email).map { (acting, target) =>
+        pool.submit(new Callable[Boolean] {
+          def call(): Boolean = try {
+            UserAdministration.change(acting, UserRequest(UserAction.Update, target, active = false)).sync()
+            true
+          } catch { case _: IllegalArgumentException => false }
+        })
+      }
+      calls.count(_.get()) should be(1)
+      DB.users.transaction(_.stream.toList).sync().count(u => u.tenantId == owner.tenantId && u.active && u.role == UserRole.Admin) should be(1)
+    } finally pool.shutdownNow()
+  }
+
+  it should "report invitation failures honestly and preserve created accounts for retry" in {
+    assume(enabled)
+    val (owner, actor) = admin()
+    val user = AuthService.addUser(owner.tenantId.value, address(), password).sync()
+    var delivered = ""
+    UserAdministration.change(actor, UserRequest(UserAction.Invite, user.email), (email, _) => delivered = email, emailEnabled = true).sync()
+    delivered should be(user.email)
+    UserAdministration.list(actor).sync().find(_.email == user.email).map(_.history.last.action) should be(Some(UserAction.InvitationSent))
+    intercept[IllegalArgumentException](UserAdministration.change(actor, UserRequest(UserAction.Invite, user.email, revision = 2), (_, _) => (), emailEnabled = true).sync())
+    val failed = AuthService.addUser(owner.tenantId.value, address(), password).sync()
+    intercept[IllegalStateException](UserAdministration.change(actor, UserRequest(UserAction.Invite, failed.email), (_, _) => throw new IllegalStateException("Unavailable"), emailEnabled = true).sync())
+    UserAdministration.list(actor).sync().find(_.email == failed.email).map(_.history.last.action) should be(Some(UserAction.InvitationFailed))
+    UserAdministration.list(actor).sync().exists(_.email == failed.email) should be(true)
+    intercept[IllegalArgumentException](UserAdministration.change(actor, UserRequest(UserAction.Invite, owner.email), (_, _) => (), emailEnabled = false).sync())
+  }
+
+  private def platform(): (User, SessionView) = {
+    val (user, _) = admin()
+    val elevated = user.copy(platformAdmin = true)
+    DB.users.transaction(_.upsert(elevated)).sync()
+    elevated -> AuthService.current(token(user.email)).sync().getOrElse(fail("Missing platform session"))
+  }
+
+  "Workspace administration" should "create isolated workspaces with an ordinary first administrator" in {
+    assume(enabled)
+    val (_, actor) = platform()
+    val name = "Customer " + UUID.randomUUID()
+    val email = address()
+    WorkspaceAdministration.change(actor, WorkspaceRequest(WorkspaceAction.Create, name, administratorEmail = email)).sync()
+    val workspace = WorkspaceAdministration.list(actor).sync().find(_.name == name).getOrElse(fail("Missing workspace"))
+    workspace.users should be(1)
+    workspace.administrators should be(1)
+    val members = UserAdministration.list(actor, workspace.id).sync()
+    members.map(_.email) should be(List(email))
+    members.head.platformAdmin should be(false)
+    val account = DB.users.transaction(_.get(Id[User](SessionTokens.digest(email)))).sync().getOrElse(fail("Missing first administrator"))
+    val session = AuthService.current(AuthService.createSession(account).sync().getOrElse(fail("Missing token"))).sync().getOrElse(fail("Missing session"))
+    session.tenantId should be(workspace.id)
+    session.platformAdmin should be(false)
+    intercept[IllegalArgumentException](WorkspaceAdministration.list(session).sync())
+    intercept[IllegalArgumentException](UserAdministration.list(session, actor.tenantId).sync())
+    UserAdministration.change(actor, UserRequest(UserAction.Create, address()), workspaceId = workspace.id).sync()
+    UserAdministration.list(actor, workspace.id).sync().size should be(2)
+    UserAdministration.list(actor).sync().exists(_.email == email) should be(false)
+  }
+
+  it should "permanently revoke customer sessions and links when a workspace is suspended" in {
+    assume(enabled)
+    EmailSignIn.migrate()
+    val (_, actor) = platform()
+    val name = "Suspend " + UUID.randomUUID()
+    val email = address()
+    WorkspaceAdministration.change(actor, WorkspaceRequest(WorkspaceAction.Create, name, administratorEmail = email)).sync()
+    val workspace = WorkspaceAdministration.list(actor).sync().find(_.name == name).getOrElse(fail("Missing workspace"))
+    val user = DB.users.transaction(_.get(Id[User](SessionTokens.digest(email)))).sync().getOrElse(fail("Missing user"))
+    val live = AuthService.createSession(user).sync().getOrElse(fail("Missing token"))
+    var pendingLink = ""
+    val links = new EmailLinks((_, link) => pendingLink = link.split("#signin=").last, "https://example.test")
+    links.request(email).sync()
+    WorkspaceAdministration.change(actor, WorkspaceRequest(WorkspaceAction.Update, name, workspace.id, active = false, revision = 1)).sync()
+    AuthService.current(live).sync() should be(None)
+    intercept[IllegalArgumentException](UserAdministration.change(actor, UserRequest(UserAction.Create, address()), workspaceId = workspace.id).sync())
+    WorkspaceAdministration.change(actor, WorkspaceRequest(WorkspaceAction.Update, name, workspace.id, active = true, revision = 2)).sync()
+    AuthService.current(live).sync() should be(None)
+    links.confirm(email, pendingLink).sync() should be(None)
+    val latest = DB.users.transaction(_.get(user._id)).sync().getOrElse(fail("Missing user"))
+    AuthService.createSession(latest).sync().nonEmpty should be(true)
+    WorkspaceAdministration.list(actor).sync().find(_.id == workspace.id).map(_.history.size) should be(Some(3))
+  }
+
+  it should "reject stale updates and atomically reject a duplicate initial administrator" in {
+    assume(enabled)
+    val (_, actor) = platform()
+    val before = WorkspaceAdministration.list(actor).sync().size
+    intercept[IllegalArgumentException](WorkspaceAdministration.change(actor, WorkspaceRequest(WorkspaceAction.Create, "Duplicate " + UUID.randomUUID(), administratorEmail = actor.email)).sync())
+    WorkspaceAdministration.list(actor).sync().size should be(before)
+    val name = "Revision " + UUID.randomUUID()
+    WorkspaceAdministration.change(actor, WorkspaceRequest(WorkspaceAction.Create, name, administratorEmail = address())).sync()
+    val workspace = WorkspaceAdministration.list(actor).sync().find(_.name == name).getOrElse(fail("Missing workspace"))
+    WorkspaceAdministration.change(actor, WorkspaceRequest(WorkspaceAction.Update, name + " renamed", workspace.id, revision = 1)).sync()
+    intercept[IllegalArgumentException](WorkspaceAdministration.change(actor, WorkspaceRequest(WorkspaceAction.Update, name, workspace.id, revision = 1)).sync())
+    val home = WorkspaceAdministration.list(actor).sync().find(_.id == actor.tenantId).getOrElse(fail("Missing home"))
+    intercept[IllegalArgumentException](WorkspaceAdministration.change(actor, WorkspaceRequest(WorkspaceAction.Update, home.name, home.id, active = false, revision = home.revision)).sync())
+  }
+
+  it should "protect platform accounts from customer administrators and recheck platform authority" in {
+    assume(enabled)
+    val (owner, actor) = platform()
+    val colleague = AuthService.addUser(owner.tenantId.value, address(), password).sync().copy(role = UserRole.Admin)
+    DB.users.transaction(_.upsert(colleague)).sync()
+    val localAdmin = AuthService.current(token(colleague.email)).sync().getOrElse(fail("Missing local admin"))
+    intercept[IllegalArgumentException](UserAdministration.change(localAdmin, UserRequest(UserAction.Update, owner.email, active = false)).sync())
+    intercept[IllegalArgumentException](WorkspaceAdministration.change(localAdmin, WorkspaceRequest(WorkspaceAction.Create, "Unauthorized", administratorEmail = address())).sync())
+    DB.users.transaction(_.upsert(owner.copy(platformAdmin = false))).sync()
+    intercept[IllegalArgumentException](WorkspaceAdministration.list(actor).sync())
   }
 
 }

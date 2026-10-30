@@ -17,18 +17,21 @@ import reactify.*
 
 import scala.util.Try
 
-class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit) extends Container {
+class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, initialSection: String = "Financials") extends Container {
   layout @= Some(VerticalLayout(20.0))
   size.width := width()
   private var deal = initial
-  private var tab = "Financials"
+  private var tab = initialSection
   private var dirty = false
   private val busy = Var(false)
   private val message = Var("")
+  private val saved = Var(false)
   private val inner = () => width() - 48.0
   private val content = Column(18.0)()
   private val status = TextView.bound(message(), 13.0, Theme.danger())
   status.size.width := width()
+  status.color := (if (saved()) WorkspaceStyle.Teal else Theme.danger())
+  status.node.el.setAttribute("role", "status")
   private val heading = WorkspaceStyle.text(deal.title, 28.0, bold = true)
   heading.size.width := width()
   heading.whiteSpace @= WhiteSpace.Normal
@@ -40,7 +43,7 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit) e
   private val tabs = Row(8.0)()
   toolbar.layout := Some(if (width() < 280.0) VerticalLayout(8.0) else HorizontalLayout(10.0))
   tabs.visible := width() >= 700.0
-  private val tabNames = List("Financials", "Judgments", "Policy", "Memo", "History")
+  private val tabNames = List("Overview", "Financials", "Judgments", "Policy", "Memo", "History")
   private val mobileTabs = new Select(tabNames)
   mobileTabs.size.width := width()
   mobileTabs.size.height @= 46.0
@@ -83,13 +86,16 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit) e
   }
   private def save[A: RW](route: String, value: A): Unit = {
     busy @= true
+    saved @= false
     message @= ""
     ApiClient.action(deal.id, route, value) {
-      case Right(updated) => busy @= false; dirty = false; deal = updated; render()
+      case Right(updated) => busy @= false; dirty = false; deal = updated; saved @= true; message @= "Changes saved."; render()
       case Left(error) => busy @= false; message @= error
     }
   }
   private def reload(): Unit = {
+    saved @= false
+    message @= ""
     busy @= true
     ApiClient.deal(deal.id) {
       case Right(updated) => busy @= false; dirty = false; deal = updated; render()
@@ -103,7 +109,7 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit) e
     link.click()
   }
   private def render(): Unit = {
-    state.content @= s"${deal.stage} · Revision ${deal.revision} · ${deal.grid.values.size} cited values · ${deal.issues.indices.count(i => !deal.dispositions.contains(i.toString))} open review items"
+    state.content @= s"${WorkspaceStyle.stageLabel(deal.stage)} · Revision ${deal.revision} · ${deal.grid.values.size} cited values · ${deal.issues.indices.count(i => !deal.dispositions.contains(i.toString))} open review items"
     mobileTabs.selected @= tabNames.indexOf(tab)
     tabs.children @= tabNames.map { name =>
       val button = WorkspaceStyle.button(name, () => if (canLeave) { dirty = false; tab = name; render() }, primary = name == tab)
@@ -111,6 +117,7 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit) e
       button
     }.toVector
     content.children @= (tab match {
+      case "Overview" => overview()
       case "Financials" => financials()
       case "Judgments" => judgments()
       case "Policy" => policy()
@@ -122,11 +129,41 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit) e
     }, 3000)
   }
 
+  private def overview(): Vector[Component] = {
+    val unresolved = deal.issues.indices.count(i => !deal.dispositions.contains(i.toString))
+    val cleared = ReviewTopic.values.count(topic => deal.stopReviews.exists(r => r.topic == topic && r.status == ReviewStatus.Clear && r.evidence.trim.nonEmpty))
+    def step(title: String, detail: String, destination: String, label: String): Component = {
+      WorkspaceStyle.card(width, WorkspaceStyle.text(title, 18.0, bold = true),
+        WorkspaceStyle.paragraph(detail, inner), WorkspaceStyle.button(label, () => {
+          if (canLeave) { dirty = false; tab = destination; render() }
+        }))
+    }
+    Vector(
+      WorkspaceStyle.card(width, WorkspaceStyle.text("Your review at a glance", 20.0, bold = true),
+        WorkspaceStyle.paragraph("Work through the financials, document your judgment, then approve the inputs for your memo. You can revisit any section before approval.", inner)),
+      step("1. Financials and sources", s"${deal.grid.values.size} cited values · $unresolved extraction issues awaiting review. Inspect source evidence and record corrections here.", "Financials", "Review financials"),
+      step("2. Credit judgment", if (deal.record.isEmpty) "Complete the credit profile before generating a full credit memo." else "Review the credit profile, risk rating, recommendation and sensitivity assumptions.", "Judgments", "Review judgments"),
+      step("3. Institution policy", deal.policy.fold("No institution policy configured. Add your institution's rules or document an exception during approval.")(p => s"Policy: ${p.name}. Review results and any exceptions before approval."), "Policy", "Review policy"),
+      step("4. Approval and memo", s"$cleared of ${ReviewTopic.values.length} required checks cleared. Document the remaining checks, edit section narratives and approve the reviewed inputs. Downloads appear here when the memo is ready.", "Memo", "Review and prepare memo"),
+      step("Review history", "See saved changes, evidence and approvals for this deal.", "History", "View history"))
+  }
+
   private def financials(): Vector[Component] = {
     val detail = WorkspaceStyle.card(width, WorkspaceStyle.text("Inspect a value", 17.0, bold = true),
       WorkspaceStyle.paragraph("Select a financial line to see its citation or record a correction.", inner))
     def label(i: Int): String = deal.grid.values(i).item.toString.replaceAll("([a-z])([A-Z])", "$1 $2")
-    val grid = new VirtualTable[Int](Var(deal.grid.values.indices.toVector), _.toString, label, Vector(
+    val visibleRows = Var(deal.grid.values.indices.toVector)
+    val search = new TextInput("Find a financial line or period")
+    search.size.width := inner()
+    val resultCount = WorkspaceStyle.text("", 13.0, muted = true)
+    def filterRows(): Unit = {
+      val query = search.value().trim.toLowerCase
+      visibleRows @= deal.grid.values.indices.filter(i => s"${label(i)} ${deal.grid.values(i).period.label}".toLowerCase.contains(query)).toVector
+      resultCount.content @= s"${visibleRows().size} of ${deal.grid.values.size} values · Select a row to inspect its source"
+    }
+    search.value.attach(_ => filterRows())
+    filterRows()
+    val grid = new VirtualTable[Int](visibleRows, _.toString, label, Vector(
       GridColumn.text[Int]("item", "Financial line item", 280.0, sorts = true)(label),
       GridColumn.text[Int]("period", "Period", 180.0, sorts = true)(i => deal.grid.values(i).period.label),
       GridColumn.text[Int]("value", "USD millions", 160.0, align = TextAlign.End,
@@ -161,7 +198,7 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit) e
     val sources = deal.documents.filterNot(_.name.startsWith("generated-")).map { doc =>
       WorkspaceStyle.button(s"Download ${doc.name}", () => download(doc))
     }
-    Vector(WorkspaceStyle.card(width, WorkspaceStyle.text("Golden Grid", 20.0, bold = true), grid), detail,
+    Vector(WorkspaceStyle.card(width, WorkspaceStyle.text("Golden Grid", 20.0, bold = true), search, resultCount, grid), detail,
       WorkspaceStyle.card(width, (Vector(WorkspaceStyle.text("Source documents", 18.0, bold = true)) ++ sources)*)) ++ issues
   }
 

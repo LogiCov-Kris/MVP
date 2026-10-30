@@ -57,9 +57,20 @@ object EmailSignIn {
     val reset = link.contains("#reset=")
     val subject = if (reset) "Reset your LogiCov password" else "Sign in to LogiCov"
     val instruction = if (reset) "reset your LogiCov password" else "sign in to LogiCov"
+    deliverMessage(address, subject, s"Use this link to $instruction:\n\n$link\n\nThe link expires in 10 minutes and can be used once. Enter this email address on the page to continue. If you did not request it, you can ignore this email.")
+  }
+
+  def invite(address: String, tenant: String): Unit = {
+    require(enabled, "Email invitations are not configured.")
+    val origin = sys.env.getOrElse("LOGICOV_PUBLIC_URL", "")
+    require(origin.matches("https://[^/#?]+") || (!App.config.production && origin.matches("http://(127\\.0\\.0\\.1|localhost):[0-9]+")), "Trusted application URL required")
+    deliverMessage(address, "You're invited to LogiCov", s"You have been invited to the $tenant workspace in LogiCov.\n\nOpen $origin and enter $address to request a secure sign-in link. You can also use Forgot password to set a password.\n\nYour workspace administrator manages your access.")
+  }
+
+  private def deliverMessage(address: String, subject: String, text: String): Unit = {
     val boundary = "mail-" + UUID.randomUUID().toString
     val fields = List("from" -> sys.env("LOGICOV_EMAIL_FROM"), "to" -> address, "subject" -> subject,
-      "text" -> s"Use this link to $instruction:\n\n$link\n\nThe link expires in 10 minutes and can be used once. Enter this email address on the page to continue. If you did not request it, you can ignore this email.",
+      "text" -> text,
       "o:tracking" -> "no", "o:tracking-clicks" -> "no", "o:tracking-opens" -> "no")
     val payload = fields.map { case (name, value) =>
       s"--$boundary\r\nContent-Disposition: form-data; name=\"$name\"\r\n\r\n$value\r\n"

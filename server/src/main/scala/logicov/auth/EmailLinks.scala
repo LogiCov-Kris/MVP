@@ -87,7 +87,7 @@ class EmailLinks(send: (String, String) => Unit, origin: String, now: () => Long
     }
   }
 
-  private def identity(user: User): String = SessionTokens.digest(user.passwordHash + ":" + user.created.toString)
+  private def identity(user: User): String = SessionTokens.digest(user.passwordHash + ":" + user.created.toString + (if (user.accessVersion == 0) "" else s":${user.accessVersion}"))
 
   private def remove(digest: String): Unit = DB.connections.jdbc { connection =>
     val statement = connection.prepareStatement("DELETE FROM email_signin_tokens WHERE digest = ?")
