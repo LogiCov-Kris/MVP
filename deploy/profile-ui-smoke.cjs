@@ -49,7 +49,7 @@ const { chromium } = require('playwright');
     await page.getByRole('button', {name:'Save narrative',exact:true}).click();
     const narrativeResponse=await narrativeSaved;assert.equal(narrativeResponse.status(),200,await narrativeResponse.text());
     const narrativeDeal=await narrativeResponse.json();await page.getByText(new RegExp('Revision '+narrativeDeal.revision+' ·')).first().waitFor();
-    await page.locator('.lc-memo article').getByText(/Reviewed borrower:/).waitFor();
+    await page.locator('#memo-section-0').getByText(/Reviewed borrower:/).waitFor();
     assert.equal(await page.getByRole('button',{name:'Submit to Committee',exact:true}).count(),0);
     await require('./review-checks.cjs')(page);
     await page.getByRole('textbox', { name: 'Approval explanation or policy exception', exact: true }).fill('Synthetic profile verification without institution policy');

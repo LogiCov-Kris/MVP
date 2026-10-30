@@ -344,12 +344,13 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
     } else Vector(WorkspaceStyle.card(width, WorkspaceStyle.text("Complete the credit profile", 20.0, bold = true),
       WorkspaceStyle.paragraph("Financial statements alone do not establish facility terms or credit judgments. Complete the sourced profile before preparing a committee memo.", inner),
       WorkspaceStyle.button("Complete credit profile", () => { tab = "Judgments"; render() })))
-    val latest = deal.documents.filter(d => d.name.startsWith("generated-") && d.contentType != "application/json").reverse.groupBy(_.contentType).values.map(_.head).toVector
+    val latest = deal.documents.filter(d => d.name.startsWith("generated-") && d.contentType != "application/json").reverse.groupBy(d => if (d.name.contains("audit")) "audit" else d.contentType).values.map(_.head).toVector
     val downloads = if (!ready) Vector.empty else Vector(WorkspaceStyle.card(width, (Vector(WorkspaceStyle.text("Memo and evidence", 18.0, bold = true)) ++ latest.map { document =>
       val label = document.contentType match {
         case "application/pdf" => "memo PDF"
         case "application/zip" => "review bundle"
-        case _ => "source audit"
+        case _ if document.name.contains("audit") => "source audit"
+        case _ => "memo HTML"
       }
       WorkspaceStyle.button(s"Download $label", () => download(document))
     })* ))
