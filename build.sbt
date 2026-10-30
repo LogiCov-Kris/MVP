@@ -91,6 +91,11 @@ lazy val server = (project in file("server"))
       "org.scalatest" %% "scalatest" % scalatestVersion % Test,
       "com.outr" %% "rapid-test" % rapidVersion % Test
     ),
+    dependencyOverrides ++= Seq(
+      "netty-buffer", "netty-codec", "netty-codec-base", "netty-codec-compression", "netty-codec-dns",
+      "netty-codec-http", "netty-codec-http2", "netty-codec-socks", "netty-common", "netty-handler",
+      "netty-handler-proxy", "netty-resolver", "netty-resolver-dns", "netty-transport", "netty-transport-native-unix-common"
+    ).map("io.netty" % _ % "4.2.16.Final"),
     buildInfoKeys := Seq(name, version, scalaVersion, sbtVersion),
     buildInfoPackage := "logicov",
     Test / fork := true,

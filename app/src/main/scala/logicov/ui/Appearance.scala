@@ -37,7 +37,7 @@ object Appearance {
   def selector(): Select = {
     val choices = ThemePreference.values.toList
     val select = new Select(choices.map(_.label))
-    select.size.width @= 150.0
+    select.size.width @= 176.0
     select.size.height @= 38.0
     val element = select.node.el.querySelector("select").asInstanceOf[dom.html.Select]
     element.setAttribute("aria-label", "Appearance")
