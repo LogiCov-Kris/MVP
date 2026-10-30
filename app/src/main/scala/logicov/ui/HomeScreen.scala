@@ -12,9 +12,9 @@ import org.scalajs.dom
 import reactify.*
 import scala.scalajs.js
 
-class HomeScreen extends UIScreen {
+class HomeScreen(administrationMode: Boolean = false) extends UIScreen {
   override def manager: ScreenManager = LogiCovApp
-  override def path: URLPath = URLPath("/")
+  override def path: URLPath = URLPath(if (administrationMode) "/admin" else "/")
 
   private var emailAvailable = false
   private var emailMode = true
@@ -243,27 +243,37 @@ class HomeScreen extends UIScreen {
 
   private def workspace(session: SessionView): Unit = {
     message @= ""
+    if (administrationMode && session.role != UserRole.Admin) {
+      val denied = WorkspaceStyle.card(() => math.min(520.0, root.size.width() - 48.0),
+        WorkspaceStyle.text("Administrator access required", 24.0, bold = true),
+        WorkspaceStyle.paragraph("Your account has access to the analyst workspace. Administration requires an administrator role.", () => math.min(472.0, root.size.width() - 96.0)),
+        WorkspaceStyle.button("Back to analyst workspace", () => dom.window.location.assign("/"), primary = true))
+      denied.position.center := root.size.center()
+      denied.position.middle := root.size.middle()
+      root.children @= Vector(denied)
+      return
+    }
     val sidebar = new Container
     sidebar.size.width := (if (root.size.width() >= 1000.0) 224.0 else 0.0)
     sidebar.size.height := root.size.height()
     sidebar.visible := root.size.width() >= 1000.0
     sidebar.backgroundColor @= WorkspaceStyle.Navy
-    sidebar.semantics @= Semantics.navigation("Workspace")
+    sidebar.semantics @= Semantics.navigation(if (administrationMode) "Administration" else "Analyst workspace")
     val logo = brand(light = true)
     logo.position.left @= 24.0
     logo.position.top @= 25.0
-    val label = WorkspaceStyle.text("WORKSPACE", 10.0, bold = true)
+    val label = WorkspaceStyle.text(if (administrationMode) "ADMINISTRATION" else "WORKSPACE", 10.0, bold = true)
     label.color @= Color.fromHex("90A7B6")
     label.position.left @= 26.0
     label.position.top @= 115.0
-    val activeLabel = WorkspaceStyle.text("Deal workspace", 14.0, bold = true)
+    val activeLabel = WorkspaceStyle.text(if (administrationMode) "User administration" else "Analyst workspace", 14.0, bold = true)
     val active = WorkspaceStyle.card(() => 192.0, activeLabel)
     active.padding @= 14.0
-    active.backgroundColor @= Color.fromHex("DCEDEA")
+    active.backgroundColor @= WorkspaceStyle.Soft
     active.borderWidth @= 0.0
     active.position.left @= 16.0
     active.position.top @= 140.0
-    val footer = WorkspaceStyle.paragraph("Every value.\nBack to its source.", () => 170.0, 13.0)
+    val footer = WorkspaceStyle.paragraph(if (administrationMode) "Manage access.\nKeep workspaces secure." else "Every value.\nBack to its source.", () => 170.0, 13.0)
     footer.color @= Color.fromHex("90A7B6")
     footer.position.left @= 26.0
     footer.position.top := math.max(240.0, sidebar.size.height() - 90.0)
@@ -275,19 +285,19 @@ class HomeScreen extends UIScreen {
     header.backgroundColor @= Color.White
     header.semantics @= Semantics.banner
     val tenant = WorkspaceStyle.text(session.tenantName, 15.0, bold = true)
-    tenant.content := (if (root.size.width() < 1000.0) s"LogiCov · ${session.tenantName}" else session.tenantName)
+    tenant.content := (if (administrationMode) s"Administration · ${session.tenantName}" else if (root.size.width() < 1000.0) s"LogiCov · ${session.tenantName}" else session.tenantName)
     tenant.whiteSpace @= WhiteSpace.NoWrap
     tenant.textOverflow @= TextOverflow.Ellipsis
     tenant.position.left @= 24.0
     tenant.position.top @= 19.0
-    tenant.maxWidth := math.max(150.0, header.size.width() - 150.0)
+    tenant.maxWidth := math.max(80.0, header.size.width() - (if (session.role == UserRole.Admin) 260.0 else 150.0))
     val identity = WorkspaceStyle.text(session.email, 11.0, muted = true)
     identity.content @= (session.email + (if (session.platformAdmin) " · Platform administrator" else if (session.role == UserRole.Admin) " · Administrator" else ""))
     identity.whiteSpace @= WhiteSpace.NoWrap
     identity.textOverflow @= TextOverflow.Ellipsis
     identity.position.left @= 24.0
     identity.position.top @= 43.0
-    identity.maxWidth := math.max(150.0, header.size.width() - 150.0)
+    identity.maxWidth := math.max(80.0, header.size.width() - (if (session.role == UserRole.Admin) 260.0 else 150.0))
     val scroll = new ScrollContainer
     scroll.position.left := sidebar.size.width()
     scroll.position.top @= 80.0
@@ -296,21 +306,22 @@ class HomeScreen extends UIScreen {
     scroll.semantics @= Semantics.main
     val width = () => math.min(1120.0, scroll.size.width() - (if (scroll.size.width() < 600.0) 32.0 else 64.0))
     status.size.width := width()
-    val panel = new WorkspacePanel(width)
+    lazy val panel = new WorkspacePanel(width)
     var administration = Option.empty[UserAdminPanel]
     var workspaceAdministration = Option.empty[WorkspaceAdminPanel]
-    val area = Var(WorkspaceArea.Deals)
+    val area = Var(if (administrationMode) WorkspaceArea.Users else WorkspaceArea.Deals)
     def canLeaveWorkspace: Boolean = area() match {
       case WorkspaceArea.Deals => panel.canLeave
       case WorkspaceArea.Users => administration.forall(_.canLeave)
       case WorkspaceArea.Workspaces => workspaceAdministration.forall(_.canLeave)
     }
-    val page = Column(14.0)(panel)
-    val workspaceButton = WorkspaceStyle.button("Deals", () => if (canLeaveWorkspace) {
-      area @= WorkspaceArea.Deals
-      activeLabel.content @= "Deal workspace"
-      page.children @= Vector(panel)
+    val page = Column(14.0)()
+    val sectionSwitch = WorkspaceStyle.button(if (administrationMode) "Exit Admin" else "Admin", () => if (canLeaveWorkspace) {
+      dom.window.location.assign(if (administrationMode) "/" else "/admin")
     })
+    sectionSwitch.visible @= session.role == UserRole.Admin
+    sectionSwitch.position.left := header.size.width() - sectionSwitch.size.width() - 126.0
+    sectionSwitch.position.top @= 19.0
     val usersButton = WorkspaceStyle.button("Users", () => if (canLeaveWorkspace) {
       val users = new UserAdminPanel(width, session)
       administration = Some(users)
@@ -327,10 +338,9 @@ class HomeScreen extends UIScreen {
     })
     workspacesButton.visible @= session.platformAdmin
     workspacesButton.backgroundColor := (if (area() == WorkspaceArea.Workspaces) WorkspaceStyle.Soft else Color.White)
-    workspaceButton.backgroundColor := (if (area() == WorkspaceArea.Deals) WorkspaceStyle.Soft else Color.White)
     usersButton.backgroundColor := (if (area() == WorkspaceArea.Users) WorkspaceStyle.Soft else Color.White)
-    val navigation = Row(10.0)(workspaceButton, usersButton, workspacesButton)
-    navigation.visible @= session.role == UserRole.Admin
+    val navigation = Row(10.0)(usersButton, workspacesButton)
+    navigation.visible @= administrationMode
     val signOut = WorkspaceStyle.button("Sign out", () => if (canLeaveWorkspace) {
       busy @= true
       ApiClient.logout { error =>
@@ -343,13 +353,20 @@ class HomeScreen extends UIScreen {
     })
     signOut.position.left := header.size.width() - signOut.size.width() - 24.0
     signOut.position.top @= 19.0
-    header.children ++= Vector(tenant, identity, signOut)
+    header.children ++= Vector(tenant, identity, sectionSwitch, signOut)
     signOut.enabled := !busy() && (area() match {
       case WorkspaceArea.Deals => !panel.processing
       case WorkspaceArea.Users => administration.forall(!_.processing)
       case WorkspaceArea.Workspaces => workspaceAdministration.forall(!_.processing)
     })
-    val content = Column(14.0)(status, navigation, page)
+    if (administrationMode) {
+      val users = new UserAdminPanel(width, session)
+      administration = Some(users)
+      page.children @= Vector(users)
+    } else page.children @= Vector(panel)
+    val introduction = Column(8.0)(WorkspaceStyle.text("Administration", 30.0, bold = true),
+      WorkspaceStyle.paragraph("Manage users, invitations and workspace access. Credit files and memo review are in the analyst workspace.", width))
+    val content = Column(18.0)((if (administrationMode) Vector(status, introduction, navigation, page) else Vector(status, page))* )
     content.position.center := scroll.size.center()
     content.position.top @= 20.0
     scroll.content.children += content

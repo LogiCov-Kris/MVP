@@ -163,7 +163,7 @@ object WebEndpoint extends ConnectionFilter {
 
   private def asset(exchange: HttpExchange, requested: String): Task[FilterResponse] = Task.defer {
     val root = Path.of(App.config.webDirectory).toAbsolutePath.normalize()
-    val relative = if (requested == "/") "index.html" else requested.stripPrefix("/")
+    val relative = if (requested == "/" || requested == "/admin") "index.html" else requested.stripPrefix("/")
     val file = root.resolve(relative).normalize()
     if (!file.startsWith(root) || !Files.isRegularFile(file) || !file.toRealPath().startsWith(root.toRealPath())) {
       error(exchange, 404, "Not found.")
