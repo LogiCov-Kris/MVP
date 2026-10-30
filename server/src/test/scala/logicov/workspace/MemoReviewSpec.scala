@@ -16,6 +16,7 @@ class MemoReviewSpec extends AnyFlatSpec with Matchers {
     val draft = WorkspaceDraft.prepare(original)
     val review = draft.review
     review.sections.size should be(WorkspaceDraft.sectionTitles.size)
+    review.sections.zipWithIndex.foreach { (section, index) => section.html should include(s"#narrative-$index.0") }
     review.sections.find(_.title == "Financial Analysis").map(_.html).getOrElse("") should include("Assessment for Kinder Morgan")
     val html = MemoRenderer.render(draft.template, draft.context)
     html should not include "<script>"

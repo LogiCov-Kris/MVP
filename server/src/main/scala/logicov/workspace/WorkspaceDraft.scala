@@ -16,7 +16,7 @@ case class WorkspaceDraft(template: MemoTemplate, context: MemoContext, texts: M
       val local = context.copy(narratives = Map(MemoRenderer.narrativeKey(0, 0) -> context.narratives(MemoRenderer.narrativeKey(index, 0))))
       val rendered = MemoRenderer.render(template.copy(sections = List(section)), local)
       val html = rendered.substring(rendered.indexOf("<section>"), rendered.lastIndexOf("</section>") + 10)
-      MemoReviewSection(section.title, texts(section.title), html.replace("<h2>1.", s"<h2>${index + 1}."))
+      MemoReviewSection(section.title, texts(section.title), html.replace("<h2>1.", s"<h2>${index + 1}.").replace("#narrative-0.0", s"#narrative-$index.0"))
     }
     val audit = MemoRenderer.audit(context, Nil)
     val appendix = audit.substring(audit.indexOf("<body>") + 6, audit.indexOf("</body>"))
