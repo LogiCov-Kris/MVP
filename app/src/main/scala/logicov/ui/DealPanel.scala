@@ -338,7 +338,7 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
       val panel = new MemoReviewPanel(width, deal, updated => {
         memoScroll = reviewPanel.fold(0.0)(_.scrollPosition)
         deal = updated; dirty = false; saved @= true; message @= "Changes saved."; render()
-      }, memoScroll)
+      }, memoScroll, value => busy @= value)
       reviewPanel = Some(panel)
       Vector(panel)
     } else Vector(WorkspaceStyle.card(width, WorkspaceStyle.text("Complete the credit profile", 20.0, bold = true),

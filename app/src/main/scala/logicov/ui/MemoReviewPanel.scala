@@ -9,7 +9,7 @@ import reactify.*
 
 import scala.util.Try
 
-class MemoReviewPanel(width: () => Double, deal: WorkspaceDeal, changed: WorkspaceDeal => Unit, initialScroll: Double = 0.0) extends Container {
+class MemoReviewPanel(width: () => Double, deal: WorkspaceDeal, changed: WorkspaceDeal => Unit, initialScroll: Double = 0.0, workingChanged: Boolean => Unit = _ => ()) extends Container {
   size.width := width()
   size.height @= 820.0
   private var working = false
@@ -35,12 +35,14 @@ class MemoReviewPanel(width: () => Double, deal: WorkspaceDeal, changed: Workspa
   }
   private def save[A: RW](route: String, value: A): Unit = {
     working = true
+    workingChanged(true)
     val states = root.querySelectorAll("button").map(n => n.asInstanceOf[dom.html.Button]).map(b => b -> b.disabled).toList
     states.foreach((button, _) => button.disabled = true)
     ApiClient.action(deal.id, route, value) {
-      case Right(updated) => working = false; dirty = false; changed(updated)
+      case Right(updated) => working = false; workingChanged(false); dirty = false; changed(updated)
       case Left(error) =>
         working = false
+        workingChanged(false)
         states.foreach((button, disabled) => button.disabled = disabled)
         dom.window.alert(error)
     }
