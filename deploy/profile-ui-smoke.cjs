@@ -84,7 +84,7 @@ const { chromium } = require('playwright');
     current=await(await page.request.get(url)).json();assert.equal(current.stage,'DealStage.Submitted');assert.equal(current.submission.recommendation,'CreditRecommendation.Conditional');
     const htmlMeta=current.documents.filter(d=>d.name.startsWith('generated-memo')&&d.contentType==='text/html').at(-1);
     const html=await(await page.request.get(url+'/files/'+htmlMeta.id)).text();assert(html.includes('Subject to documented facility conditions'));assert(html.includes('Submitted for Approval'));assert(!html.includes('<script>'));
-    await page.getByRole('button',{name:'Back to deals',exact:true}).click();await page.getByText(/Submitted for Approval/).first().waitFor();
+    await page.getByRole('button',{name:'Back to deals',exact:true}).click();await page.getByText(/Submitted for Approval/).filter({visible:true}).first().waitFor();
     assert.deepEqual(errors, []);
     console.log('Private profile UI passed: multi-year statement, supporting source, sourced credit terms, deterministic ratios, approval and committee PDF');
   } finally { await browser.close(); }
