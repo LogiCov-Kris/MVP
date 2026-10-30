@@ -47,6 +47,8 @@ object MemoRenderer {
     val narratives = context.narratives.toList.sortBy(_._1).map((key, n) =>
       s"""<section id="narrative-$key"><h2>Narrative $key</h2><p>Draft narrative from the deal record and retained source documents. Numeric matching is not factual or analyst approval.</p>""" +
         (if (n.fromTranscript.isEmpty) "" else s"""<p class="note">Figures found only in the discovery transcript (confirm against filings): ${escape(n.fromTranscript.mkString(", "))}</p>""") +
+        (if (n.publicEvidence.isEmpty) "" else s"<p>Public-only draft, independently retrieved SEC evidence. Configured model: ${escape(n.providerModel)}. Prompt SHA-256: ${escape(n.promptHash)}</p><pre>${escape(n.publicEvidence)}</pre>") +
+        n.publicSources.map(url => s"""<p><a href="${escape(url)}">Public SEC source</a></p>""").mkString +
         s"""<p>${escape(n.text)}</p></section>""").mkString
     val files = sourceLinks.map((name, link) => s"""<li><a href="${escape(link)}">${escape(name)}</a></li>""").mkString
     s"""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Source and calculation audit</title><style>$Style pre {white-space:pre-wrap} table {break-inside:auto}</style></head>

@@ -207,6 +207,7 @@ resource "google_cloud_run_v2_service" "app" {
           LOGICOV_NARRATIVES_ENABLED = "true"
           LOGICOV_PROVIDER_APPROVED  = "true"
           LOGICOV_NARRATIVE_MODEL    = var.narrative_model
+          EDGAR_USER_AGENT           = var.edgar_user_agent
         } : {}
         content {
           name  = env.key
@@ -271,8 +272,8 @@ resource "google_cloud_run_v2_service" "app" {
       error_message = "Email sign-in requires an application origin, verified sender and pinned email-key version."
     }
     precondition {
-      condition     = !var.narratives_enabled || (var.narrative_model != "" && can(regex("^[1-9][0-9]*$", var.provider_key_version)))
-      error_message = "Enabling narratives requires a model identifier and a pinned, client-owned provider-key secret version."
+      condition     = !var.narratives_enabled || (var.narrative_model != "" && var.edgar_user_agent != "" && can(regex("^[1-9][0-9]*$", var.provider_key_version)))
+      error_message = "Enabling narratives requires a model identifier, SEC contact and a pinned, client-owned provider-key secret version."
     }
     precondition {
       condition     = var.public_url == "" || can(regex("^https://[^/]+$", var.public_url))

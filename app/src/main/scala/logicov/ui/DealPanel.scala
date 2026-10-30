@@ -258,6 +258,24 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit) e
         }, clear))
   }
 
+  private def requiredChecks(): Component = {
+    val rows = ReviewTopic.values.toVector.map { topic =>
+      val previous = deal.stopReviews.find(_.topic == topic)
+      val state = select(s"${topic.label} status", List("Pending review", "Clear", "Stop"), previous.fold(0)(_.status.ordinal))
+      val evidence = field(s"${topic.label} evidence", previous.fold("")(_.evidence))
+      (topic, state, evidence)
+    }
+    WorkspaceStyle.card(width, (Vector(
+      WorkspaceStyle.text("Required checks", 20.0, bold = true),
+      WorkspaceStyle.paragraph("Document your screening and source review for each check. These are analyst attestations, not automated screening. Pending or stopped checks prevent memo generation.", inner)) ++
+      rows.flatMap { (topic, state, evidence) => Vector(WorkspaceStyle.text(topic.label, 14.0, bold = true), state, evidence) } ++
+      Vector(action("Save required checks") {
+        save("checks", StopReviewRequest(deal.revision, rows.map { (topic, state, evidence) =>
+          StopReview(topic, ReviewStatus.values(state.selected()), evidence.value())
+        }.toList))
+      }))* )
+  }
+
   private def memo(): Vector[Component] = {
     val reason = field("Approval explanation or policy exception")
     val approve = action("Approve reviewed inputs") { save("approve", DealActionRequest(deal.revision, reason.value())) }
@@ -360,7 +378,7 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit) e
         WorkspaceStyle.paragraph("Write or revise the selected memo section. Saved prose is included in the next approved memo.", inner), section, editor, riskOrder, explanation,
         action("Save narrative") { save("narratives", NarrativeRequest(deal.revision, sections(section.selected()), area.value, explanation.value())) })
     }
-    Vector(approval) ++ narrative ++ Vector(WorkspaceStyle.card(width, (Vector(WorkspaceStyle.text("Memo downloads", 18.0, bold = true)) ++ files)*))
+    Vector(requiredChecks(), approval) ++ narrative ++ Vector(WorkspaceStyle.card(width, (Vector(WorkspaceStyle.text("Memo downloads", 18.0, bold = true)) ++ files)*))
   }
 
   private def history(): Vector[Component] = deal.events.reverse.map { event =>
@@ -374,6 +392,8 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit) e
         case "Policy changed" =>
           val request = JsonParser(event.detail).as[PolicyRequest]
           s"${request.policy.name}, version ${request.policy.version}: ${request.reason}"
+        case "Required checks reviewed" => JsonParser(event.detail).as[List[StopReview]]
+          .map(r => s"${r.topic.label}: ${r.status}. ${r.evidence}").mkString("\n\n")
         case "Policy removed" => event.detail.split("; prior policy:", 2).head
         case "Narrative edited" =>
           val request = JsonParser(event.detail).as[NarrativeRequest]

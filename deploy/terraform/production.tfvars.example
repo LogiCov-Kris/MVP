@@ -1,0 +1,13 @@
+# Copy to an ignored production.tfvars only after approval. Use a separate prod backend prefix.
+project_id           = "logicov"
+environment          = "prod"
+region               = "us-central1"
+github_owner_id      = "338338549"
+github_repository_id = "1406452220"
+image                = ""
+public_url           = ""
+deletion_protection  = true
+narratives_enabled   = false
+email_signin_enabled = false
+# Pin production-owned secret versions and set the approved sender after bootstrap.
+# Never copy development encryption keys or test accounts into production.

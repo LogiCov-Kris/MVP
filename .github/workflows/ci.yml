@@ -79,6 +79,7 @@ jobs:
         run: |
           printf '%s\n' 'Local-smoke-password-123!' | target/runtime/bin/logicov-server -main logicov.auth.ProvisionApp 'Smoke tenant' 'smoke@example.test'
           printf '%s\n' 'Local-smoke-password-123!' | target/runtime/bin/logicov-server -main logicov.auth.ProvisionApp 'Isolation tenant' 'isolation@example.test'
+          printf '%s\n' 'Local-smoke-password-123!' | target/runtime/bin/logicov-server -main logicov.auth.ProvisionApp 'Email test tenant' 'email-smoke@example.test'
       - name: Create ephemeral test encryption key
         run: echo "LOGICOV_MASTER_KEY=$(openssl rand -base64 32)" >> "$GITHUB_ENV"
       - name: Verify container login
@@ -100,6 +101,25 @@ jobs:
           node deploy/workspace-smoke.cjs
           node deploy/profile-ui-smoke.cjs
           docker stop logicov-smoke
+      - name: Verify email sign-in and password reset
+        env:
+          LOGICOV_TEST_PASSWORD: Local-smoke-password-123!
+          NODE_PATH: ./target/browser/node_modules
+        run: |
+          python3 deploy/mail-capture.py &
+          capture_pid=$!
+          trap 'kill "$capture_pid"; docker stop logicov-email-smoke' EXIT
+          docker run -d --name logicov-email-smoke --network host -e PORT=18302 \
+            -e LOGICOV_DB_URL -e LOGICOV_DB_USER -e LOGICOV_DB_PASSWORD -e LOGICOV_MASTER_KEY \
+            -e LOGICOV_EMAIL_SIGNIN_ENABLED=true -e LOGICOV_EMAIL_DOMAIN=example.test \
+            -e LOGICOV_EMAIL_FROM=test@example.test -e LOGICOV_EMAIL_API_KEY=local-test \
+            -e LOGICOV_EMAIL_API_URL=http://127.0.0.1:18424/emails \
+            -e LOGICOV_PUBLIC_URL=http://127.0.0.1:18302 "logicov:$GITHUB_SHA"
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:18302/api/ready >/dev/null; then break; fi
+            sleep 2
+          done
+          node deploy/email-smoke.cjs
       - name: Container logs on failure
         if: failure()
         run: docker logs logicov-smoke 2>/dev/null || true

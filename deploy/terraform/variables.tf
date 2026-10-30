@@ -100,3 +100,9 @@ variable "github_repository_id" {
   default     = "1406452220"
   description = "Numeric repository ID used by immutable GitHub identity subjects."
 }
+
+variable "edgar_user_agent" {
+  type        = string
+  default     = ""
+  description = "Operator name and contact email for independently retrieved public SEC evidence."
+}

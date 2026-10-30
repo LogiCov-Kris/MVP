@@ -5,6 +5,7 @@ const { chromium } = require('playwright');
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, headless: true, args: ['--no-sandbox'] });
   try {
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+    page.setDefaultTimeout(30000);
     const errors = [];
     page.on('pageerror', e => errors.push(e.message));
     await page.goto(process.env.LOGICOV_TEST_URL || 'http://127.0.0.1:18301');
@@ -40,6 +41,7 @@ const { chromium } = require('playwright');
     await page.getByText('Credit analysis', { exact: true }).waitFor();
     await page.getByText(/Net leverage: 1\.00x/).waitFor();
     await page.getByRole('button', { name: 'Memo', exact: true }).click();
+    await require('./review-checks.cjs')(page);
     await page.getByRole('textbox', { name: 'Approval explanation or policy exception', exact: true }).fill('Synthetic profile verification without institution policy');
     await page.getByRole('button', { name: 'Approve reviewed inputs', exact: true }).click();
     await page.getByRole('button', { name: 'Generate memo', exact: true }).click();

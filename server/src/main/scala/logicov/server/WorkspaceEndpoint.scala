@@ -41,6 +41,7 @@ object WorkspaceEndpoint extends ConnectionFilter {
         case (HttpMethod.Post, List(id, "judgments")) => body[JudgmentRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.judgments(session, id, r)))
         case (HttpMethod.Post, List(id, "recommendation")) => body[RecommendationRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.recommendation(session, id, r)))
         case (HttpMethod.Post, List(id, "narratives")) => body[NarrativeRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.narrative(session, id, r)))
+        case (HttpMethod.Post, List(id, "checks")) => body[StopReviewRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.reviewStops(session, id, r)))
         case (HttpMethod.Post, List(id, "approve")) => body[DealActionRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.approve(session, id, r)))
         case (HttpMethod.Post, List(id, "resume")) => body[DealActionRequest](exchange)(r => resume(exchange, session, id, r))
         case _ => WebEndpoint.error(exchange, 404, "Not found.")

@@ -51,3 +51,15 @@ For a recovery drill, restore a backup into an isolated database, configure the 
 ## Verification
 
 Run `LOGICOV_AUTH_TESTS=1` with a dedicated database whose URL contains `logicov_m1_test`, then run `server/testFull`. Integration tests cover encrypted payloads, tenant-bound keys, forced RLS, transaction scope reset, source isolation, stale writes, approval invalidation and lease recovery. `deploy/workspace-smoke.cjs` exercises browser save/correct/approve/generate/download. `deploy/profile-ui-smoke.cjs` covers a statement-to-credit-profile workflow; `deploy/reference-ui-smoke.cjs` covers reference-deal judgments, policy and narrative ordering. `deploy/verify-restore.py` checks an isolated restore using authorized and second-tenant accounts. `deploy/workspace-api-smoke.py` verifies the three onboarded reference borrowers and portable artifact hashes; it records local test approvals, not client acceptance.
+
+## Required analyst checks
+
+Before approval or generation, each deal requires documented clearance of sanctions screening, going-concern opinion, financial-statement currency, borrower/holding-company identity and dividend use of proceeds. The Memo section saves Pending, Clear or Stop with supporting evidence. A policy exception cannot bypass these checks. They are analyst attestations; the application does not perform sanctions screening or infer absent opinions. Financial corrections, new sources and replacement credit profiles clear the prior checks. Saving checks invalidates approval and is recorded in history; the PDF includes the approved evidence. Existing approvals without these checks require review before further generation.
+
+## Public narrative boundary
+
+Hosted model requests contain only issuer identity, industry classification and available executive-officer excerpts independently fetched from SEC endpoints using a numeric CIK. Only industry and leadership sections are drafted. Uploaded financials, record figures, transcripts, analyst notes, institution policies, recommendations and manual narrative text are excluded. Private-company records without a public CIK make no model request. Manual section text takes precedence. The public sources, supplied evidence and prompt hash appear in the audit companion. Financial/rating/recommendation text remains deterministic or analyst-written. Public drafts use current SEC sources and require analyst review against the deal's as-of date.
+
+Enable only with the approved client account, existing provider flags and `EDGAR_USER_AGENT` identifying the operator. Source or provider failures stop generation and preserve the approved snapshot for retry. No personal provider account is used by hosted generation. The standalone public-data demonstration CLI remains a separate operator tool; its broader prompt interface must not be used with confidential material.
+
+Production preparation and rollback are in [PRODUCTION.md](PRODUCTION.md).

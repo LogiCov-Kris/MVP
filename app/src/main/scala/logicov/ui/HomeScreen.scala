@@ -10,6 +10,7 @@ import everyui.theme.Theme
 import logicov.model.{SessionView, UserRole}
 import org.scalajs.dom
 import reactify.*
+import scala.scalajs.js
 
 class HomeScreen extends UIScreen {
   override def manager: ScreenManager = LogiCovApp
@@ -22,6 +23,9 @@ class HomeScreen extends UIScreen {
   private val message = Var("")
   private val notice = Var(false)
   private val busy = Var(false)
+  private val clock = Var(0.0)
+  private val cooldownUntil = Var(0.0)
+  private val cooldownEmail = Var("")
   private val email = new TextInput("Email")
   private val password = new TextInput("Password", secure = true)
   private val newPassword = new TextInput("New password", secure = true)
@@ -47,6 +51,8 @@ class HomeScreen extends UIScreen {
     status.color := (if (notice()) WorkspaceStyle.Teal else Theme.danger())
     status.whiteSpace @= WhiteSpace.Normal
     status.node.el.setAttribute("role", "status")
+    clock @= js.Date.now()
+    dom.window.setInterval(() => clock @= js.Date.now(), 1000)
     readSignInLink()
     dom.window.addEventListener("hashchange", (_: dom.Event) => if (readSignInLink()) loginForm(""))
     email.submitted.attach(_ => if (resetMode && signInToken.nonEmpty) resetPassword() else if (resetMode) requestEmail() else if (signInToken.nonEmpty) confirmEmail() else if (emailAvailable && emailMode) requestEmail())
@@ -127,8 +133,10 @@ class HomeScreen extends UIScreen {
     val label = if (resetMode && confirming) "Reset password" else if (resetMode) "Email me a reset link" else if (confirming) "Continue to workspace" else if (useEmail) "Email me a sign-in link" else "Sign in"
     val signInButton = WorkspaceStyle.button(label, action, primary = true)
     signInButton.minWidth := width()
-    signInButton.enabled := !busy()
-    signInButton.label := (if (busy()) "Please wait..." else label)
+    val requestingLink = !confirming && (resetMode || useEmail)
+    val remaining = Val(if (cooldownEmail() == email.value().trim.toLowerCase) math.max(0, math.ceil((cooldownUntil() - clock()) / 1000).toInt) else 0)
+    signInButton.enabled := !busy() && (!requestingLink || remaining() == 0)
+    signInButton.label := (if (busy()) "Please wait..." else if (requestingLink && remaining() > 0) s"Resend in ${remaining()}s" else label)
     val fields = if (resetMode && confirming) Vector(email, newPassword, repeatPassword) else if (resetMode || confirming || useEmail) Vector(email) else Vector(email, password)
     val alternate = WorkspaceStyle.button(if (useEmail) "Use a password instead" else "Use an email sign-in link", () => {
       resetMode = false
@@ -147,7 +155,7 @@ class HomeScreen extends UIScreen {
     val heading = if (resetMode) "Reset your password" else if (confirming) "Confirm your email" else "Welcome back"
     val explanation = if (resetMode && confirming) "Confirm your email and choose a password with 14 to 256 characters. Existing sessions will be signed out."
       else if (resetMode) "We’ll email you a secure link to choose a new password."
-      else if (confirming) "Enter the email address that received this link to finish signing in."
+      else if (confirming) "Enter the email address that received this link to finish signing in. If it has expired, request a new link below."
       else if (useEmail) "We’ll email you a secure sign-in link. No password needed."
       else "Sign in to your underwriting workspace."
     val form = Column(22.0)((Vector(brand(), WorkspaceStyle.text(heading, 30.0, bold = true),
@@ -159,14 +167,19 @@ class HomeScreen extends UIScreen {
     root.children @= Vector(left, scroll)
   }
 
-  private def requestEmail(): Unit = if (!busy()) {
+  private def requestEmail(): Unit = if (!busy() && (cooldownEmail() != email.value().trim.toLowerCase || cooldownUntil() <= js.Date.now())) {
     busy @= true
     message @= ""
     val send = if (resetMode) ApiClient.requestPasswordReset else ApiClient.requestEmail
     send(email.value()) { error =>
       busy @= false
       notice @= error.isEmpty
-      message @= error.getOrElse("If this email has workspace access, a " + (if (resetMode) "password-reset" else "sign-in") + " link is on its way. Check your inbox and spam folder. Links expire in 10 minutes.")
+      if (error.isEmpty) {
+        cooldownEmail @= email.value().trim.toLowerCase
+        clock @= js.Date.now()
+        cooldownUntil @= clock() + 60000
+      }
+      message @= error.getOrElse("If this email has workspace access, a " + (if (resetMode) "password-reset" else "sign-in") + " link has been requested. Delivery may take a few minutes. Check your inbox and spam folder before requesting another link. Links expire 10 minutes after being issued.")
     }
   }
 

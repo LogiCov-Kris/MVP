@@ -3,7 +3,7 @@ package logicov.workspace
 import fabric.io.{JsonFormatter, JsonParser}
 import fabric.rw.*
 import logicov.analysis.CreditAnalysis
-import logicov.memo.{MemoBlock, MemoContext, MemoRenderer, MemoTemplate, NarrativeGenerator, NarrativeText, PdfPrinter}
+import logicov.memo.{MemoBlock, MemoContext, MemoRenderer, MemoTemplate, PublicNarratives, NarrativeText, PdfPrinter}
 import logicov.model.SessionView
 
 import java.nio.charset.StandardCharsets
@@ -16,6 +16,7 @@ object WorkspaceMemo {
   private def escape(value: String): String = value.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;")
 
   def generate(session: SessionView, deal: WorkspaceDeal, store: WorkspaceStore = WorkspaceService.store): List[(WorkspaceDocument, Array[Byte])] = {
+    StopReview.requireClear(deal.stopReviews)
     val directory = Files.createTempDirectory("logicov-memo-")
     try {
       val base = sys.env.getOrElse("LOGICOV_PUBLIC_URL", "http://127.0.0.1:18300").stripSuffix("/")
@@ -30,7 +31,9 @@ object WorkspaceMemo {
       val policy = s"""<section><h2>Policy evaluation</h2><p>${escape(deal.policy.fold("No institution policy configured")(p => s"${p.name}, version ${p.version}, source: ${p.source}"))}</p>
         <table><tr><th>Rule</th><th>Result</th><th>Actual</th><th>Threshold</th></tr>$policyRows</table>
         <p>Approval exception: ${escape(deal.approval.fold("")(_.exception))}</p></section>"""
+      val checks = deal.stopReviews.map(r => s"<tr><td>${escape(r.topic.label)}</td><td>${r.status}</td><td>${escape(r.evidence)}</td></tr>").mkString
       val approval = s"""<section><h2>Analyst approval</h2><p>${escape(deal.approval.fold("")(a => s"${a.actor}, ${a.at}; reviewed revision ${a.revision}"))}</p>
+        <h3>Required analyst checks</h3><table><tr><th>Check</th><th>Result</th><th>Evidence</th></tr>$checks</table>
         <p>Approval records input review. This memo is not a commitment to lend.</p></section>"""
       val (body, audit) = deal.record match {
         case Some(record) =>
@@ -52,7 +55,7 @@ object WorkspaceMemo {
           val configured = sys.env.get("LOGICOV_NARRATIVES_ENABLED").contains("true")
           val drafts = if (configured) {
             require(sys.env.get("LOGICOV_PROVIDER_APPROVED").contains("true"), "A client-owned, zero-retention provider account must be approved before workspace narrative generation")
-            NarrativeGenerator.generate(template, context, record.inputs.narrativeNotes, directory.resolve("narrative-cache")).sync()
+            PublicNarratives.generate(record.cik, PublicNarratives.Sections -- deal.narratives.keySet).sync()
           } else Map.empty
           val narratives = template.sections.zipWithIndex.flatMap { (section, sectionIndex) =>
             val first = section.blocks.indexWhere {
@@ -61,8 +64,9 @@ object WorkspaceMemo {
             }
             section.blocks.zipWithIndex.collect { case (MemoBlock.Narrative(_, _), blockIndex) =>
               val key = MemoRenderer.narrativeKey(sectionIndex, blockIndex)
-              val narrative = if (configured && !deal.narratives.contains(section.title)) drafts(key)
-                else NarrativeText(if (blockIndex == first) deal.narratives.getOrElse(section.title, fallback(section.title, analysis)) else "", Nil)
+              val narrative = if (blockIndex != first) NarrativeText("", Nil)
+                else deal.narratives.get(section.title).map(text => NarrativeText(text, Nil))
+                  .orElse(drafts.get(section.title)).getOrElse(NarrativeText(fallback(section.title, analysis), Nil))
               key -> narrative
             }
           }.toMap

@@ -63,6 +63,7 @@ for summary in records:
     if deal['stage'].split('.')[-1] == 'Review':
         for index in range(len(deal['issues'])):
             deal = data(route + '/issues', {'revision': deal['revision'], 'issue': index, 'reason': 'Local reference-package verification; analyst acceptance is pending'})
+        deal = data(route + '/checks', {'revision': deal['revision'], 'reviews': [{'topic': 'ReviewTopic.' + topic, 'status': 'ReviewStatus.Clear', 'evidence': 'Synthetic reference verification; not live screening or client approval'} for topic in ['Sanctions', 'GoingConcern', 'FinancialCurrency', 'BorrowerIdentity', 'UseOfProceeds']]})
         deal = data(route + '/approve', {'revision': deal['revision'], 'reason': 'Local reference-package verification without institution policy; not client acceptance'})
     if deal['stage'].split('.')[-1] in ('Approved', 'Failed'):
         deal = data(route + '/resume', {'revision': deal['revision'], 'reason': ''})

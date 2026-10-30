@@ -59,6 +59,7 @@ run "narratives_use_pinned_client_secret" {
     narratives_enabled   = true
     narrative_model      = "anthropic/configured-model"
     provider_key_version = "1"
+    edgar_user_agent     = "Example Operator contact@example.test"
   }
   assert {
     condition     = length([for e in google_cloud_run_v2_service.app[0].template[0].containers[0].env : e if e.name == "ANTHROPIC_API_KEY"]) == 1
@@ -73,4 +74,20 @@ run "email_requires_delivery_configuration" {
     email_signin_enabled = true
   }
   expect_failures = [google_cloud_run_v2_service.app]
+}
+
+run "production_foundation_is_separate" {
+  command = plan
+  variables {
+    environment = "prod"
+    image       = ""
+  }
+  assert {
+    condition     = google_sql_database_instance.main.name == "logicov-prod" && google_service_account.runtime.account_id == "logicov-prod"
+    error_message = "Production must have separate database and runtime identities."
+  }
+  assert {
+    condition     = length(google_cloud_run_v2_service.app) == 0 && google_sql_database_instance.main.deletion_protection
+    error_message = "Production bootstrap must preserve data and not release a placeholder service."
+  }
 }

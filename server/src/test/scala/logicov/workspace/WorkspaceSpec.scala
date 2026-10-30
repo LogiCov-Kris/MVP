@@ -22,6 +22,7 @@ class WorkspaceSpec extends AnyFlatSpec with Matchers with BeforeAndAfterAll {
   private val cipher = new TenantCipher(Array.fill[Byte](32)(17))
   private val store = new WorkspaceStore(database, cipher)
   private val workflow = new WorkspaceWorkflow(store)
+  private def clearChecks: List[StopReview] = ReviewTopic.values.toList.map(t => StopReview(t, ReviewStatus.Clear, "Synthetic test evidence"))
   private def session(): SessionView = SessionView("analyst@example.test", UUID.randomUUID().toString, "Test tenant")
   private def create(user: SessionView): WorkspaceDeal = workflow.create(user, CreateDealRequest("Private borrower", Some(ImportRequest(
     "financials.csv", Base64.getEncoder.encodeToString("Revenue,120\nCash,10\n".getBytes("UTF-8")),
@@ -92,12 +93,15 @@ class WorkspaceSpec extends AnyFlatSpec with Matchers with BeforeAndAfterAll {
     val deal = create(user)
     intercept[IllegalArgumentException](workflow.claim(user, deal.id, DealActionRequest(deal.revision)))
     intercept[IllegalArgumentException](workflow.approve(user, deal.id, DealActionRequest(deal.revision)))
-    val approved = workflow.approve(user, deal.id, DealActionRequest(deal.revision, "Policy not yet configured; analyst reviewed the source"))
+    intercept[IllegalArgumentException](workflow.approve(user, deal.id, DealActionRequest(deal.revision, "Policy exception cannot bypass checks")))
+    val checked = workflow.reviewStops(user, deal.id, StopReviewRequest(deal.revision, clearChecks))
+    val approved = workflow.approve(user, deal.id, DealActionRequest(checked.revision, "Policy not yet configured; analyst reviewed the source"))
     val cell = approved.grid.values.head
     val correction = GridCorrection(cell.item, cell.period, cell.value, cell.value + 1, cell.source, "Source correction", "forged", "forged")
     intercept[WorkspaceConflict](workflow.correct(user, deal.id, DealCorrectionRequest(deal.revision, correction)))
     val changed = workflow.correct(user, deal.id, DealCorrectionRequest(approved.revision, correction))
     changed.approval should be(None)
+    changed.stopReviews should be(Nil)
     changed.stage should be(DealStage.Review)
     changed.events.last.actor should be(user.email)
     changed.events.last.detail should not include "forged"
@@ -107,7 +111,8 @@ class WorkspaceSpec extends AnyFlatSpec with Matchers with BeforeAndAfterAll {
     assume(enabled)
     val user = session()
     val deal = create(user)
-    val approved = workflow.approve(user, deal.id, DealActionRequest(deal.revision, "Reviewed without institution policy"))
+    val checked = workflow.reviewStops(user, deal.id, StopReviewRequest(deal.revision, clearChecks))
+    val approved = workflow.approve(user, deal.id, DealActionRequest(checked.revision, "Reviewed without institution policy"))
     val claimed = workflow.claim(user, deal.id, DealActionRequest(approved.revision))
     intercept[IllegalArgumentException](workflow.claim(user, deal.id, DealActionRequest(claimed.revision)))
     val expired = store.change(user.tenantId, deal.id, claimed.revision)(_.copy(lease = claimed.lease.map(_.copy(expiresAt = 0))))
@@ -134,6 +139,23 @@ class WorkspaceSpec extends AnyFlatSpec with Matchers with BeforeAndAfterAll {
     recommended.recommendation should be(CreditRecommendation.Conditional)
     recommended.stage should be(DealStage.Review)
     recommended.approval should be(None)
+  }
+
+  it should "block stopped checks, preserve their evidence and invalidate approval when changed" in {
+    assume(enabled)
+    val user = session()
+    val deal = create(user)
+    val stopped = workflow.reviewStops(user, deal.id, StopReviewRequest(deal.revision,
+      clearChecks.map(r => if (r.topic == ReviewTopic.Sanctions) r.copy(status = ReviewStatus.Stop, evidence = "Unresolved screening match") else r)))
+    stopped.stopReviews.exists(_.evidence == "Unresolved screening match") should be(true)
+    intercept[IllegalArgumentException](workflow.approve(user, deal.id, DealActionRequest(stopped.revision, "Cannot override a stop")))
+    intercept[IllegalArgumentException](workflow.reviewStops(user, deal.id, StopReviewRequest(stopped.revision,
+      List(StopReview(ReviewTopic.Sanctions, ReviewStatus.Clear, "")))))
+    val cleared = workflow.reviewStops(user, deal.id, StopReviewRequest(stopped.revision, clearChecks))
+    val approved = workflow.approve(user, deal.id, DealActionRequest(cleared.revision, "Reviewed without institution policy"))
+    val reopened = workflow.reviewStops(user, deal.id, StopReviewRequest(approved.revision, Nil))
+    reopened.approval should be(None)
+    intercept[IllegalArgumentException](workflow.claim(user, deal.id, DealActionRequest(reopened.revision)))
   }
 
   it should "coordinate repeated migration checks with active workspace transactions" in {

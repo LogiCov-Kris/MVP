@@ -6,6 +6,7 @@ const { chromium } = require('playwright');
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, headless: true, args: ['--no-sandbox'] });
   try {
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+    page.setDefaultTimeout(30000);
     const errors = [];
     page.on('pageerror', e => errors.push(e.message));
     await page.goto(process.env.LOGICOV_TEST_URL || 'http://127.0.0.1:18301/');
@@ -43,6 +44,9 @@ const { chromium } = require('playwright');
     await page.getByText('125', { exact: true }).filter({ visible: true }).first().waitFor();
     await page.getByRole('button', { name: 'Memo', exact: true }).click();
     assert.equal(await page.getByRole('button', { name: 'Generate memo', exact: true }).getAttribute('aria-disabled'), 'true');
+    await page.getByRole('button', { name: 'Approve reviewed inputs', exact: true }).click();
+    await page.getByText(/Complete all required checks and resolve every stop condition/).waitFor();
+    await require('./review-checks.cjs')(page);
     await page.getByRole('button', { name: 'Approve reviewed inputs', exact: true }).click();
     await page.getByText('requirement failed: A review reason is required (up to 2000 characters)', { exact: true }).waitFor();
     await page.getByRole('textbox', { name: 'Approval explanation or policy exception', exact: true }).fill('Financial review approved; institution policy not yet supplied');

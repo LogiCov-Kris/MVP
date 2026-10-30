@@ -12,4 +12,4 @@ case class WorkspaceDeal(id: String, title: String, stage: DealStage, revision: 
   policyResults: List[PolicyResult] = Nil, approval: Option[ApprovalRecord] = None,
   lease: Option[JobLease] = None, memo: Option[String] = None, failure: Option[String] = None,
   narratives: Map[String, String] = Map.empty,
-                         recommendation: CreditRecommendation = CreditRecommendation.Pending, recommendationBasis: String = "") derives RW
+                         recommendation: CreditRecommendation = CreditRecommendation.Pending, recommendationBasis: String = "", stopReviews: List[StopReview] = Nil) derives RW
