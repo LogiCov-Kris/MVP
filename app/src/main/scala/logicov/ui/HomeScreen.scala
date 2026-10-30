@@ -160,8 +160,8 @@ class HomeScreen(administrationMode: Boolean = false) extends UIScreen {
       else "Sign in to your underwriting workspace."
     val form = Column(22.0, padding = 28.0)((Vector(brand(), WorkspaceStyle.text(heading, 30.0, bold = true),
       WorkspaceStyle.paragraph(explanation, width)) ++ fields ++ Vector(signInButton, status) ++ switches ++ Vector(
-      WorkspaceStyle.paragraph("Access is provided by your workspace administrator.", width, 12.0)))* )
-    form.backgroundColor @= Color.White
+      WorkspaceStyle.paragraph("Access is provided by your workspace administrator.", width, 12.0), Appearance.selector()))* )
+    form.backgroundColor := Theme.surface()
     form.radius @= 14.0
     form.borderWidth @= 1.0
     form.borderColor := Theme.border()
@@ -269,7 +269,7 @@ class HomeScreen(administrationMode: Boolean = false) extends UIScreen {
     val activeLabel = WorkspaceStyle.text(if (administrationMode) "User administration" else "Analyst workspace", 14.0, bold = true)
     val active = WorkspaceStyle.card(() => 192.0, activeLabel)
     active.padding @= 14.0
-    active.backgroundColor @= WorkspaceStyle.Soft
+    active.backgroundColor := WorkspaceStyle.Soft
     active.borderWidth @= 0.0
     active.position.left @= 16.0
     active.position.top @= 140.0
@@ -282,7 +282,7 @@ class HomeScreen(administrationMode: Boolean = false) extends UIScreen {
     header.position.left := sidebar.size.width()
     header.size.width := root.size.width() - sidebar.size.width()
     header.size.height @= 80.0
-    header.backgroundColor @= Color.White
+    header.backgroundColor := Theme.surface()
     header.semantics @= Semantics.banner
     val tenant = WorkspaceStyle.text(session.tenantName, 15.0, bold = true)
     tenant.content := (if (administrationMode) s"Administration · ${session.tenantName}" else if (root.size.width() < 1000.0) s"LogiCov · ${session.tenantName}" else session.tenantName)
@@ -337,8 +337,8 @@ class HomeScreen(administrationMode: Boolean = false) extends UIScreen {
       page.children @= Vector(workspaces)
     })
     workspacesButton.visible @= session.platformAdmin
-    workspacesButton.backgroundColor := (if (area() == WorkspaceArea.Workspaces) WorkspaceStyle.Soft else Color.White)
-    usersButton.backgroundColor := (if (area() == WorkspaceArea.Users) WorkspaceStyle.Soft else Color.White)
+    workspacesButton.backgroundColor := (if (area() == WorkspaceArea.Workspaces) WorkspaceStyle.Soft else Theme.surface())
+    usersButton.backgroundColor := (if (area() == WorkspaceArea.Users) WorkspaceStyle.Soft else Theme.surface())
     val navigation = Row(10.0)(usersButton, workspacesButton)
     navigation.visible @= administrationMode
     val signOut = WorkspaceStyle.button("Sign out", () => if (canLeaveWorkspace) {
@@ -366,7 +366,8 @@ class HomeScreen(administrationMode: Boolean = false) extends UIScreen {
     } else page.children @= Vector(panel)
     val introduction = Column(8.0)(WorkspaceStyle.text("Administration", 30.0, bold = true),
       WorkspaceStyle.paragraph("Manage users, invitations and workspace access. Credit files and memo review are in the analyst workspace.", width))
-    val content = Column(18.0)((if (administrationMode) Vector(status, introduction, navigation, page) else Vector(status, page))* )
+    val appearance = Appearance.selector()
+    val content = Column(18.0)((Vector(appearance) ++ (if (administrationMode) Vector(status, introduction, navigation, page) else Vector(status, page)))* )
     content.position.center := scroll.size.center()
     content.position.top @= 20.0
     scroll.content.children += content

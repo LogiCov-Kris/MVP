@@ -9,7 +9,8 @@ RUN printf '#!/bin/sh\nexec /usr/bin/chromium --no-sandbox --disable-dev-shm-usa
     && chmod 755 /usr/local/bin/chromium
 WORKDIR /opt/logicov
 COPY --chown=10001:10001 . /opt/logicov/
-RUN useradd --uid 10001 --home-dir /home/logicov --create-home logicov
+RUN useradd --uid 10001 --home-dir /home/logicov --create-home logicov \
+    && install -d -o 10001 -g 10001 /opt/logicov/db
 USER 10001:10001
 ENV PORT=8080 LOGICOV_WEB_DIRECTORY=/opt/logicov/web
 EXPOSE 8080

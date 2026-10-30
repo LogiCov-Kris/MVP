@@ -11,7 +11,7 @@ import reactify.*
 object WorkspaceStyle {
   val Navy: Color = Color.fromHex("242453")
   val Teal: Color = Color.fromHex("2563EB")
-  val Soft: Color = Color.fromHex("EEF3FF")
+  def Soft: Color = if (Appearance.dark()) Color.fromHex("293857") else Color.fromHex("EEF3FF")
 
   def quantity(count: Int, noun: String): String = s"$count $noun${if (count == 1) "" else "s"}"
 
@@ -24,15 +24,22 @@ object WorkspaceStyle {
     case DealStage.Failed => "Needs attention"
   }
 
-  def initialize(): Unit = {
-    Theme.palette @= Palette.light.copy(background = Color.fromHex("F5F7FA"), surface = Color.White,
+  def initialize(): Unit = Appearance.initialize()
+
+  def applyPalette(dark: Boolean): Unit = {
+    Theme.palette @= (if (dark) Palette.dark.copy(
+      background = Color.fromHex("101522"), surface = Color.fromHex("1A2233"),
+      raised = Color.fromHex("222D40"), control = Color.fromHex("253148"), controlLit = Color.fromHex("30405A"),
+      border = Color.fromHex("42506A"), text = Color.fromHex("E5EAF4"), muted = Color.fromHex("AAB8CE"),
+      accent = Color.fromHex("81A9FF"), accentLit = Color.fromHex("ADC6FF")) else Palette.light.copy(background = Color.fromHex("F5F7FA"), surface = Color.White,
       raised = Color.White, control = Color.fromHex("EEF2F6"), controlLit = Color.fromHex("F2F7F8"),
       border = Color.fromHex("DDE4EB"), text = Color.fromHex("203344"), muted = Color.fromHex("657687"),
-      accent = Teal, accentLit = Color.fromHex("1D4ED8"), success = Color.fromHex("16836D"))
+      accent = Teal, accentLit = Color.fromHex("1D4ED8"), success = Color.fromHex("16836D")))
   }
 
   def text(value: String, points: Double = 14.0, muted: Boolean = false, bold: Boolean = false): TextView = {
-    val view = TextView(value, points, if (muted) Theme.muted() else Theme.text())
+    val view = TextView(value, points)
+    view.color := (if (muted) Theme.muted() else Theme.text())
     if (bold) view.font.weight @= FontWeight.SemiBold
     view
   }
@@ -59,7 +66,7 @@ object WorkspaceStyle {
   def card(width: () => Double, children: Component*): Container = {
     val card = Column(16.0, padding = 24.0)(children*)
     card.size.width := width()
-    card.backgroundColor @= Color.White
+    card.backgroundColor := Theme.surface()
     card.borderWidth @= 1.0
     card.borderColor := Theme.border()
     card.radius @= 12.0

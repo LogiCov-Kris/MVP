@@ -29,7 +29,7 @@ object WorkspaceMemo {
         case Some(record) =>
           val configured = sys.env.get("LOGICOV_NARRATIVES_ENABLED").contains("true")
           val drafts = if (configured) {
-            require(sys.env.get("LOGICOV_PROVIDER_APPROVED").contains("true"), "A client-owned, zero-retention provider account must be approved before workspace narrative generation")
+            require(sys.env.get("LOGICOV_PROVIDER_APPROVED").contains("true"), "A client-owned provider account must be approved for this environment before workspace narrative generation")
             PublicNarratives.generate(record.cik, PublicNarratives.Sections -- deal.narratives.keySet).sync()
           } else Map.empty
           val draft = WorkspaceDraft.prepare(deal, drafts)

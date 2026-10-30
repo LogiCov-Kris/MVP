@@ -71,9 +71,9 @@ class ImportPanel(width: () => Double, saved: WorkspaceDeal => Unit = _ => ()) e
 
   private val dropZone = new Container
   dropZone.size.width := fieldWidth()
-  dropZone.backgroundColor @= Color.fromHex("F7FAFB")
+  dropZone.backgroundColor := Theme.control()
   dropZone.borderWidth @= 0.0
-  dropZone.borderColor @= Color.fromHex("B8CBCF")
+  dropZone.borderColor := Theme.border()
   dropZone.radius @= 9.0
   dropZone.node.el.style.border = "1px dashed #b8cbcf"
   dropZone.semantics @= Semantics.region("Statement upload")
@@ -93,10 +93,10 @@ class ImportPanel(width: () => Double, saved: WorkspaceDeal => Unit = _ => ()) e
   dropZone.children += uploadContent
   dropZone.size.height := math.max(168.0, uploadContent.size.height() + 28.0)
   dropZone.node.el.ondragover = (event: dom.DragEvent) => { event.preventDefault(); dropZone.backgroundColor @= WorkspaceStyle.Soft }
-  dropZone.node.el.ondragleave = (_: dom.DragEvent) => dropZone.backgroundColor @= Color.fromHex("F7FAFB")
+  dropZone.node.el.ondragleave = (_: dom.DragEvent) => dropZone.backgroundColor := Theme.control()
   dropZone.node.el.ondrop = (event: dom.DragEvent) => {
     event.preventDefault()
-    dropZone.backgroundColor @= Color.fromHex("F7FAFB")
+    dropZone.backgroundColor := Theme.control()
     if (!busy() && event.dataTransfer.files.length == 1) selectFile(event.dataTransfer.files(0))
     else if (!busy()) message @= "Choose one statement at a time."
   }

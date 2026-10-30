@@ -53,7 +53,7 @@ variable "public_url" {
 variable "narratives_enabled" {
   type        = bool
   default     = false
-  description = "Enable only after the client-owned provider account and zero-retention arrangement are verified."
+  description = "Requires client approval for this environment. Production also requires verified zero retention; approved development testing remains public-source-only."
 }
 variable "narrative_model" {
   type        = string
