@@ -19,6 +19,7 @@ object ApiClient {
 
   def deals(done: Either[String, List[DealSummary]] => Unit): Unit = get("/api/deals")(done)
   def deal(id: String)(done: Either[String, WorkspaceDeal] => Unit): Unit = get(s"/api/deals/$id")(done)
+  def memoReview(id: String)(done: Either[String, MemoReviewDocument] => Unit): Unit = get(s"/api/deals/$id/review")(done)
   def create(value: CreateDealRequest)(done: Either[String, WorkspaceDeal] => Unit): Unit = post("/api/deals", value)(done)
   def action[A: RW](id: String, action: String, value: A)(done: Either[String, WorkspaceDeal] => Unit): Unit =
     post(s"/api/deals/$id/$action", value)(done)

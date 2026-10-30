@@ -9,9 +9,9 @@ import logicov.workspace.DealStage
 import reactify.*
 
 object WorkspaceStyle {
-  val Navy: Color = Color.fromHex("142B3C")
-  val Teal: Color = Color.fromHex("087F79")
-  val Soft: Color = Color.fromHex("EFF6F5")
+  val Navy: Color = Color.fromHex("242453")
+  val Teal: Color = Color.fromHex("2563EB")
+  val Soft: Color = Color.fromHex("EEF3FF")
 
   def quantity(count: Int, noun: String): String = s"$count $noun${if (count == 1) "" else "s"}"
 
@@ -20,6 +20,7 @@ object WorkspaceStyle {
     case DealStage.Approved => "Ready to generate"
     case DealStage.Generating => "Preparing memo"
     case DealStage.Completed => "Memo ready"
+    case DealStage.Submitted => "Submitted for Approval"
     case DealStage.Failed => "Needs attention"
   }
 
@@ -27,7 +28,7 @@ object WorkspaceStyle {
     Theme.palette @= Palette.light.copy(background = Color.fromHex("F5F7FA"), surface = Color.White,
       raised = Color.White, control = Color.fromHex("EEF2F6"), controlLit = Color.fromHex("F2F7F8"),
       border = Color.fromHex("DDE4EB"), text = Color.fromHex("203344"), muted = Color.fromHex("657687"),
-      accent = Teal, accentLit = Color.fromHex("096C67"), success = Teal)
+      accent = Teal, accentLit = Color.fromHex("1D4ED8"), success = Color.fromHex("16836D"))
   }
 
   def text(value: String, points: Double = 14.0, muted: Boolean = false, bold: Boolean = false): TextView = {

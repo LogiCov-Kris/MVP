@@ -13,14 +13,13 @@ const { chromium } = require('playwright');
     await page.locator('input[name=email]').fill(process.env.LOGICOV_TEST_EMAIL);
     await page.locator('input[name=password]').fill(process.env.LOGICOV_TEST_PASSWORD);
     await page.locator('input[name=password]').press('Enter');
-    await page.getByRole('button', { name: 'New financial review', exact: true }).click();
+    await page.getByRole('button', { name: 'New Credit File', exact: true }).click();
     await page.locator('input[name=borrower]').fill('Saved review ' + Date.now());
     const chooser = page.waitForEvent('filechooser');
     await page.getByRole('button', { name: 'Choose statement', exact: true }).click();
     await (await chooser).setFiles({ name: 'retained.csv', mimeType: 'text/csv', buffer: Buffer.from('Revenue,120\nCash,10\n') });
-    await page.getByRole('button', { name: 'Preview Golden Grid', exact: true }).click();
     const savedResponse = page.waitForResponse(r => r.url().endsWith('/api/deals') && r.request().method() === 'POST');
-    await page.getByRole('button', { name: 'Save to workspace', exact: true }).click();
+    await page.getByRole('button', { name: 'Ingest & Analyze', exact: true }).click();
     const saved = await (await savedResponse).json();
     await page.getByText('Inspect a value', { exact: true }).waitFor();
     if (process.env.LOGICOV_OTHER_EMAIL) {
@@ -73,7 +72,7 @@ const { chromium } = require('playwright');
     await page.getByRole('button', { name: 'Download retained.csv', exact: true }).click();
     assert.equal(await fs.readFile(await (await source).path(), 'utf8'), 'Revenue,120\nCash,10\n');
     await page.reload();
-    await page.getByRole('button', { name: 'New financial review', exact: true }).waitFor();
+    await page.getByRole('button', { name: 'New Credit File', exact: true }).waitFor();
     assert.deepEqual(errors, []);
     console.log('Workspace browser passed: save, correct, approve, generate PDF, portable bundle, audit, original source and reload');
   } finally { await browser.close(); }

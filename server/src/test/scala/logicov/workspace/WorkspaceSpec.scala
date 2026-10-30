@@ -135,10 +135,7 @@ class WorkspaceSpec extends AnyFlatSpec with Matchers with BeforeAndAfterAll {
     val reviewed = workflow.judgments(user, deal.id, JudgmentRequest(unreviewed.revision, record.inputs.copy(ratingReview = None), record.profile, "Confirmed existing override", overrideReviewed = true))
     reviewed.record.flatMap(_.inputs.ratingReview) should be(None)
     reviewed.recommendation should be(CreditRecommendation.Pending)
-    val recommended = workflow.recommendation(user, deal.id, RecommendationRequest(reviewed.revision, CreditRecommendation.Conditional, "Analyst's documented conditions"))
-    recommended.recommendation should be(CreditRecommendation.Conditional)
-    recommended.stage should be(DealStage.Review)
-    recommended.approval should be(None)
+    intercept[IllegalArgumentException](workflow.recommendation(user, deal.id, RecommendationRequest(reviewed.revision, CreditRecommendation.Conditional, "Premature recommendation")))
   }
 
   it should "block stopped checks, preserve their evidence and invalidate approval when changed" in {
@@ -173,6 +170,34 @@ class WorkspaceSpec extends AnyFlatSpec with Matchers with BeforeAndAfterAll {
       reads.get(30, TimeUnit.SECONDS)
       migrations.get(30, TimeUnit.SECONDS)
     } finally executor.shutdownNow()
+  }
+
+  it should "enforce section review and invalidate submission eligibility on edits" in {
+    assume(enabled)
+    val user = session()
+    val created = workflow.create(user, CreateDealRequest("Committee review", record = Some(SampleDeals.kinderMorgan)))
+    intercept[IllegalArgumentException](workflow.submit(user, created.id, SubmissionRequest(created.revision, CreditRecommendation.Approve, "Too early")))
+    val reviewed = workflow.reviewStops(user, created.id, StopReviewRequest(created.revision, clearChecks))
+    val approved = workflow.approve(user, created.id, DealActionRequest(reviewed.revision, "Synthetic policy exception"))
+    val claimed = workflow.claim(user, created.id, DealActionRequest(approved.revision))
+    val completed = workflow.complete(user, claimed, Nil, "synthetic-pdf")
+    intercept[IllegalArgumentException](workflow.submit(user, completed.id, SubmissionRequest(completed.revision, CreditRecommendation.Approve, "Sections still pending")))
+    val marked = WorkspaceDraft.sectionTitles.foldLeft(completed) { (deal, title) =>
+      workflow.reviewSection(user, deal.id, SectionReviewRequest(deal.revision, title))
+    }
+    intercept[WorkspaceConflict](workflow.submit(user, marked.id, SubmissionRequest(completed.revision, CreditRecommendation.Approve, "Stale review")))
+    intercept[NoSuchElementException](workflow.submit(session(), marked.id, SubmissionRequest(marked.revision, CreditRecommendation.Approve, "Wrong tenant")))
+    val submitting = workflow.submit(user, marked.id, SubmissionRequest(marked.revision, CreditRecommendation.Conditional, "Subject to documented conditions"))
+    submitting.stage should be(DealStage.Generating)
+    val submitted = workflow.complete(user, submitting, Nil, "final-pdf")
+    submitted.stage should be(DealStage.Submitted)
+    submitted.submission.map(_.actor) should be(Some(user.email))
+    val edited = workflow.narrative(user, submitted.id, NarrativeRequest(submitted.revision, "Executive Summary", "Updated {{borrower}} assessment", "New assessment"))
+    edited.stage should be(DealStage.Review)
+    edited.sectionReviews should be(empty)
+    edited.submission should be(None)
+    edited.memo should be(None)
+    intercept[IllegalArgumentException](workflow.submit(user, edited.id, SubmissionRequest(edited.revision, CreditRecommendation.Approve, "Review was invalidated")))
   }
 
 }

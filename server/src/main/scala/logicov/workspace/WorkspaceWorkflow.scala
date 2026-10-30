@@ -1,6 +1,6 @@
 package logicov.workspace
 
-import fabric.io.JsonFormatter
+import fabric.io.{JsonFormatter, JsonParser}
 import fabric.rw.*
 import logicov.analysis.CreditAnalysis
 import logicov.deal.{DealCorrections, DealRecord}
@@ -51,8 +51,20 @@ class WorkspaceWorkflow(val store: WorkspaceStore) {
   private def event(deal: WorkspaceDeal, session: SessionView, action: String, detail: String): List[WorkspaceEvent] =
     deal.events :+ WorkspaceEvent(now, session.email, action, detail, deal.revision + 1)
 
-  private def revised(deal: WorkspaceDeal): WorkspaceDeal = deal.copy(stage = DealStage.Review, approval = None, lease = None, memo = None, failure = None,
+  private def revised(deal: WorkspaceDeal): WorkspaceDeal = deal.copy(stage = DealStage.Review, approval = None, lease = None, memo = None, failure = None, progress = GenerationProgress(), sectionReviews = Nil, submission = None,
     policyResults = PolicyEngine.evaluate(deal.policy, deal.record))
+
+  def borrower(session: SessionView, id: String, request: BorrowerRequest): WorkspaceDeal = {
+    reason(request.reason)
+    require(request.name.trim.nonEmpty && request.name.length <= 200, "Borrower legal name is required (up to 200 characters)")
+    store.change(session.tenantId, id, request.revision) { before =>
+      editable(before)
+      val name = request.name.trim
+      val grid = before.grid.copy(entity = name)
+      revised(before.copy(title = name, grid = grid, record = before.record.map(_.copy(borrower = name, grid = grid)), stopReviews = Nil,
+        events = event(before, session, "Borrower name corrected", s"${before.title} -> $name. ${request.reason}")))
+    }
+  }
 
   def correct(session: SessionView, id: String, request: DealCorrectionRequest): WorkspaceDeal = {
     reason(request.correction.reason)
@@ -160,6 +172,7 @@ class WorkspaceWorkflow(val store: WorkspaceStore) {
     store.change(session.tenantId, id, request.revision) { before =>
       editable(before)
       require(before.record.nonEmpty, "A complete credit record is required for a credit recommendation")
+      requireReviewed(before)
       revised(before.copy(recommendation = request.recommendation, recommendationBasis = request.rationale,
         events = event(before, session, "Credit recommendation changed", JsonFormatter.Compact(request.json))))
     }
@@ -167,11 +180,40 @@ class WorkspaceWorkflow(val store: WorkspaceStore) {
 
   def narrative(session: SessionView, id: String, request: NarrativeRequest): WorkspaceDeal = {
     reason(request.reason)
-    require(MemoSections.titles.contains(request.section) && request.text.length <= 20000, "Invalid narrative section")
+    require(WorkspaceDraft.sectionTitles.contains(request.section) && request.text.length <= 20000, "Invalid narrative section")
     store.change(session.tenantId, id, request.revision) { before =>
       editable(before)
+      WorkspaceDraft.validateText(before, request.section, request.text)
       revised(before.copy(narratives = before.narratives.updated(request.section, request.text),
         events = event(before, session, "Narrative edited", JsonFormatter.Compact(request.json))))
+    }
+  }
+
+  private def requireReviewed(deal: WorkspaceDeal): Unit = {
+    require(deal.stage == DealStage.Completed && deal.memo.nonEmpty, "Generate the current memo before committee review")
+    require(WorkspaceDraft.sectionTitles.forall(title => deal.sectionReviews.exists(_.section == title)), "Review every memo section before choosing a recommendation or submitting")
+    StopReview.requireClear(deal.stopReviews)
+  }
+
+  def reviewSection(session: SessionView, id: String, request: SectionReviewRequest): WorkspaceDeal =
+    store.change(session.tenantId, id, request.revision) { before =>
+      require(before.stage == DealStage.Completed && before.memo.nonEmpty, "Generate the current memo before marking sections reviewed")
+      require(WorkspaceDraft.sectionTitles.contains(request.section), "Unknown memo section")
+      val retained = before.sectionReviews.filterNot(_.section == request.section)
+      before.copy(sectionReviews = if (request.reviewed) retained :+ SectionReview(request.section, session.email, now) else retained,
+        events = event(before, session, "Memo section reviewed", s"${request.section}: ${request.reviewed}"))
+    }
+
+  def submit(session: SessionView, id: String, request: SubmissionRequest): WorkspaceDeal = {
+    reason(request.rationale)
+    require(Set(CreditRecommendation.Approve, CreditRecommendation.Conditional, CreditRecommendation.Decline).contains(request.recommendation), "Choose Approve, Conditional or Decline")
+    store.change(session.tenantId, id, request.revision) { before =>
+      requireReviewed(before)
+      require(before.record.nonEmpty && before.approval.nonEmpty, "A complete approved credit record is required for committee submission")
+      before.copy(stage = DealStage.Generating, lease = Some(JobLease(identifier(), System.currentTimeMillis() + 15 * 60 * 1000)),
+        recommendation = request.recommendation, recommendationBasis = request.rationale, failure = None,
+        submission = Some(SubmissionRecord(session.email, now, request.recommendation, request.rationale)),
+        events = event(before, session, "Committee submission requested", JsonFormatter.Compact(request.json)))
     }
   }
 
@@ -206,13 +248,19 @@ class WorkspaceWorkflow(val store: WorkspaceStore) {
       require(before.stage == DealStage.Approved || before.stage == DealStage.Failed ||
         (before.stage == DealStage.Generating && before.lease.exists(_.expiresAt < System.currentTimeMillis())), "Generation is already active or this revision is complete")
       before.copy(stage = DealStage.Generating, lease = Some(JobLease(identifier(), System.currentTimeMillis() + 15 * 60 * 1000)),
-        failure = None, events = event(before, session, "Generation started", "Approved snapshot claimed for memo generation"))
+        failure = None, progress = GenerationProgress(), events = event(before, session, "Generation started", "Approved snapshot claimed for memo generation"))
+    }
+
+  def generationProgress(session: SessionView, claimed: WorkspaceDeal, progress: GenerationProgress): WorkspaceDeal =
+    store.change(session.tenantId, claimed.id, claimed.revision) { current =>
+      require(current.stage == DealStage.Generating && current.lease == claimed.lease, "Generation lease changed")
+      current.copy(progress = progress)
     }
 
   def complete(session: SessionView, claimed: WorkspaceDeal, files: List[(WorkspaceDocument, Array[Byte])], pdf: String): WorkspaceDeal =
     store.change(session.tenantId, claimed.id, claimed.revision, files.map((m, bytes) => m.id -> bytes)) { current =>
       require(current.stage == DealStage.Generating && current.lease == claimed.lease, "Generation lease changed")
-      current.copy(stage = DealStage.Completed, lease = None, memo = Some(pdf), documents = current.documents ++ files.map(_._1),
+      current.copy(stage = if (current.submission.nonEmpty) DealStage.Submitted else DealStage.Completed, lease = None, memo = Some(pdf), narratives = files.find(_._1.name == "generated-narratives.json").fold(current.narratives)(f => JsonParser(new String(f._2, "UTF-8")).as[Map[String, String]]), documents = current.documents ++ files.map(_._1),
         events = event(current, session, "Memo generated", s"PDF $pdf; approved revision ${current.approval.map(_.revision).getOrElse(0L)}"))
     }
 

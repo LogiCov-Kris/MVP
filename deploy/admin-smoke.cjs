@@ -32,7 +32,7 @@ const assert=require('node:assert/strict');
     assert.equal((await member.request.get(base+'/api/admin/users')).status(),403);
     assert.equal((await member.request.post(base+'/api/admin/users',{headers,data:{action:'Create',email:'forbidden@example.test'}})).status(),403);
     const memberPage=await member.newPage();await memberPage.goto(base);
-    await memberPage.getByRole('button',{name:'New financial review',exact:true}).waitFor();assert.equal(await memberPage.getByRole('button',{name:'Users',exact:true}).count(),0);
+    await memberPage.getByRole('button',{name:'New Credit File',exact:true}).waitFor();assert.equal(await memberPage.getByRole('button',{name:'Users',exact:true}).count(),0);
     await page.getByRole('button',{name:'Refresh users',exact:true}).click();
     await page.getByText(/Unexpired sessions: 1/).waitFor();
     await page.getByRole('button',{name:'Revoke sessions',exact:true}).click();

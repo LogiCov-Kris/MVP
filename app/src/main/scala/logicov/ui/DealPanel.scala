@@ -23,6 +23,8 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
   private var deal = initial
   private var tab = initialSection
   private var dirty = false
+  private var memoScroll = 0.0
+  private var reviewPanel = Option.empty[MemoReviewPanel]
   private val busy = Var(false)
   private val message = Var("")
   private val saved = Var(false)
@@ -58,8 +60,8 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
   }
   children := Vector(toolbar, heading, state) ++ (if (width() < 700.0) Vector(mobileTabs) else Vector(tabs)) ++ Vector(status, content)
 
-  def processing: Boolean = busy()
-  def canLeave: Boolean = !busy() && (!dirty || dom.window.confirm("Discard your unsaved changes?"))
+  def processing: Boolean = busy() || reviewPanel.exists(_.processing)
+  def canLeave: Boolean = !processing && reviewPanel.forall(_.canLeave) && (!dirty || dom.window.confirm("Discard your unsaved changes?"))
   private def editable: Boolean = deal.stage != DealStage.Generating
   private def field(label: String, value: String = ""): TextInput = {
     val input = new TextInput(label)
@@ -109,6 +111,8 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
     link.click()
   }
   private def render(): Unit = {
+    children @= (if (deal.stage == DealStage.Generating) Vector(toolbar, status, content) else Vector(toolbar, heading, state) ++ (if (width() < 700.0) Vector(mobileTabs) else Vector(tabs)) ++ Vector(status, content))
+    heading.content @= deal.title
     state.content @= s"${WorkspaceStyle.stageLabel(deal.stage)} · Revision ${deal.revision} · ${deal.grid.values.size} cited values · ${deal.issues.indices.count(i => !deal.dispositions.contains(i.toString))} open review items"
     mobileTabs.selected @= tabNames.indexOf(tab)
     tabs.children @= tabNames.map { name =>
@@ -116,6 +120,7 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
       button.enabled := !busy()
       button
     }.toVector
+    reviewPanel = None
     content.children @= (tab match {
       case "Overview" => overview()
       case "Financials" => financials()
@@ -149,6 +154,10 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
   }
 
   private def financials(): Vector[Component] = {
+    val borrower = field("Borrower legal name", deal.title)
+    val identityReason = field("Reason for borrower name correction")
+    val identity = WorkspaceStyle.card(width, WorkspaceStyle.text("Borrower details", 20.0, bold = true), borrower, identityReason,
+      action("Save borrower name") { save("identity", BorrowerRequest(deal.revision, borrower.value(), identityReason.value())) })
     val detail = WorkspaceStyle.card(width, WorkspaceStyle.text("Inspect a value", 17.0, bold = true),
       WorkspaceStyle.paragraph("Select a financial line to see its citation or record a correction.", inner))
     def label(i: Int): String = deal.grid.values(i).item.toString.replaceAll("([a-z])([A-Z])", "$1 $2")
@@ -198,7 +207,7 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
     val sources = deal.documents.filterNot(_.name.startsWith("generated-")).map { doc =>
       WorkspaceStyle.button(s"Download ${doc.name}", () => download(doc))
     }
-    Vector(WorkspaceStyle.card(width, WorkspaceStyle.text("Golden Grid", 20.0, bold = true), search, resultCount, grid), detail,
+    Vector(identity, WorkspaceStyle.button("Continue to credit review", () => if (canLeave) { tab = "Judgments"; render() }, primary = true), WorkspaceStyle.card(width, WorkspaceStyle.text("Data Verification", 20.0, bold = true), search, resultCount, grid), detail,
       WorkspaceStyle.card(width, (Vector(WorkspaceStyle.text("Source documents", 18.0, bold = true)) ++ sources)*)) ++ issues
   }
 
@@ -249,11 +258,8 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
                   val scenarios = record.inputs.stressScenarios :+ StressScenario(s"EBITDA -$value%", ebitdaChange = -value / 100)
                   save("judgments", JudgmentRequest(deal.revision, record.inputs.copy(stressScenarios = scenarios), record.profile.copy(stressScenarios = scenarios), s"Added EBITDA sensitivity of $value%"))
               }
-            }), WorkspaceStyle.card(width, WorkspaceStyle.text("Credit recommendation", 20.0, bold = true),
-              WorkspaceStyle.paragraph("The analyst records the credit recommendation separately from approving the financial inputs.", inner),
-              recommendation, rationale, action("Save recommendation") {
-                save("recommendation", RecommendationRequest(deal.revision, CreditRecommendation.values(recommendation.selected()), rationale.value()))
-              }))
+            }))
+
   }
 
   private def policy(): Vector[Component] = {
@@ -314,108 +320,40 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
   }
 
   private def memo(): Vector[Component] = {
+    if (deal.stage == DealStage.Generating) {
+      val resume = WorkspaceStyle.button("Resume interrupted generation", () => save("resume", DealActionRequest(deal.revision)))
+      resume.enabled := !busy() && deal.lease.exists(_.expiresAt < System.currentTimeMillis())
+      return Vector(new ProcessingPanel(width, if (deal.submission.nonEmpty) "Preparing committee submission" else "Preparing your memo", Some(deal.progress)), resume)
+    }
     val reason = field("Approval explanation or policy exception")
     val approve = action("Approve reviewed inputs") { save("approve", DealActionRequest(deal.revision, reason.value())) }
     approve.enabled := !busy() && (deal.stage == DealStage.Review || deal.stage == DealStage.Failed)
     val generate = WorkspaceStyle.button("Generate memo", () => save("resume", DealActionRequest(deal.revision)), primary = true)
-    generate.enabled := !busy() && (deal.stage == DealStage.Approved || deal.stage == DealStage.Failed ||
-      (deal.stage == DealStage.Generating && deal.lease.exists(_.expiresAt < System.currentTimeMillis())))
-    val files = deal.documents.filter(_.name.startsWith("generated-")).reverse.map { document =>
+    generate.enabled := !busy() && (deal.stage == DealStage.Approved || deal.stage == DealStage.Failed)
+    val ready = deal.stage == DealStage.Completed || deal.stage == DealStage.Submitted
+    val prepare = if (ready) Vector.empty else Vector(requiredChecks(), WorkspaceStyle.card(width,
+      WorkspaceStyle.text("Prepare the memo", 20.0, bold = true),
+      WorkspaceStyle.paragraph(deal.failure.getOrElse("Confirm your source values, credit profile and required checks. Approving inputs prepares a draft; committee submission follows section-by-section review."), inner), reason, approve, generate))
+    val document = if (deal.record.nonEmpty) {
+      val panel = new MemoReviewPanel(width, deal, updated => {
+        memoScroll = reviewPanel.fold(0.0)(_.scrollPosition)
+        deal = updated; dirty = false; saved @= true; message @= "Changes saved."; render()
+      }, memoScroll)
+      reviewPanel = Some(panel)
+      Vector(panel)
+    } else Vector(WorkspaceStyle.card(width, WorkspaceStyle.text("Complete the credit profile", 20.0, bold = true),
+      WorkspaceStyle.paragraph("Financial statements alone do not establish facility terms or credit judgments. Complete the sourced profile before preparing a committee memo.", inner),
+      WorkspaceStyle.button("Complete credit profile", () => { tab = "Judgments"; render() })))
+    val latest = deal.documents.filter(d => d.name.startsWith("generated-") && d.contentType != "application/json").reverse.groupBy(_.contentType).values.map(_.head).toVector
+    val downloads = if (!ready) Vector.empty else Vector(WorkspaceStyle.card(width, (Vector(WorkspaceStyle.text("Memo and evidence", 18.0, bold = true)) ++ latest.map { document =>
       val label = document.contentType match {
         case "application/pdf" => "memo PDF"
         case "application/zip" => "review bundle"
-        case _ if document.name.contains("audit") => "source audit"
-        case _ => "memo HTML"
+        case _ => "source audit"
       }
-      val revision = """-r([0-9]+)\.""".r.findFirstMatchIn(document.name).fold("")(m => s" · Revision ${m.group(1)}")
-      WorkspaceStyle.button(s"Download $label$revision", () => download(document))
-    }
-    val approval = if (deal.stage == DealStage.Completed) WorkspaceStyle.card(width,
-      WorkspaceStyle.text("Memo ready", 20.0, bold = true),
-      WorkspaceStyle.paragraph(deal.approval.fold("")(a => s"Reviewed by ${a.actor}. The memo and supporting evidence are available below. Any further edit requires a new approval."), inner))
-    else if (deal.stage == DealStage.Generating) WorkspaceStyle.card(width,
-      WorkspaceStyle.text("Preparing your memo", 20.0, bold = true),
-      WorkspaceStyle.paragraph("Your approved inputs are saved. This page updates automatically; you may return to the deal later. If processing is interrupted, resume becomes available when the current job expires.", inner), generate)
-    else WorkspaceStyle.card(width, WorkspaceStyle.text("Review and approve", 20.0, bold = true),
-      WorkspaceStyle.paragraph(deal.failure.getOrElse("Resolve extraction issues and review your judgments before approval. Any policy exception must be explained. Editing approved inputs returns the deal to review."), inner),
-      reason, approve, generate)
-    val narrative = deal.record.toVector.map { _ =>
-      val sections = MemoSections.titles
-      val section = select("Memo section", sections, track = false)
-      val editor = new Container
-      editor.size.width := inner()
-      editor.size.height @= 240.0
-      val area = dom.document.createElement("textarea").asInstanceOf[dom.html.TextArea]
-      area.setAttribute("aria-label", "Section narrative")
-      area.style.cssText = "width:100%;height:100%;padding:14px;border:1px solid #dde4eb;border-radius:8px;font:14px/1.6 sans-serif;resize:none;box-sizing:border-box"
-      area.value = deal.narratives.getOrElse(sections.head, "")
-      area.disabled = !editable
-      editor.node.el.appendChild(area)
-      val riskOrder = new Container
-      riskOrder.size.width := inner()
-      val list = dom.document.createElement("div").asInstanceOf[dom.html.Div]
-      list.style.cssText = "font:13px/1.5 sans-serif;color:#203344"
-      riskOrder.node.el.appendChild(list)
-      var dragged = -1
-      def showRisks(): Unit = {
-        val blocks = if (sections(section.selected()) == "Key Risk Factors and Mitigants") area.value.split("\\n\\s*\\n").toVector.filter(_.trim.nonEmpty) else Vector.empty
-        list.textContent = ""
-        riskOrder.size.height @= blocks.size * 78.0
-        blocks.zipWithIndex.foreach { (text, index) =>
-          val row = dom.document.createElement("div").asInstanceOf[dom.html.Div]
-          row.draggable = editable
-          row.style.cssText = "height:68px;margin:5px 0;padding:10px;background:#f5f7fa;border:1px solid #dde4eb;border-radius:6px;box-sizing:border-box;overflow:hidden"
-          val label = dom.document.createElement("span")
-          label.textContent = s"${index + 1}. ${text.take(90)} "
-          row.appendChild(label)
-          def move(target: Int): Unit = if (target >= 0 && target < blocks.size && editable) {
-            val reordered = blocks.patch(index, Nil, 1).patch(target, Vector(blocks(index)), 0)
-            area.value = reordered.mkString("\n\n")
-            dirty = true
-            showRisks()
-          }
-          List("Move up" -> (index - 1), "Move down" -> (index + 1)).foreach { (name, target) =>
-            val button = dom.document.createElement("button").asInstanceOf[dom.html.Button]
-            button.textContent = name
-            button.setAttribute("aria-label", s"$name risk ${index + 1}")
-            button.disabled = !editable || target < 0 || target >= blocks.size
-            button.style.cssText = "margin-left:8px;background:white;border:1px solid #dde4eb;border-radius:4px;padding:4px;color:#087f79"
-            button.onclick = _ => move(target)
-            row.appendChild(button)
-          }
-          row.ondragstart = (_: dom.DragEvent) => dragged = index
-          row.ondragover = (event: dom.DragEvent) => event.preventDefault()
-          row.ondrop = (event: dom.DragEvent) => {
-            event.preventDefault()
-            if (dragged >= 0 && dragged < blocks.size && dragged != index && editable) {
-              area.value = blocks.patch(dragged, Nil, 1).patch(index, Vector(blocks(dragged)), 0).mkString("\n\n")
-              dragged = -1
-              dirty = true
-              showRisks()
-            }
-          }
-          list.appendChild(row)
-        }
-      }
-      area.oninput = _ => { dirty = true; showRisks() }
-      var selectedSection = 0
-      section.selected.attach { index =>
-        if (index != selectedSection) {
-          if (!dirty || dom.window.confirm("Discard unsaved narrative text?")) {
-            selectedSection = index
-            area.value = deal.narratives.getOrElse(sections(index), "")
-            dirty = false
-            showRisks()
-          } else section.selected @= selectedSection
-        }
-      }
-      showRisks()
-      val explanation = field("Reason for narrative change")
-      WorkspaceStyle.card(width, WorkspaceStyle.text("Analyst narrative", 20.0, bold = true),
-        WorkspaceStyle.paragraph("Write or revise the selected memo section. Saved prose is included in the next approved memo.", inner), section, editor, riskOrder, explanation,
-        action("Save narrative") { save("narratives", NarrativeRequest(deal.revision, sections(section.selected()), area.value, explanation.value())) })
-    }
-    Vector(requiredChecks(), approval) ++ narrative ++ Vector(WorkspaceStyle.card(width, (Vector(WorkspaceStyle.text("Memo downloads", 18.0, bold = true)) ++ files)*))
+      WorkspaceStyle.button(s"Download $label", () => download(document))
+    })* ))
+    prepare ++ document ++ downloads
   }
 
   private def history(): Vector[Component] = deal.events.reverse.map { event =>

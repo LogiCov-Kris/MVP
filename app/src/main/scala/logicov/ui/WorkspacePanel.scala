@@ -35,7 +35,7 @@ class WorkspacePanel(width: () => Double) extends Container {
     val search = new TextInput("Search borrowers")
     search.value @= searchTerm
     search.size.width := width()
-    val stages = new Select(List("All deals", "Needs review", "Ready to generate", "Preparing memo", "Memo ready", "Needs attention"))
+    val stages = new Select(List("All deals", "Needs review", "Ready to generate", "Preparing memo", "Memo ready", "Needs attention", "Submitted for Approval"))
     stages.selected @= stageIndex
     stages.size.width := (if (width() >= 700.0) (width() - 16.0) / 2.0 else width())
     stages.size.height @= 46.0
@@ -52,7 +52,7 @@ class WorkspacePanel(width: () => Double) extends Container {
     val count = WorkspaceStyle.text("", 13.0, muted = true)
     val rows = Column(12.0)()
     def filter(): Unit = {
-      val selected = List(None, Some(DealStage.Review), Some(DealStage.Approved), Some(DealStage.Generating), Some(DealStage.Completed), Some(DealStage.Failed))(stages.selected())
+      val selected = List(None, Some(DealStage.Review), Some(DealStage.Approved), Some(DealStage.Generating), Some(DealStage.Completed), Some(DealStage.Failed), Some(DealStage.Submitted))(stages.selected())
       searchTerm = search.value()
       stageIndex = stages.selected()
       sortIndex = sort.selected()
@@ -69,17 +69,16 @@ class WorkspacePanel(width: () => Double) extends Container {
         WorkspaceStyle.button("Clear filters", () => { search.value @= ""; stages.selected @= 0 })))
       else found.map { deal => WorkspaceStyle.card(width,
         WorkspaceStyle.paragraph(deal.title, () => width() - 48.0, 20.0, muted = false),
-        WorkspaceStyle.paragraph(s"${WorkspaceStyle.stageLabel(deal.stage)} · ${deal.values} cited values · ${deal.issues} open review items · Revision ${deal.revision}", () => width() - 48.0, 13.0),
+        WorkspaceStyle.paragraph(s"${deal.facility}\n${WorkspaceStyle.stageLabel(deal.stage)} · Updated ${deal.updatedAt.take(10)}", () => width() - 48.0, 13.0),
         WorkspaceStyle.button("Open deal", () => open(deal.id))) }.toVector)
     }
     search.value.attach(_ => filter())
     stages.selected.attach(_ => filter())
     sort.selected.attach(_ => filter())
     filter()
-    children @= Vector(WorkspaceStyle.text("Deal workspace", 30.0, bold = true),
+    children @= Vector(WorkspaceStyle.text("Analyst Workspace", 30.0, bold = true),
       WorkspaceStyle.paragraph("Financial analysis, review and approval in one place.", width, 15.0),
-      WorkspaceStyle.card(width, WorkspaceStyle.text(s"${deals.size} deals  ·  ${deals.count(_.stage == DealStage.Review)} awaiting review", 18.0, bold = true),
-        WorkspaceStyle.button("New financial review", () => startImport(), primary = true)), WorkspaceStyle.text("Find a deal", 16.0, bold = true), search,
+      WorkspaceStyle.button("New Credit File", () => startImport(), primary = true), WorkspaceStyle.text("Find a deal", 16.0, bold = true), search,
       filters, count, rows)
   }
 
@@ -106,7 +105,7 @@ class WorkspacePanel(width: () => Double) extends Container {
   private def showDeal(deal: WorkspaceDeal, overview: Boolean): Unit = {
     generation += 1
     importer = None
-    val panel = new DealPanel(width, deal, () => portfolio(), if (overview) "Overview" else "Financials")
+    val panel = new DealPanel(width, deal, () => portfolio(), if (deal.stage == DealStage.Completed || deal.stage == DealStage.Submitted || deal.stage == DealStage.Generating) "Memo" else if (overview) "Overview" else "Financials")
     detail = Some(panel)
     children @= Vector(panel)
   }

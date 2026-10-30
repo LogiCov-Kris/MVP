@@ -5,7 +5,7 @@ object MemoRenderer {
 
   private val Binding = """\{\{([^}]+)\}\}""".r
 
-  def render(template: MemoTemplate, context: MemoContext): String = {
+  def render(template: MemoTemplate, context: MemoContext, rendered: String => Unit = _ => ()): String = {
     def bind(text: String): String =
       Binding.replaceAllIn(text, m => java.util.regex.Matcher.quoteReplacement(escape(context.value(m.group(1).trim))))
 
@@ -27,6 +27,7 @@ object MemoRenderer {
             case None => s"""<div class="narrative"><span class="label">Narrative · ${escape(author)}</span><p>${bind(guidance)}</p></div>"""
           }
       }.mkString("\n")
+      rendered(section.title)
       s"<section><h2>${index + 1}. ${escape(section.title)}</h2>\n$blocks</section>"
     }.mkString("\n")
     s"""<!doctype html>

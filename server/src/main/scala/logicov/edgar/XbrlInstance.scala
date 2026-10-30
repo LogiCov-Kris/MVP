@@ -29,11 +29,11 @@ object XbrlInstance {
   private val StandardLabel = "http://www.xbrl.org/2003/role/label"
   private val MaxText = 64
 
-  def parse(form: String, accession: String, instance: Array[Byte], labelLinkbase: Option[Array[Byte]]): XbrlInstance = {
+  def parse(form: String, accession: String, instance: Array[Byte], labelLinkbase: Option[Array[Byte]], standardOnly: Boolean = false): XbrlInstance = {
     val root = document(instance)
     val contexts = children(root, Xbrli, "context").map(c => c.getAttribute("id") -> context(c)).toMap
     val units = children(root, Xbrli, "unit").map(u => u.getAttribute("id") -> localName(descendants(u, Xbrli, "measure").head.getTextContent)).toMap
-    val facts = elements(root).filter(_.hasAttribute("contextRef")).flatMap { e =>
+    val facts = elements(root).filter(e => e.hasAttribute("contextRef") && (!standardOnly || Option(e.getNamespaceURI).exists(_.startsWith("http://fasb.org/us-gaap/")))).flatMap { e =>
       val content = e.getTextContent.trim
       val (start, end, dimensions) = contexts(e.getAttribute("contextRef"))
       if (content.isEmpty || content.length > MaxText) None

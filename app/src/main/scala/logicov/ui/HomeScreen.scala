@@ -100,7 +100,7 @@ class HomeScreen extends UIScreen {
   private def loginForm(error: String): Unit = {
     notice @= false
     message @= error
-    val wide = Val(root.size.width() >= 900.0)
+    val wide = Val(false)
     val left = new Container
     left.size.width := (if (wide()) root.size.width() * 0.43 else 0.0)
     left.size.height := root.size.height()
@@ -121,7 +121,7 @@ class HomeScreen extends UIScreen {
     scroll.position.left := left.size.width()
     scroll.size.width := root.size.width() - left.size.width()
     scroll.size.height := root.size.height()
-    val width = () => math.min(390.0, scroll.size.width() - 48.0)
+    val width = () => math.min(390.0, scroll.size.width() - 104.0)
     email.size.width := width()
     password.size.width := width()
     newPassword.size.width := width()
@@ -158,9 +158,14 @@ class HomeScreen extends UIScreen {
       else if (confirming) "Enter the email address that received this link to finish signing in. If it has expired, request a new link below."
       else if (useEmail) "We’ll email you a secure sign-in link. No password needed."
       else "Sign in to your underwriting workspace."
-    val form = Column(22.0)((Vector(brand(), WorkspaceStyle.text(heading, 30.0, bold = true),
+    val form = Column(22.0, padding = 28.0)((Vector(brand(), WorkspaceStyle.text(heading, 30.0, bold = true),
       WorkspaceStyle.paragraph(explanation, width)) ++ fields ++ Vector(signInButton, status) ++ switches ++ Vector(
       WorkspaceStyle.paragraph("Access is provided by your workspace administrator.", width, 12.0)))* )
+    form.backgroundColor @= Color.White
+    form.radius @= 14.0
+    form.borderWidth @= 1.0
+    form.borderColor := Theme.border()
+    form.node.el.style.boxShadow = "0 16px 60px #25245a10"
     form.position.center := scroll.size.center()
     form.position.top := math.max(48.0, (scroll.size.height() - 530.0) / 2.0)
     scroll.content.children += form

@@ -31,7 +31,7 @@ const assert = require('node:assert/strict');
     await page.getByText(/This sign-in link is invalid or expired/).waitFor();
     await page.locator('input[name=email]').fill(email);
     await page.getByRole('button', { name: 'Continue to workspace', exact: true }).click();
-    await page.getByRole('button', { name: 'New financial review', exact: true }).waitFor();
+    await page.getByRole('button', { name: 'New Credit File', exact: true }).waitFor();
     await page.getByRole('button', { name: 'Sign out', exact: true }).click();
     await page.goto(link);
     await page.getByRole('button', { name: 'Continue to workspace', exact: true }).waitFor();
@@ -61,7 +61,7 @@ const assert = require('node:assert/strict');
     assert.equal((await stale.request.get(base + '/api/session')).status(), 401);
     await page.locator('input[name=password]').fill(password);
     await page.getByRole('button', { name: 'Sign in', exact: true }).click();
-    await page.getByRole('button', { name: 'New financial review', exact: true }).waitFor();
+    await page.getByRole('button', { name: 'New Credit File', exact: true }).waitFor();
     assert.equal((await page.request.post(base + '/api/auth/password/reset', { headers, data: { email, token: resetLink.split('#reset=')[1], password } })).status(), 401);
     console.log('Email browser passed: multipart delivery, cooldown, email binding, confirmation, replay denial, reset, session revocation and new-password login');
   } finally {

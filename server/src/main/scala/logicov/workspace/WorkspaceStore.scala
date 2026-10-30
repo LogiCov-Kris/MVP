@@ -57,7 +57,7 @@ class WorkspaceStore(val database: WorkspaceDatabase, cipher: TenantCipher) {
         while (rows.next()) {
           val deal = decode(connection, tenant, rows.getString(1), rows.getBytes(2))
           found += DealSummary(deal.id, deal.title, deal.stage, deal.revision, deal.grid.values.size,
-            deal.issues.indices.count(i => !deal.dispositions.contains(i.toString)), deal.events.lastOption.fold("")(_.at))
+            deal.issues.indices.count(i => !deal.dispositions.contains(i.toString)), deal.events.lastOption.fold("")(_.at), deal.record.fold("Facility details pending")(_.profile.facility.kind))
         }
       } finally rows.close()
       found.toList

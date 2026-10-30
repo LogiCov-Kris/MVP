@@ -28,8 +28,10 @@ object WorkspaceEndpoint extends ConnectionFilter {
       case Some(session) => (exchange.request.method, parts) match {
         case (HttpMethod.Get, Nil) => respond(exchange)(WorkspaceService.store.list(session.tenantId))
         case (HttpMethod.Get, List(id)) => respond(exchange)(WorkspaceService.store.get(session.tenantId, id))
+        case (HttpMethod.Get, List(id, "review")) => respond(exchange)(WorkspaceDraft.prepare(WorkspaceService.store.get(session.tenantId, id)).review)
         case (HttpMethod.Get, List(id, "files", file)) => download(exchange, session, id, file)
         case (HttpMethod.Post, Nil) => body[CreateDealRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.create(session, r)))
+        case (HttpMethod.Post, List(id, "identity")) => body[BorrowerRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.borrower(session, id, r)))
         case (HttpMethod.Post, List(id, "documents")) => body[DocumentRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.attach(session, id, r)))
         case (HttpMethod.Post, List(id, "profile")) => body[CreditSetupRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.setup(session, id, r)))
         case (HttpMethod.Post, List(id, "corrections")) => body[DealCorrectionRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.correct(session, id, r)))
@@ -41,6 +43,8 @@ object WorkspaceEndpoint extends ConnectionFilter {
         case (HttpMethod.Post, List(id, "judgments")) => body[JudgmentRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.judgments(session, id, r)))
         case (HttpMethod.Post, List(id, "recommendation")) => body[RecommendationRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.recommendation(session, id, r)))
         case (HttpMethod.Post, List(id, "narratives")) => body[NarrativeRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.narrative(session, id, r)))
+        case (HttpMethod.Post, List(id, "section-review")) => body[SectionReviewRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.reviewSection(session, id, r)))
+        case (HttpMethod.Post, List(id, "submit")) => body[SubmissionRequest](exchange)(r => generate(exchange, session, WorkspaceService.workflow.submit(session, id, r)))
         case (HttpMethod.Post, List(id, "checks")) => body[StopReviewRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.reviewStops(session, id, r)))
         case (HttpMethod.Post, List(id, "approve")) => body[DealActionRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.approve(session, id, r)))
         case (HttpMethod.Post, List(id, "resume")) => body[DealActionRequest](exchange)(r => resume(exchange, session, id, r))
@@ -73,18 +77,22 @@ object WorkspaceEndpoint extends ConnectionFilter {
     }).guarantee(Task(writes.release()).unit)
   }
 
-  private def resume(exchange: HttpExchange, session: SessionView, id: String, request: DealActionRequest): Task[FilterResponse] = Task.defer {
+  private def resume(exchange: HttpExchange, session: SessionView, id: String, request: DealActionRequest): Task[FilterResponse] =
+    generate(exchange, session, WorkspaceService.workflow.claim(session, id, request))
+
+  private def generate(exchange: HttpExchange, session: SessionView, claim: => WorkspaceDeal): Task[FilterResponse] = Task.defer {
     if (!jobs.tryAcquire()) WebEndpoint.error(exchange, 429, "A memo is being generated. Try again shortly.")
-    else Task(WorkspaceService.workflow.claim(session, id, request)).attempt.flatMap {
+    else Task(claim).attempt.flatMap {
       case Failure(error) => jobs.release(); Task.error(error)
       case Success(claimed) =>
+        var active = claimed
         Task {
-          val files = WorkspaceMemo.generate(session, claimed)
+          val files = WorkspaceMemo.generate(session, claimed, progress = p => active = WorkspaceService.workflow.generationProgress(session, active, p))
           val pdf = files.find(_._1.contentType == "application/pdf").getOrElse(throw new IllegalStateException("PDF missing"))
-          WorkspaceService.workflow.complete(session, claimed, files, pdf._1.id)
+          WorkspaceService.workflow.complete(session, active, files, pdf._1.id)
         }.unit.handleError { cause => Task {
           scribe.error("Memo generation failed", cause)
-          try WorkspaceService.workflow.fail(session, claimed)
+          try WorkspaceService.workflow.fail(session, active)
           catch { case conflict: WorkspaceConflict => scribe.warn("Generation lease superseded; newer revision retained", conflict) }
           ()
         }}.guarantee(Task(jobs.release()).unit).start.flatMap(_ => WebEndpoint.json(exchange, 202, claimed))

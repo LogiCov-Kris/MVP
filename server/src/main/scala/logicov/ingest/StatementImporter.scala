@@ -14,6 +14,7 @@ object StatementImporter {
     options.validate()
     require(filename.nonEmpty && filename.length <= 200 && !filename.exists(c => c == '/' || c == '\\' || c.isControl), "Invalid filename")
     require(bytes.nonEmpty && bytes.length <= MaxBytes, "Upload must contain between 1 byte and 5 MB")
+    if (Set("xbrl", "xml").contains(filename.toLowerCase(Locale.ROOT).split('.').last)) return XbrlStatements.read(filename, bytes, options)
     val rows = filename.toLowerCase(Locale.ROOT).split('.').last match {
       case "csv" => CsvStatements.read(bytes)
       case "xls" | "xlsx" => WorkbookStatements.read(bytes)

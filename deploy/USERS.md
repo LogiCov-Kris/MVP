@@ -29,3 +29,13 @@ target/runtime/bin/logicov-server -main logicov.auth.AccountAdminApp '<administr
 Use `workspace` instead of `platform` to remove platform access while retaining the workspace Administrator role. The operation revokes existing sessions; the administrator must sign in again. Existing accounts default to no platform access. The account-management API cannot set this flag, and customer administrators cannot change platform accounts.
 
 The platform interface manages workspace configuration and accounts. It does not switch the operator's deal context or grant implicit access to customer deal records or source documents. Those endpoints continue to use the signed-in user's own tenant.
+
+## Analyst review and submission
+
+The analyst starts a New Credit File with the borrower legal name and a source statement. Extraction saves the source and cited values together. Data Verification supports audited borrower-name and financial corrections. Credit-profile inputs, institution policy and required checks remain prerequisites to approval and generation.
+
+Memo Review presents one continuous document with section navigation and a linked source appendix. Inline narrative edits support shared values and references to another section's narrative; changing the underlying record updates those references throughout the document. Literal prose remains the analyst's responsibility. Financial corrections recalculate the deterministic analysis. Narrative, source, judgment and policy changes invalidate input approval, generated output and section review completion.
+
+Every configured memo section must be explicitly marked reviewed before the server accepts a committee recommendation. Submit to Committee records the recommendation and its rationale, produces the final PDF, and changes the deal to Submitted for Approval only after generation succeeds. This is a submission record, not committee approval or voting. Failed generation retains the approved snapshot for retry. Concurrent and stale edits are rejected.
+
+Progress reports completed rendering sections and actual PDF/packaging phases. During extraction, progress is indeterminate until the saved result is returned. No timed simulation is used. Standalone XBRL/XML intake supports undimensioned US GAAP USD facts for the selected periods; inline XBRL, custom taxonomy inference, and OCR are not implied.

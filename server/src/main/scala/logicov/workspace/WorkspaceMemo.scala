@@ -2,20 +2,18 @@ package logicov.workspace
 
 import fabric.io.{JsonFormatter, JsonParser}
 import fabric.rw.*
-import logicov.analysis.CreditAnalysis
-import logicov.memo.{MemoBlock, MemoContext, MemoRenderer, MemoTemplate, PublicNarratives, NarrativeText, PdfPrinter}
+import logicov.memo.{MemoRenderer, PublicNarratives, PdfPrinter}
 import logicov.model.SessionView
 
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Path}
-import java.time.LocalDate
 import java.util.zip.{ZipEntry, ZipOutputStream}
 import scala.jdk.CollectionConverters.*
 
 object WorkspaceMemo {
   private def escape(value: String): String = value.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;")
 
-  def generate(session: SessionView, deal: WorkspaceDeal, store: WorkspaceStore = WorkspaceService.store): List[(WorkspaceDocument, Array[Byte])] = {
+  def generate(session: SessionView, deal: WorkspaceDeal, store: WorkspaceStore = WorkspaceService.store, progress: GenerationProgress => Unit = _ => ()): List[(WorkspaceDocument, Array[Byte])] = {
     StopReview.requireClear(deal.stopReviews)
     val directory = Files.createTempDirectory("logicov-memo-")
     try {
@@ -35,47 +33,28 @@ object WorkspaceMemo {
       val approval = s"""<section><h2>Analyst approval</h2><p>${escape(deal.approval.fold("")(a => s"${a.actor}, ${a.at}; reviewed revision ${a.revision}"))}</p>
         <h3>Required analyst checks</h3><table><tr><th>Check</th><th>Result</th><th>Evidence</th></tr>$checks</table>
         <p>Approval records input review. This memo is not a commitment to lend.</p></section>"""
+      var generatedTexts = deal.narratives
+      var renderedSections = List.empty[String]
       val (body, audit) = deal.record match {
         case Some(record) =>
-          val stream = getClass.getClassLoader.getResourceAsStream("templates/public-revolver.json")
-          val baseTemplate = try JsonParser(new String(stream.readAllBytes(), StandardCharsets.UTF_8)).as[MemoTemplate] finally stream.close()
-          val template = baseTemplate.copy(title = "Credit Memorandum | {{borrower}}", header = "Credit Memorandum · CONFIDENTIAL",
-            disclaimer = baseTemplate.disclaimer.replace("Sample output for analyst review", "Prepared for analyst review"),
-            sections = baseTemplate.sections.map { section =>
-              if (section.title != "Recommendation") section
-              else section.copy(blocks = section.blocks.map {
-                case MemoBlock.Paragraph(_) => MemoBlock.Paragraph("{{recommendation}}. {{recommendation.basis}}")
-                case block => block
-              })
-            })
-          val analysis = CreditAnalysis.run(record)
-          val baseContext = MemoContext.build(analysis, LocalDate.now(), deal.id)
-          val context = baseContext.copy(values = baseContext.values.updated("recommendation", deal.recommendation.label)
-            .updated("recommendation.basis", deal.recommendationBasis))
           val configured = sys.env.get("LOGICOV_NARRATIVES_ENABLED").contains("true")
           val drafts = if (configured) {
             require(sys.env.get("LOGICOV_PROVIDER_APPROVED").contains("true"), "A client-owned, zero-retention provider account must be approved before workspace narrative generation")
             PublicNarratives.generate(record.cik, PublicNarratives.Sections -- deal.narratives.keySet).sync()
           } else Map.empty
-          val narratives = template.sections.zipWithIndex.flatMap { (section, sectionIndex) =>
-            val first = section.blocks.indexWhere {
-              case MemoBlock.Narrative(_, _) => true
-              case _ => false
-            }
-            section.blocks.zipWithIndex.collect { case (MemoBlock.Narrative(_, _), blockIndex) =>
-              val key = MemoRenderer.narrativeKey(sectionIndex, blockIndex)
-              val narrative = if (blockIndex != first) NarrativeText("", Nil)
-                else deal.narratives.get(section.title).map(text => NarrativeText(text, Nil))
-                  .orElse(drafts.get(section.title)).getOrElse(NarrativeText(fallback(section.title, analysis), Nil))
-              key -> narrative
-            }
-          }.toMap
-          val auditPath = context.value("source.audit")
-          val tables = context.tables.view.mapValues { table =>
-            table.copy(links = table.links.view.mapValues(link => if (link.startsWith(auditPath + "#")) auditUrl + link.stripPrefix(auditPath) else link).toMap)
-          }.toMap
-          val enriched = context.copy(values = context.values.updated("source.audit", auditUrl), tables = tables, narratives = narratives)
-          MemoRenderer.render(template, enriched) -> MemoRenderer.audit(enriched, links)
+          val draft = WorkspaceDraft.prepare(deal, drafts)
+          generatedTexts = draft.texts
+          val context = draft.context
+          val appendix = draft.review.appendix
+          val sourceList = links.map((name, url) => s"<p><a href=\"${escape(url)}\">${escape(name)}</a></p>").mkString
+          val html = MemoRenderer.render(draft.template, context, title => {
+            renderedSections = renderedSections :+ title
+            progress(GenerationProgress(GenerationPhase.Rendering, renderedSections, WorkspaceDraft.sectionTitles))
+          })
+            .replace("href=\"#", "href=\"#evidence-")
+            .replace("#evidence-evidence-", "#evidence-")
+            .replace("</body>", s"<section id=\"citations\"><h2>Source Appendix</h2>$sourceList$appendix</section></body>")
+          html -> MemoRenderer.audit(context, links)
         case None =>
           val rows = deal.grid.values.map { v => s"<tr><td>${escape(v.item.toString)}</td><td>${escape(v.period.label)}</td><td>${v.value}</td><td>${escape(v.source.describe)}</td></tr>" }.mkString
           val html = s"""<!doctype html><html><head><meta charset="utf-8"><style>body{font:12px sans-serif;margin:40px;color:#203344}h1,h2{color:#142b3c}table{width:100%;border-collapse:collapse}td,th{padding:8px;border-bottom:1px solid #ddd;text-align:left}tr{break-inside:avoid}</style></head><body>
@@ -86,16 +65,19 @@ object WorkspaceMemo {
       }
       val history = deal.events.map(e => s"<tr><td>${escape(e.at)}</td><td>${escape(e.actor)}</td><td>${escape(e.action)}</td><td>${escape(e.detail)}</td></tr>").mkString
       val auditBytes = audit.replace("</body>", s"<h2>Review history</h2><table>$history</table></body>").getBytes(StandardCharsets.UTF_8)
-      val memoHtml = body.replace("</body>", policy + approval + "</body>")
+      val submission = deal.submission.fold("")(s => s"<section><h2>Submitted for Approval</h2><p>${escape(s.actor)} · ${escape(s.at)}</p><p>${escape(s.recommendation.label)}: ${escape(s.rationale)}</p></section>")
+      val memoHtml = body.replace("</body>", policy + approval + submission + "</body>")
       val html = directory.resolve("memo.html")
       Files.writeString(html, memoHtml)
       val printer = new PdfPrinter(sys.env.getOrElse("LOGICOV_CHROMIUM", "/usr/local/bin/chromium"))
+      progress(GenerationProgress(GenerationPhase.Printing, renderedSections, WorkspaceDraft.sectionTitles))
       val pdf = printer.print(html, directory.resolve("memo.pdf"))
       val pdfBytes = Files.readAllBytes(pdf)
       val pdfMeta = new WorkspaceWorkflow(store).document(s"generated-memo-r${deal.revision}.pdf", "application/pdf", pdfBytes)
       val auditMeta = new WorkspaceWorkflow(store).document(s"generated-audit-r${deal.revision}.html", "text/html", auditBytes).copy(id = auditId)
       val htmlBytes = memoHtml.getBytes(StandardCharsets.UTF_8)
       val htmlMeta = new WorkspaceWorkflow(store).document(s"generated-memo-r${deal.revision}.html", "text/html", htmlBytes)
+      progress(GenerationProgress(GenerationPhase.Packaging, renderedSections, WorkspaceDraft.sectionTitles))
       Files.write(directory.resolve("audit.html"), auditBytes)
       var portableAudit = new String(auditBytes, StandardCharsets.UTF_8)
       sources.foreach { source =>
@@ -123,7 +105,9 @@ object WorkspaceMemo {
       } finally { files.close(); output.close() }
       val zipBytes = Files.readAllBytes(zip)
       val zipMeta = new WorkspaceWorkflow(store).document(s"generated-review-r${deal.revision}.zip", "application/zip", zipBytes)
-      List(pdfMeta -> pdfBytes, auditMeta -> auditBytes, htmlMeta -> htmlBytes, zipMeta -> zipBytes)
+      val narrativeBytes = JsonFormatter.Compact(generatedTexts.json).getBytes(StandardCharsets.UTF_8)
+      val narrativeMeta = new WorkspaceWorkflow(store).document("generated-narratives.json", "application/json", narrativeBytes)
+      List(pdfMeta -> pdfBytes, auditMeta -> auditBytes, htmlMeta -> htmlBytes, zipMeta -> zipBytes, narrativeMeta -> narrativeBytes)
     } finally {
       val files = Files.walk(directory)
       try files.iterator().asScala.toList.sortBy(_.getNameCount).reverse.foreach(Files.deleteIfExists)
@@ -131,16 +115,4 @@ object WorkspaceMemo {
     }
   }
 
-  private def fallback(title: String, analysis: CreditAnalysis): String = {
-    val ratios = analysis.ratios
-    title.toLowerCase match {
-      case t if t.contains("executive") => s"${analysis.record.borrower} has a calculated risk rating of ${analysis.rating.machineGrade.label} and a final risk rating of ${analysis.rating.grade.label}. The analysis uses the retained financial statements and documented analyst inputs."
-      case t if t.contains("financial") => s"The financial spread uses EBITDA of ${ratios.ebitda} million and net debt of ${ratios.netDebt} million. Net leverage is ${ratios.netLeverage.setScale(2, BigDecimal.RoundingMode.HALF_UP)}x. The tables identify the periods and sources used."
-      case t if t.contains("covenant") => s"The facility test is ${analysis.covenant.covenant.kind}, with a threshold of ${analysis.covenant.threshold} and a calculated result of ${analysis.covenant.actual.setScale(4, BigDecimal.RoundingMode.HALF_UP)}. Contractual definitions and compliance reporting govern the facility test."
-      case t if t.contains("risk rating") => s"The calculated composite is ${analysis.rating.composite}. The final risk rating is ${analysis.rating.grade.mapping}; documented overrides remain part of the analyst record."
-      case t if t.contains("stress") => "The stress results use the scenarios and actual covenant definition recorded for this facility. These sensitivities are calculations rather than forecasts."
-      case t if t.contains("recommendation") => "The analyst has approved the inputs for this memo. The credit recommendation requires the analyst's documented judgment and the institution's approval process."
-      case _ => ""
-    }
-  }
 }
