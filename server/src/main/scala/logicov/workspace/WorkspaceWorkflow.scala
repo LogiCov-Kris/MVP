@@ -211,7 +211,7 @@ class WorkspaceWorkflow(val store: WorkspaceStore) {
       requireReviewed(before)
       require(before.record.nonEmpty && before.approval.nonEmpty, "A complete approved credit record is required for committee submission")
       before.copy(stage = DealStage.Generating, lease = Some(JobLease(identifier(), System.currentTimeMillis() + 15 * 60 * 1000)),
-        recommendation = request.recommendation, recommendationBasis = request.rationale, failure = None,
+        recommendation = request.recommendation, recommendationBasis = request.rationale, failure = None, progress = GenerationProgress(),
         submission = Some(SubmissionRecord(session.email, now, request.recommendation, request.rationale)),
         events = event(before, session, "Committee submission requested", JsonFormatter.Compact(request.json)))
     }

@@ -10,7 +10,7 @@ import java.time.LocalDate
 import scala.collection.mutable
 import scala.util.matching.Regex
 
-case class WorkspaceDraft(template: MemoTemplate, context: MemoContext, texts: Map[String, String]) {
+case class WorkspaceDraft(template: MemoTemplate, context: MemoContext, texts: Map[String, String], supplement: String) {
   def review: MemoReviewDocument = {
     val sections = template.sections.filter(s => WorkspaceDraft.sectionTitles.contains(s.title)).zipWithIndex.map { (section, index) =>
       val local = context.copy(narratives = Map(MemoRenderer.narrativeKey(0, 0) -> context.narratives(MemoRenderer.narrativeKey(index, 0))))
@@ -20,7 +20,7 @@ case class WorkspaceDraft(template: MemoTemplate, context: MemoContext, texts: M
     }
     val audit = MemoRenderer.audit(context, Nil)
     val appendix = audit.substring(audit.indexOf("<body>") + 6, audit.indexOf("</body>"))
-      .replace("id=\"", "id=\"evidence-")
+      .replace("id=\"", "id=\"evidence-") + supplement
     val full = MemoRenderer.render(template, context)
     val cover = full.substring(full.indexOf("<body>") + 6, full.indexOf("<section>"))
     MemoReviewDocument(sections, appendix, context.values.filterNot((key, _) => key.startsWith("source") || key == "reference"), cover)
@@ -92,7 +92,24 @@ object WorkspaceDraft {
     }.toMap)).toMap
     WorkspaceDraft(source.copy(title = "Credit Memorandum | {{borrower}}", header = "Credit Memorandum · CONFIDENTIAL",
       sections = sections, disclaimer = source.disclaimer.replace("Sample output for analyst review", "Prepared for analyst review")),
-      base.copy(values = enriched, tables = tables, narratives = narratives), texts)
+      base.copy(values = enriched, tables = tables, narratives = narratives), texts, supplement(deal))
+  }
+
+  private def escape(value: String): String = value.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;")
+
+  def supplement(deal: WorkspaceDeal): String = {
+    val policyRows = deal.policyResults.map { r =>
+      s"<tr><td>${escape(r.description)}</td><td>${r.status}</td><td>${r.actual.fold("Not available")(_.toString)}</td><td>${r.threshold.fold("")(_.toString)}</td></tr>"
+    }.mkString
+    val policy = s"""<section><h2>Policy evaluation</h2><p>${escape(deal.policy.fold("No institution policy configured")(p => s"${p.name}, version ${p.version}, source: ${p.source}"))}</p>
+      <table><tr><th>Rule</th><th>Result</th><th>Actual</th><th>Threshold</th></tr>$policyRows</table>
+      <p>Approval exception: ${escape(deal.approval.fold("")(_.exception))}</p></section>"""
+    val checks = deal.stopReviews.map(r => s"<tr><td>${escape(r.topic.label)}</td><td>${r.status}</td><td>${escape(r.evidence)}</td></tr>").mkString
+    val approval = s"""<section><h2>Analyst approval</h2><p>${escape(deal.approval.fold("")(a => s"${a.actor}, ${a.at}; reviewed revision ${a.revision}"))}</p>
+      <h3>Required analyst checks</h3><table><tr><th>Check</th><th>Result</th><th>Evidence</th></tr>$checks</table>
+      <p>Approval records input review. This memo is not a commitment to lend.</p></section>"""
+    val submission = deal.submission.fold("")(s => s"<section><h2>Submitted for Approval</h2><p>${escape(s.actor)} · ${escape(s.at)}</p><p>${escape(s.recommendation.label)}: ${escape(s.rationale)}</p></section>")
+    policy + approval + submission
   }
 
   private def fallback(section: String): String = section match {
