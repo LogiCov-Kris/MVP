@@ -2,6 +2,7 @@ package logicov.memo
 
 import logicov.ai.LogiCovSigil
 import logicov.config.LogiCovConfig
+import spice.http.client.HttpClient
 
 object PublicNarrativeCheckApp {
   def main(args: Array[String]): Unit = {
@@ -17,6 +18,9 @@ object PublicNarrativeCheckApp {
       val draft = drafts(PublicNarratives.Industry)
       require(draft.publicSources.nonEmpty && draft.promptHash.nonEmpty, "Public evidence was not retained")
       println(s"Public narrative verified: ${draft.publicSources.size} public source, prompt ${draft.promptHash}")
-    } finally LogiCovSigil.shutdown.sync()
+    } finally {
+      try LogiCovSigil.shutdown.sync()
+      finally HttpClient.dispose().sync()
+    }
   }
 }
