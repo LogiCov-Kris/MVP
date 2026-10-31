@@ -91,3 +91,28 @@ run "production_foundation_is_separate" {
     error_message = "Production bootstrap must preserve data and not release a placeholder service."
   }
 }
+
+run "monitoring_and_promotion_are_opt_in" {
+  command = plan
+  assert {
+    condition     = length(google_monitoring_alert_policy.server_errors) == 0 && length(google_artifact_registry_repository_iam_member.release_source) == 0
+    error_message = "Monitoring and cross-repository promotion must remain opt-in."
+  }
+}
+
+run "approved_production_release_preparation" {
+  command = plan
+  variables {
+    environment               = "prod"
+    release_source_repository = "logicov-dev"
+    monitoring_enabled        = true
+  }
+  assert {
+    condition     = google_artifact_registry_repository_iam_member.release_source[0].role == "roles/artifactregistry.reader"
+    error_message = "Promotion needs read-only access to the source repository."
+  }
+  assert {
+    condition     = length(google_monitoring_uptime_check_config.ready) == 1 && length(google_monitoring_alert_policy.server_errors) == 1 && length(google_monitoring_alert_policy.unavailable[0].notification_channels) == 0
+    error_message = "Prepared monitoring must cover availability and errors without unapproved recipients."
+  }
+}

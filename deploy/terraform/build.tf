@@ -21,3 +21,11 @@ resource "google_cloud_run_v2_job_iam_member" "migrate" {
   role     = "roles/run.developer"
   member   = "serviceAccount:${google_service_account.deploy.email}"
 }
+
+resource "google_artifact_registry_repository_iam_member" "release_source" {
+  count      = var.release_source_repository == "" ? 0 : 1
+  location   = var.region
+  repository = var.release_source_repository
+  role       = "roles/artifactregistry.reader"
+  member     = "serviceAccount:${google_service_account.deploy.email}"
+}

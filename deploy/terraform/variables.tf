@@ -106,3 +106,20 @@ variable "edgar_user_agent" {
   default     = ""
   description = "Operator name and contact email for independently retrieved public SEC evidence."
 }
+
+variable "release_source_repository" {
+  type        = string
+  default     = ""
+  description = "Reviewed image repository that the release identity may read for promotion."
+}
+
+variable "monitoring_enabled" {
+  type    = bool
+  default = false
+}
+
+variable "monitoring_notification_channels" {
+  type        = list(string)
+  default     = []
+  description = "Existing approved Monitoring notification channel names. Empty records incidents in the console without sending messages."
+}

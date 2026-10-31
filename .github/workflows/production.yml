@@ -1,0 +1,76 @@
+name: Promote approved production release
+on:
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: Full commit SHA of the approved successful development build
+        required: true
+      image:
+        description: Tested development image including sha256 digest
+        required: true
+permissions:
+  contents: read
+  actions: read
+  id-token: write
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+jobs:
+  promote:
+    if: github.ref == 'refs/heads/master'
+    environment: prod
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      APPROVED_COMMIT: ${{ inputs.commit }}
+      SOURCE_IMAGE: ${{ inputs.image }}
+      RELEASE_ENABLED: ${{ vars.PRODUCTION_RELEASE_ENABLED }}
+      GCP_PROJECT_ID: logicov
+      GCP_REGION: us-central1
+      GCP_SERVICE: logicov-prod
+    steps:
+      - name: Require production approval and successful development verification
+        env:
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          [[ "$RELEASE_ENABLED" == true ]] || { echo 'Production release has not been enabled after client approval.' >&2; exit 1; }
+          [[ "$APPROVED_COMMIT" =~ ^[a-f0-9]{40}$ ]] || exit 1
+          [[ "$SOURCE_IMAGE" =~ ^us-central1-docker.pkg.dev/logicov/logicov-dev/server@sha256:[a-f0-9]{64}$ ]] || exit 1
+          gh api "repos/$REPOSITORY/actions/workflows/ci.yml/runs?head_sha=$APPROVED_COMMIT&status=success" > runs.json
+          python3 -c 'import json; assert any(r["head_branch"] == "master" for r in json.load(open("runs.json"))["workflow_runs"]), "Successful development CI required"'
+      - uses: actions/checkout@v4
+      - uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: projects/469625584366/locations/global/workloadIdentityPools/logicov-prod-github/providers/github
+          service_account: logicov-prod-deploy@logicov.iam.gserviceaccount.com
+          project_id: logicov
+      - uses: google-github-actions/setup-gcloud@v3
+      - name: Verify and promote the tested image
+        run: |
+          set -euo pipefail
+          tagged=$(gcloud artifacts docker images describe "us-central1-docker.pkg.dev/logicov/logicov-dev/server:$APPROVED_COMMIT" --format='value(image_summary.fully_qualified_digest)')
+          [[ "$tagged" == "$SOURCE_IMAGE" ]] || { echo 'Image does not match the reviewed commit.' >&2; exit 1; }
+          gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+          docker pull "$SOURCE_IMAGE"
+          destination="us-central1-docker.pkg.dev/logicov/logicov-prod/server:$APPROVED_COMMIT"
+          docker tag "$SOURCE_IMAGE" "$destination"
+          docker push "$destination"
+          promoted=$(gcloud artifacts docker images describe "$destination" --format='value(image_summary.fully_qualified_digest)')
+          [[ "${promoted##*@}" == "${SOURCE_IMAGE##*@}" ]] || { echo 'Promoted digest differs from the tested image.' >&2; exit 1; }
+          echo "RELEASE_IMAGE=$promoted" >> "$GITHUB_ENV"
+      - name: Record rollback revision
+        run: |
+          gcloud run services describe "$GCP_SERVICE" --project="$GCP_PROJECT_ID" --region="$GCP_REGION" --format=json > prior-service.json
+          python3 -c 'import json; x=json.load(open("prior-service.json")); print("Prior traffic:",json.dumps(x["status"]["traffic"]))' >> "$GITHUB_STEP_SUMMARY"
+      - name: Migrate production database
+        run: |
+          gcloud run jobs update "$GCP_SERVICE-migrate" --image="$RELEASE_IMAGE" --project="$GCP_PROJECT_ID" --region="$GCP_REGION" --quiet
+          gcloud run jobs execute "$GCP_SERVICE-migrate" --project="$GCP_PROJECT_ID" --region="$GCP_REGION" --wait --quiet
+      - name: Verify candidate and promote traffic
+        run: ./deploy/release.sh "$RELEASE_IMAGE"
+      - name: Record release
+        run: |
+          echo "Approved commit: $APPROVED_COMMIT" >> "$GITHUB_STEP_SUMMARY"
+          echo "Deployed image: $RELEASE_IMAGE" >> "$GITHUB_STEP_SUMMARY"
+          gcloud run services describe "$GCP_SERVICE" --project="$GCP_PROJECT_ID" --region="$GCP_REGION" --format='json(status.traffic)' >> "$GITHUB_STEP_SUMMARY"

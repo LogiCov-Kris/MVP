@@ -2,7 +2,7 @@ locals {
   name = "logicov-${var.environment}"
   apis = toset(["run.googleapis.com", "sqladmin.googleapis.com", "artifactregistry.googleapis.com",
     "secretmanager.googleapis.com", "iam.googleapis.com", "iamcredentials.googleapis.com",
-  "sts.googleapis.com", "cloudresourcemanager.googleapis.com", "storage.googleapis.com", "billingbudgets.googleapis.com"])
+  "sts.googleapis.com", "cloudresourcemanager.googleapis.com", "storage.googleapis.com", "billingbudgets.googleapis.com", "monitoring.googleapis.com"])
 }
 resource "google_project_service" "required" {
   for_each           = local.apis

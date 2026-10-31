@@ -15,3 +15,13 @@ Production starts after client approval of the development release. The current 
 ## Rollback
 
 Keep migrations additive and compatible with the prior image. Restore traffic to the recorded prior revision if application checks fail; this does not roll back data. Do not delete or recreate Cloud SQL, overwrite encryption keys, or apply a development Terraform plan to production. For a data incident, stop the affected writes, identify the restore point and restore into an isolated instance before deciding on a cutover.
+
+## Approved image promotion
+
+The manual `Promote approved production release` workflow promotes a previously verified development image without rebuilding it. Supply the full approved commit SHA and immutable development image digest. It rejects a commit without successful development CI and checks that the commit's image tag resolves to the supplied digest. The production copy must retain the same digest. Migration runs before candidate health checks and traffic promotion; failed candidate checks leave existing traffic unchanged.
+
+Before the first production release, configure the GitHub `prod` environment with required reviewers and no self-approval, limit deployment branches to `master`, and set its `PRODUCTION_RELEASE_ENABLED` variable to `true` only after client approval. Until then the workflow fails closed. Bootstrap the production foundation/service using the steps above. Set `release_source_repository = "logicov-dev"` to grant the production deploy identity read access to the tested images. No production resources or environment approval settings are created by committing this workflow.
+
+## Monitoring
+
+`monitoring_enabled` provisions HTTPS readiness checks and sustained server-error incidents. Readiness failure alerts after five minutes; server-error alerts require more than three errors per minute for five minutes. Configure existing approved notification channel names in `monitoring_notification_channels` when recipients are agreed. Without channels, incidents remain in Cloud Monitoring and no messages are sent. These checks are operational indicators, not a guarantee that financial outputs are correct.

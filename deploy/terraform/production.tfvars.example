@@ -11,3 +11,6 @@ narratives_enabled   = false
 email_signin_enabled = false
 # Pin production-owned secret versions and set the approved sender after bootstrap.
 # Never copy development encryption keys or test accounts into production.
+
+release_source_repository = "logicov-dev"
+monitoring_enabled = true
