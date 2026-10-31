@@ -55,6 +55,16 @@ variable "narratives_enabled" {
   default     = false
   description = "Requires client approval for this environment. Production also requires verified zero retention; approved development testing remains public-source-only."
 }
+variable "record_narratives_enabled" {
+  type        = bool
+  default     = false
+  description = "Draft analytical sections from approved deal records only after confirmed provider retention approval."
+}
+variable "retention_approved" {
+  type        = bool
+  default     = false
+  description = "Confirmed contractual zero-retention approval for sending deal records to the provider."
+}
 variable "narrative_model" {
   type        = string
   default     = ""

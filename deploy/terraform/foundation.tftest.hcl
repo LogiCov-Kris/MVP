@@ -120,3 +120,16 @@ run "approved_production_release_preparation" {
     error_message = "Prepared monitoring must cover availability and errors without unapproved recipients."
   }
 }
+
+run "record_drafting_requires_retention_approval" {
+  command = plan
+  variables {
+    image                     = "us-central1-docker.pkg.dev/logicov-test-project/logicov-dev/server@sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    narratives_enabled        = true
+    record_narratives_enabled = true
+    narrative_model           = "anthropic/configured-model"
+    provider_key_version      = "1"
+    edgar_user_agent          = "Example Operator contact@example.test"
+  }
+  expect_failures = [google_cloud_run_v2_service.app]
+}

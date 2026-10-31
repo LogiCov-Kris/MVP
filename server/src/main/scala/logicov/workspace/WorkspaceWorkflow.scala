@@ -7,6 +7,7 @@ import logicov.deal.{DealCorrections, DealRecord}
 import logicov.grid.{GridValidation, GridValue}
 import logicov.ingest.{ImportIssueKind, StatementImporter}
 import logicov.model.SessionView
+import logicov.memo.NarrativeText
 import logicov.source.Source
 
 import java.security.MessageDigest
@@ -51,7 +52,7 @@ class WorkspaceWorkflow(val store: WorkspaceStore) {
   private def event(deal: WorkspaceDeal, session: SessionView, action: String, detail: String): List[WorkspaceEvent] =
     deal.events :+ WorkspaceEvent(now, session.email, action, detail, deal.revision + 1)
 
-  private def revised(deal: WorkspaceDeal): WorkspaceDeal = deal.copy(stage = DealStage.Review, approval = None, lease = None, memo = None, failure = None, progress = GenerationProgress(), sectionReviews = Nil, submission = None,
+  private def revised(deal: WorkspaceDeal): WorkspaceDeal = deal.copy(stage = DealStage.Review, approval = None, lease = None, memo = None, failure = None, progress = GenerationProgress(), generatedNarratives = Map.empty, sectionReviews = Nil, submission = None,
     policyResults = PolicyEngine.evaluate(deal.policy, deal.record))
 
   def borrower(session: SessionView, id: String, request: BorrowerRequest): WorkspaceDeal = {
@@ -260,7 +261,7 @@ class WorkspaceWorkflow(val store: WorkspaceStore) {
   def complete(session: SessionView, claimed: WorkspaceDeal, files: List[(WorkspaceDocument, Array[Byte])], pdf: String): WorkspaceDeal =
     store.change(session.tenantId, claimed.id, claimed.revision, files.map((m, bytes) => m.id -> bytes)) { current =>
       require(current.stage == DealStage.Generating && current.lease == claimed.lease, "Generation lease changed")
-      current.copy(stage = if (current.submission.nonEmpty) DealStage.Submitted else DealStage.Completed, lease = None, memo = Some(pdf), narratives = files.find(_._1.name == "generated-narratives.json").fold(current.narratives)(f => JsonParser(new String(f._2, "UTF-8")).as[Map[String, String]]), documents = current.documents ++ files.map(_._1),
+      current.copy(stage = if (current.submission.nonEmpty) DealStage.Submitted else DealStage.Completed, lease = None, memo = Some(pdf), generatedNarratives = files.find(_._1.name == "generated-narrative-evidence.json").fold(current.generatedNarratives)(f => JsonParser(new String(f._2, "UTF-8")).as[Map[String, NarrativeText]]), documents = current.documents ++ files.map(_._1),
         events = event(current, session, "Memo generated", s"PDF $pdf; approved revision ${current.approval.map(_.revision).getOrElse(0L)}"))
     }
 

@@ -1,5 +1,8 @@
 package logicov.workspace
 
+import fabric.io.JsonFormatter
+import fabric.rw.*
+import logicov.memo.{NarrativeBasis, NarrativeText}
 import logicov.config.DBConfig
 import logicov.analysis.SampleDeals
 import logicov.db.ManagedConnections
@@ -180,7 +183,12 @@ class WorkspaceSpec extends AnyFlatSpec with Matchers with BeforeAndAfterAll {
     val reviewed = workflow.reviewStops(user, created.id, StopReviewRequest(created.revision, clearChecks))
     val approved = workflow.approve(user, created.id, DealActionRequest(reviewed.revision, "Synthetic policy exception"))
     val claimed = workflow.claim(user, created.id, DealActionRequest(approved.revision))
-    val completed = workflow.complete(user, claimed, Nil, "synthetic-pdf")
+    val evidence = Map("1.1" -> NarrativeText("Reviewed generated prose", Nil, promptHash = "synthetic", basis = NarrativeBasis.ApprovedRecord))
+    val bytes = JsonFormatter.Compact(evidence.json).getBytes("UTF-8")
+    val metadata = workflow.document("generated-narrative-evidence.json", "application/json", bytes)
+    val completed = workflow.complete(user, claimed, List(metadata -> bytes), "synthetic-pdf")
+    completed.narratives should be(empty)
+    completed.generatedNarratives should be(evidence)
     intercept[IllegalArgumentException](workflow.submit(user, completed.id, SubmissionRequest(completed.revision, CreditRecommendation.Approve, "Sections still pending")))
     val marked = WorkspaceDraft.sectionTitles.foldLeft(completed) { (deal, title) =>
       workflow.reviewSection(user, deal.id, SectionReviewRequest(deal.revision, title))
@@ -197,6 +205,8 @@ class WorkspaceSpec extends AnyFlatSpec with Matchers with BeforeAndAfterAll {
     edited.sectionReviews should be(empty)
     edited.submission should be(None)
     edited.memo should be(None)
+    edited.generatedNarratives should be(empty)
+    edited.narratives("Executive Summary") should be("Updated {{borrower}} assessment")
     intercept[IllegalArgumentException](workflow.submit(user, edited.id, SubmissionRequest(edited.revision, CreditRecommendation.Approve, "Review was invalidated")))
   }
 

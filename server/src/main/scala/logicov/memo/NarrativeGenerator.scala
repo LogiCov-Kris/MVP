@@ -14,6 +14,7 @@ object NarrativeGenerator {
       |Never add, subtract or otherwise compute a new figure: quote figures as they appear in the facts.
       |Dollar amounts in the facts are in $ millions. Write 1,000 or more as $ billions with three decimals (4,696 is $4.696 billion,
       |32,055 is $32.055 billion) and smaller amounts as $ millions (867 is $867 million). Never write a bare dollar amount without its unit.
+      |An unavailable input is not proof that something does not exist. Do not turn missing ratings, pricing, fees or leases into claims of absence or zero.
       |Use no outside knowledge: no headquarters, ownership stakes, history, geography or industry claims that are not in the facts.
       |Company guidance, budgets and expectations are not results: write "the Company expects" or "per management".
       |Ratios in the tables are the memo's calculations: state them plainly, without attributing them to LogiCov. Call a ratio
@@ -51,7 +52,9 @@ object NarrativeGenerator {
    * Writes every narrative block. `notes` holds the analyst's direction per section title. Drafts are cached by prompt
    * and re-checked against the current record whenever they are reused.
    */
-  def generate(template: MemoTemplate, context: MemoContext, notes: Map[String, String], cache: Path): Task[Map[String, NarrativeText]] = {
+  def generate(template: MemoTemplate, context: MemoContext, notes: Map[String, String], cache: Path,
+               complete: (String, String) => Task[String] = LogiCovSigil.complete,
+               completed: String => Unit = _ => ()): Task[Map[String, NarrativeText]] = {
     val requests = for {
       (section, sectionIndex) <- template.sections.zipWithIndex
       case (MemoBlock.Narrative(author, guidance), blockIndex) <- section.blocks.zipWithIndex
@@ -68,11 +71,12 @@ object NarrativeGenerator {
            |${context.facts}""".stripMargin
       val file = Files.createDirectories(cache).resolve(s"${sha256(System + user)}.txt")
       val cached = Option.when(Files.exists(file))(Files.readString(file)).filter(issues(_, user, context).isEmpty)
-      val draft = cached.fold(write(user, context).map { text => Files.writeString(file, text); text })(Task.pure)
+      val draft = cached.fold(write(user, context, complete).map { text => Files.writeString(file, text); text })(Task.pure)
       draft.map { text =>
         val narrative = check(text, context)
         scribe.info(s"Narrative written: $title (${narrative.fromTranscript.size} figures only in the transcript)")
-        key -> narrative
+        completed(key)
+        key -> narrative.copy(promptHash = sha256(System + user), providerModel = sys.env.getOrElse("LOGICOV_NARRATIVE_MODEL", ""), basis = NarrativeBasis.ApprovedRecord)
       }
     }, parallelism = 3).map(_.toMap)
   }
@@ -92,13 +96,13 @@ object NarrativeGenerator {
     }.toMap
   }
 
-  private def write(user: String, context: MemoContext, attempt: Int = 0): Task[String] = LogiCovSigil.complete(System, user).flatMap { response =>
+  private def write(user: String, context: MemoContext, complete: (String, String) => Task[String], attempt: Int = 0): Task[String] = complete(System, user).flatMap { response =>
     val text = response.replace("—", "; ").replaceAll("(?m)^\\s*[*]\\s+", "")
     issues(text, user, context) match {
       case Nil => Task.pure(text)
       case found if attempt >= 2 => Task.error(new IllegalStateException(s"Narrative validation failed: ${found.mkString(", ")}"))
       case found => write(s"$user\n\nRewrite without these unsupported figures or forbidden wording, and fix these format issues: " +
-        s"${found.mkString(", ")}. Do not compute new numbers.", context, attempt + 1)
+        s"${found.mkString(", ")}. Do not compute new numbers.", context, complete, attempt + 1)
     }
   }
 
@@ -106,7 +110,19 @@ object NarrativeGenerator {
   private def issues(text: String, user: String, context: MemoContext): List[String] = {
     val forbidden = Forbidden.filter(term => text.toLowerCase.contains(term.toLowerCase))
     val risks = user.contains("Exactly six paragraphs") && text.split("\\n\\s*\\n").count(_.contains("Mitigant:")) != RiskPairs
+    val styleChecks = user.contains("Author constraint: Approved record")
+    val markdown = styleChecks && "(?m)^\\s*(?:[-*]|[0-9]+[.)]|#{1,6})\\s+|\\*\\*".r.findFirstIn(text).nonEmpty
+    val guidance = user.linesIterator.find(_.startsWith("Guidance:")).getOrElse(user)
+    val maximum = "(?:at most ([0-9]+)|([0-9]+)[-–]([0-9]+)) words".r.findFirstMatchIn(guidance)
+      .filter(_ => styleChecks).map(m => Option(m.group(1)).getOrElse(m.group(3)).toInt)
+    val words = text.trim.split("\\s+").count(_.nonEmpty)
+    val recommendation = user.contains("Author constraint: Approved record") &&
+      "(?i)\\brecommend(?:s|ed|ation|ations)?\\b".r.findFirstIn(text).nonEmpty
     NarrativeCheck.unverified(text, context.facts) ++ forbidden ++
+      (if (markdown) List("Use plain paragraphs without numbered lists, bullets, headings or markdown emphasis") else Nil) ++
+      maximum.filter(words > _).map(limit => s"Keep this block to at most $limit words").toList ++
+      (if (recommendation) List("Leave credit recommendation language to the analyst decision section") else Nil) ++
+      (if (text.trim.isEmpty) List("Narrative must not be empty") else Nil) ++
       (if (risks) List(s"Exactly $RiskPairs separate paragraphs, each with Risk: and Mitigant:") else Nil)
   }
 

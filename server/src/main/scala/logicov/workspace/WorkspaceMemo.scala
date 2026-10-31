@@ -2,7 +2,7 @@ package logicov.workspace
 
 import fabric.io.{JsonFormatter, JsonParser}
 import fabric.rw.*
-import logicov.memo.{MemoRenderer, PublicNarratives, PdfPrinter}
+import logicov.memo.{MemoRenderer, NarrativeText, PdfPrinter}
 import logicov.model.SessionView
 
 import java.nio.charset.StandardCharsets
@@ -24,14 +24,12 @@ object WorkspaceMemo {
       val auditId = new WorkspaceWorkflow(store).identifier()
       val auditUrl = s"$base/api/deals/${deal.id}/files/$auditId"
       var generatedTexts = deal.narratives
+      var generatedEvidence = Map.empty[String, NarrativeText]
       var renderedSections = List.empty[String]
       val (body, audit) = deal.record match {
         case Some(record) =>
-          val configured = sys.env.get("LOGICOV_NARRATIVES_ENABLED").contains("true")
-          val drafts = if (configured) {
-            require(sys.env.get("LOGICOV_PROVIDER_APPROVED").contains("true"), "A client-owned provider account must be approved for this environment before workspace narrative generation")
-            PublicNarratives.generate(record.cik, PublicNarratives.Sections -- deal.narratives.keySet).sync()
-          } else Map.empty
+          val drafts = WorkspaceNarratives.generate(deal, directory.resolve("narrative-cache"), progress)
+          generatedEvidence = deal.generatedNarratives ++ drafts
           val draft = WorkspaceDraft.prepare(deal, drafts)
           generatedTexts = draft.texts
           val context = draft.context
@@ -79,6 +77,10 @@ object WorkspaceMemo {
       Files.writeString(html, memoHtml.replace(auditUrl, "audit.html"))
       printer.print(html, pdf)
       Files.writeString(directory.resolve("approved-workspace.json"), JsonFormatter.Default(deal.json))
+      val narrativeBytes = JsonFormatter.Compact(generatedTexts.json).getBytes(StandardCharsets.UTF_8)
+      val evidenceBytes = JsonFormatter.Compact(generatedEvidence.json).getBytes(StandardCharsets.UTF_8)
+      Files.write(directory.resolve("generated-narratives.json"), narrativeBytes)
+      Files.write(directory.resolve("generated-narrative-evidence.json"), evidenceBytes)
       val entries = Files.list(directory)
       val hashes = try entries.iterator().asScala.filter(Files.isRegularFile(_)).map { path =>
         path.getFileName.toString -> new WorkspaceWorkflow(store).sha(Files.readAllBytes(path))
@@ -94,9 +96,9 @@ object WorkspaceMemo {
       } finally { files.close(); output.close() }
       val zipBytes = Files.readAllBytes(zip)
       val zipMeta = new WorkspaceWorkflow(store).document(s"generated-review-r${deal.revision}.zip", "application/zip", zipBytes)
-      val narrativeBytes = JsonFormatter.Compact(generatedTexts.json).getBytes(StandardCharsets.UTF_8)
       val narrativeMeta = new WorkspaceWorkflow(store).document("generated-narratives.json", "application/json", narrativeBytes)
-      List(pdfMeta -> pdfBytes, auditMeta -> auditBytes, htmlMeta -> htmlBytes, zipMeta -> zipBytes, narrativeMeta -> narrativeBytes)
+      val evidenceMeta = new WorkspaceWorkflow(store).document("generated-narrative-evidence.json", "application/json", evidenceBytes)
+      List(evidenceMeta -> evidenceBytes, pdfMeta -> pdfBytes, auditMeta -> auditBytes, htmlMeta -> htmlBytes, zipMeta -> zipBytes, narrativeMeta -> narrativeBytes)
     } finally {
       val files = Files.walk(directory)
       try files.iterator().asScala.toList.sortBy(_.getNameCount).reverse.foreach(Files.deleteIfExists)

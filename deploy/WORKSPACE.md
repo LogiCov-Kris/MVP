@@ -63,3 +63,23 @@ Hosted model requests contain only issuer identity, industry classification and 
 Enable only with the approved client account, existing provider flags and `EDGAR_USER_AGENT` identifying the operator. Source or provider failures stop generation and preserve the approved snapshot for retry. No personal provider account is used by hosted generation. The standalone public-data demonstration CLI remains a separate operator tool; its broader prompt interface must not be used with confidential material.
 
 Production preparation and rollback are in [PRODUCTION.md](PRODUCTION.md).
+
+### Full-record drafting
+
+Public-only drafting remains the default when narrative generation is enabled. It retrieves
+SEC evidence independently and does not send the approved workspace record to the provider.
+Full-record drafting additionally requires `LOGICOV_RECORD_NARRATIVES_ENABLED=true` and
+`LOGICOV_RETENTION_APPROVED=true`. In Terraform these are `record_narratives_enabled` and
+`retention_approved`, both false by default. Set them only after confirming the client account's
+contractual zero-retention approval. Startup rejects incomplete approval settings.
+
+Full-record mode drafts the analytical blocks in the existing memo template, including the
+separate financial narratives before their tables. Numerical checks and wording checks run
+before a draft is accepted. These checks do not replace analyst review. The Recommendation
+section reflects the analyst's selected decision and rationale, never a generated decision.
+
+Generated prose and its prompt hash, configured model and evidence basis are stored separately
+from authored prose. Financial and judgment edits invalidate generated drafts; authored text
+remains. Committee submission reuses reviewed drafts. Downloads include generated narrative
+evidence in the portable bundle, and the evidence appendix retains links for each block.
+Existing saved section prose is treated as authored text and is preserved.

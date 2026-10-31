@@ -12,8 +12,7 @@ object WorkspaceService {
   def initialize(): Unit = {
     if (!App.config.production) database.initialize()
     database.verify()
-    if (sys.env.get("LOGICOV_NARRATIVES_ENABLED").contains("true")) {
-      require(sys.env.get("LOGICOV_PROVIDER_APPROVED").contains("true"), "Approve the client-owned provider account for this environment before enabling narratives")
+    if (WorkspaceNarratives.configured(sys.env) != NarrativeMode.Disabled) {
       LogiCovSigil.instance.sync()
     }
     workflow

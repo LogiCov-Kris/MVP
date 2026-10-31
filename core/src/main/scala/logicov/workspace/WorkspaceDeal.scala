@@ -4,6 +4,7 @@ import fabric.rw.*
 import logicov.grid.GoldenGrid
 import logicov.deal.DealRecord
 import logicov.ingest.ImportIssue
+import logicov.memo.NarrativeText
 
 case class WorkspaceDeal(id: String, title: String, stage: DealStage, revision: Long,
   grid: GoldenGrid, record: Option[DealRecord], issues: List[ImportIssue],
@@ -12,4 +13,4 @@ case class WorkspaceDeal(id: String, title: String, stage: DealStage, revision: 
   policyResults: List[PolicyResult] = Nil, approval: Option[ApprovalRecord] = None,
   lease: Option[JobLease] = None, memo: Option[String] = None, failure: Option[String] = None,
   narratives: Map[String, String] = Map.empty,
-                         recommendation: CreditRecommendation = CreditRecommendation.Pending, recommendationBasis: String = "", stopReviews: List[StopReview] = Nil, sectionReviews: List[SectionReview] = Nil, submission: Option[SubmissionRecord] = None, progress: GenerationProgress = GenerationProgress()) derives RW
+                         recommendation: CreditRecommendation = CreditRecommendation.Pending, recommendationBasis: String = "", stopReviews: List[StopReview] = Nil, sectionReviews: List[SectionReview] = Nil, submission: Option[SubmissionRecord] = None, progress: GenerationProgress = GenerationProgress(), generatedNarratives: Map[String, NarrativeText] = Map.empty) derives RW

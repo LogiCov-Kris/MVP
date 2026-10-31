@@ -25,7 +25,7 @@ The public-company onboarding button is intentionally unavailable for this pilot
 5. Mark every section reviewed. Only then choose Approve, Conditional or Decline, explain the recommendation, and select **Submit to Committee**.
 6. The status becomes **Submitted for Approval** after the final PDF is generated. This records submission, not committee approval or voting. Download the PDF, source audit or review ZIP as needed.
 
-Current generated drafts use public SEC evidence for industry and leadership only. Other prose is deterministic or analyst-authored. Private uploads and analyst notes are not sent to the narrative provider. Production provider activation remains subject to the approved data-retention arrangement.
+The default generation mode uses public SEC evidence for industry and leadership only. Other prose is deterministic or analyst-authored, and private uploads and analyst notes are not sent to the narrative provider. After the provider retention arrangement is approved, the operator can enable drafting across the analytical sections from approved inputs. Generated prose is checked against the record and still requires analyst review. Input changes refresh generated prose while preserving analyst edits. The credit recommendation always remains the analyst’s decision.
 
 ## Administration and support
 

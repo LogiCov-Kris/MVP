@@ -204,10 +204,12 @@ resource "google_cloud_run_v2_service" "app" {
       }
       dynamic "env" {
         for_each = var.narratives_enabled ? {
-          LOGICOV_NARRATIVES_ENABLED = "true"
-          LOGICOV_PROVIDER_APPROVED  = "true"
-          LOGICOV_NARRATIVE_MODEL    = var.narrative_model
-          EDGAR_USER_AGENT           = var.edgar_user_agent
+          LOGICOV_NARRATIVES_ENABLED        = "true"
+          LOGICOV_PROVIDER_APPROVED         = "true"
+          LOGICOV_NARRATIVE_MODEL           = var.narrative_model
+          LOGICOV_RECORD_NARRATIVES_ENABLED = tostring(var.record_narratives_enabled)
+          LOGICOV_RETENTION_APPROVED        = tostring(var.retention_approved)
+          EDGAR_USER_AGENT                  = var.edgar_user_agent
         } : {}
         content {
           name  = env.key
@@ -270,6 +272,10 @@ resource "google_cloud_run_v2_service" "app" {
     precondition {
       condition     = !var.email_signin_enabled || (var.public_url != "" && var.email_from != "" && var.email_domain != "" && can(regex("^[1-9][0-9]*$", var.email_key_version)))
       error_message = "Email sign-in requires an application origin, verified sender and pinned email-key version."
+    }
+    precondition {
+      condition     = !var.record_narratives_enabled || (var.narratives_enabled && var.retention_approved)
+      error_message = "Full-record drafting requires narrative generation and confirmed provider retention approval."
     }
     precondition {
       condition     = !var.narratives_enabled || (var.narrative_model != "" && var.edgar_user_agent != "" && can(regex("^[1-9][0-9]*$", var.provider_key_version)))

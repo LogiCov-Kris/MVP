@@ -34,7 +34,7 @@ object PublicNarratives {
           val source = if (section == Industry) f"https://data.sec.gov/submissions/CIK$cik%010d.json" else company.source
           val prompt = Instructions + "\n" + evidence
           val hash = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(prompt.getBytes(StandardCharsets.UTF_8)))
-          section -> NarrativeText(text, Nil, publicSources = List(source), publicEvidence = evidence, promptHash = hash, providerModel = sys.env.getOrElse("LOGICOV_NARRATIVE_MODEL", ""))
+          section -> NarrativeText(text, Nil, publicSources = List(source), publicEvidence = evidence, promptHash = hash, providerModel = sys.env.getOrElse("LOGICOV_NARRATIVE_MODEL", ""), basis = NarrativeBasis.PublicEvidence)
         }
       }, parallelism = 2).map(_.toMap)
     }

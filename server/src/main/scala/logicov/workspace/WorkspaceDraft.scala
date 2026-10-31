@@ -13,10 +13,12 @@ import scala.util.matching.Regex
 case class WorkspaceDraft(template: MemoTemplate, context: MemoContext, texts: Map[String, String], supplement: String) {
   def review: MemoReviewDocument = {
     val sections = template.sections.filter(s => WorkspaceDraft.sectionTitles.contains(s.title)).zipWithIndex.map { (section, index) =>
-      val local = context.copy(narratives = Map(MemoRenderer.narrativeKey(0, 0) -> context.narratives(MemoRenderer.narrativeKey(index, 0))))
+      val local = context.copy(narratives = context.narratives.collect {
+        case (key, text) if key.startsWith(s"$index.") => s"0.${key.split("\\.").last}" -> text
+      })
       val rendered = MemoRenderer.render(template.copy(sections = List(section)), local)
       val html = rendered.substring(rendered.indexOf("<section>"), rendered.lastIndexOf("</section>") + 10)
-      MemoReviewSection(section.title, texts(section.title), html.replace("<h2>1.", s"<h2>${index + 1}.").replace("#narrative-0.0", s"#narrative-$index.0"))
+      MemoReviewSection(section.title, texts(section.title), html.replace("<h2>1.", s"<h2>${index + 1}.").replace("#narrative-0.", s"#narrative-$index."))
     }
     val audit = MemoRenderer.audit(context, Nil)
     val appendix = audit.substring(audit.indexOf("<body>") + 6, audit.indexOf("</body>"))
@@ -33,6 +35,19 @@ object WorkspaceDraft {
     try JsonParser(new String(stream.readAllBytes(), StandardCharsets.UTF_8)).as[MemoTemplate] finally stream.close()
   }
   def sectionTitles: List[String] = source.sections.map(_.title).filterNot(_ == "Source Appendix")
+  def narrativeTemplate: MemoTemplate = source.copy(sections = source.sections.filterNot(_.title == "Source Appendix"))
+  def blockSections: Map[String, String] = (for {
+    (section, i) <- narrativeTemplate.sections.zipWithIndex
+    case (_: MemoBlock.Narrative, j) <- section.blocks.zipWithIndex
+  } yield MemoRenderer.narrativeKey(i, j) -> section.title).toMap
+
+  def context(deal: WorkspaceDeal): MemoContext = {
+    val record = deal.record.getOrElse(throw new IllegalArgumentException("Complete the credit profile to preview the credit memo"))
+    val base = MemoContext.build(CreditAnalysis.run(record), LocalDate.now(), deal.id)
+    base.copy(values = base.values.updated("recommendation", deal.recommendation.label)
+      .updated("recommendation.basis", deal.recommendationBasis).updated("source.audit", ""))
+  }
+
   private val Binding = "\\{\\{([^}]+)\\}\\}".r
 
   def bind(text: String, values: Map[String, String]): String = Binding.replaceAllIn(text, m =>
@@ -45,15 +60,20 @@ object WorkspaceDraft {
   }
 
   def prepare(deal: WorkspaceDeal, drafts: Map[String, NarrativeText] = Map.empty): WorkspaceDraft = {
-    val record = deal.record.getOrElse(throw new IllegalArgumentException("Complete the credit profile to preview the credit memo"))
-    val base = MemoContext.build(CreditAnalysis.run(record), LocalDate.now(), deal.id)
-    val values = base.values.updated("recommendation", deal.recommendation.label).updated("recommendation.basis", deal.recommendationBasis)
-      .updated("source.audit", "")
-    val selected = source.sections.filter(s => WorkspaceDraft.sectionTitles.contains(s.title))
-    val texts = selected.map { section =>
+    val base = context(deal)
+    val values = base.values
+    val selected = narrativeTemplate.sections
+    val generated = deal.generatedNarratives ++ drafts
+    def structured(title: String): Boolean = title != "Recommendation" && !deal.narratives.contains(title) &&
+      blockSections.exists((key, section) => section == title && generated.contains(key))
+    val texts = selected.zipWithIndex.map { (section, i) =>
       val default = if (section.title == "Recommendation") "{{recommendation}}. {{recommendation.basis}}"
+        else if (structured(section.title)) section.blocks.zipWithIndex.collect {
+          case (MemoBlock.Paragraph(text), _) => text
+          case (_: MemoBlock.Narrative, j) => generated.get(MemoRenderer.narrativeKey(i, j)).fold("")(_.text)
+        }.filter(_.nonEmpty).mkString("\n\n")
         else (section.blocks.collect { case MemoBlock.Paragraph(text) => text } :+ fallback(section.title)).filter(_.nonEmpty).mkString("\n\n")
-      section.title -> deal.narratives.getOrElse(section.title, drafts.get(section.title).fold(default)(_.text))
+      section.title -> (if (section.title == "Recommendation") default + deal.narratives.get(section.title).map(_.stripPrefix(default).trim).filter(_.nonEmpty).fold("")(text => "\n\n" + text) else deal.narratives.getOrElse(section.title, default))
     }.toMap
     val resolved = mutable.Map.empty[String, String]
     def resolve(title: String, visited: Set[String]): String = {
@@ -80,12 +100,20 @@ object WorkspaceDraft {
     }
     val shared = texts.keys.map(title => ("narrative." + title) -> resolve(title, Set.empty)).toMap
     val enriched = values ++ shared
-    val sections = selected.map(s => s.copy(blocks = MemoBlock.Narrative("Analyst", "") :: s.blocks.filter {
-      case MemoBlock.Table(_) | MemoBlock.Subheading(_) => true
-      case _ => false
-    }))
-    val narratives = sections.zipWithIndex.map { (section, index) =>
-      MemoRenderer.narrativeKey(index, 0) -> drafts.getOrElse(section.title, NarrativeText("", Nil)).copy(text = bind(texts(section.title), enriched))
+    val sections = selected.map { section =>
+      if (structured(section.title)) section
+      else section.copy(blocks = MemoBlock.Narrative("Analyst", "") :: section.blocks.filter {
+        case MemoBlock.Table(_) | MemoBlock.Subheading(_) => true
+        case _ => false
+      })
+    }
+    val narratives = sections.zipWithIndex.flatMap { (section, i) =>
+      section.blocks.zipWithIndex.collect { case (_: MemoBlock.Narrative, j) =>
+        val key = MemoRenderer.narrativeKey(i, j)
+        val text = if (structured(section.title)) generated.getOrElse(key, NarrativeText("", Nil))
+          else NarrativeText(bind(texts(section.title), enriched), Nil)
+        key -> text
+      }
     }.toMap
     val tables = base.tables.view.mapValues(t => t.copy(links = t.links.view.mapValues { link =>
       if (link.contains("#")) "#evidence-" + link.split("#", 2).last else link
