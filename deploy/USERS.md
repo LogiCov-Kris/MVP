@@ -1,6 +1,6 @@
 # Workspace user administration
 
-Administrators open **Users** from the workspace navigation. Analysts cannot access this screen or its API. User management is scoped to the signed-in administrator's workspace; a request cannot select another tenant. Platform administrators also have a Workspaces screen for customer onboarding and workspace management. Ordinary workspace administrators cannot access it.
+Administrators open **Admin** in the account header, then **Users** in the separate administration section. Analysts cannot access this screen or its API. User management is scoped to the signed-in administrator's workspace; a request cannot select another tenant. Platform administrators also have a Workspaces screen for customer onboarding and workspace management. Ordinary workspace administrators cannot access it.
 
 Create an account with its email and Analyst or Administrator role, then send an invitation from its detail view. The system creates an unknown random password; no password is displayed or shared. The invitation directs the recipient to request a fresh email sign-in link, or use Forgot password to set their own password. The welcome email itself grants no access and contains no authentication token.
 

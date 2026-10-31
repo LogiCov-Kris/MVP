@@ -164,7 +164,7 @@ resource "google_cloud_run_v2_service" "app" {
       image = var.image
       ports { container_port = 8080 }
       resources {
-        limits            = { cpu = "1", memory = "1Gi" }
+        limits            = { cpu = "1", memory = "2Gi" }
         cpu_idle          = false
         startup_cpu_boost = true
       }

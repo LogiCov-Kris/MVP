@@ -38,6 +38,10 @@ run "service_with_immutable_image" {
     error_message = "Runtime scaling must stay bounded."
   }
   assert {
+    condition     = google_cloud_run_v2_service.app[0].template[0].containers[0].resources[0].limits["memory"] == "2Gi"
+    error_message = "Narrative initialization and PDF rendering need the verified memory allocation."
+  }
+  assert {
     condition     = google_cloud_run_v2_service.app[0].template[0].containers[0].startup_probe[0].http_get[0].path == "/api/ready"
     error_message = "Startup must verify database readiness."
   }
