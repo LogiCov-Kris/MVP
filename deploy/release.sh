@@ -7,7 +7,7 @@ gcloud run services describe "$GCP_SERVICE" --project "$GCP_PROJECT_ID" --region
 revision=$(gcloud run services update "$GCP_SERVICE" --project "$GCP_PROJECT_ID" --region "$GCP_REGION" \
   --image "$image" --no-traffic --tag candidate --format='value(status.latestCreatedRevisionName)')
 url=$(gcloud run services describe "$GCP_SERVICE" --project "$GCP_PROJECT_ID" --region "$GCP_REGION" \
-  --flatten='status.traffic' --filter='status.traffic.tag=candidate' --format='value(status.traffic.url)')
+  --flatten='status.traffic' --format='value(status.traffic.tag,status.traffic.url)' | awk '$1 == "candidate" { print $2 }')
 [[ "$url" == https://* && "$url" != *$'\n'* ]] || { echo 'Expected one HTTPS candidate URL' >&2; exit 1; }
 curl --fail --retry 5 --retry-all-errors --retry-delay 3 "$url/api/ready"
 curl --fail "$url/" >/dev/null
