@@ -63,7 +63,6 @@ object PackTrimmer {
     ToolFiles.write(output, Map("cik" -> data("cik"), "entityName" -> data("entityName"), "facts" -> Map("us-gaap" -> facts.json).json).json)
   }
   private def text(html: String): String = html.replaceAll("<[^>]+>", " ").replaceAll("\\s+", " ")
-  private def escape(s: String): String = s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
   def run(source: Path, destination: Path, repo: Path): Unit = {
     val input = source.toAbsolutePath.normalize(); val out = destination.toAbsolutePath.normalize()
     require(!input.startsWith(out) && !out.startsWith(input), "Fixture destination must be separate from the source pack")
@@ -103,12 +102,12 @@ object PackTrimmer {
         case "InterimLabels" => labels(from, to, members("InterimXbrl"))
         case "PeerRatingsOffering" => save(to, Files.readAllBytes(from))
         case "Proxy" =>
-          val content = text(Files.readString(from)).replace("&nbsp;", " ").replace("&#160;", " ").replace("&amp;", "&")
+          val content = text(Files.readString(from))
           val passages = "Director since [0-9]{4}".r.findAllMatchIn(content).map(m => content.substring((m.start - 100).max(0), (m.end + 2000).min(content.length)))
-          save(to, ("<html><body>" + passages.map(p => "<p>" + escape(p) + "</p>").mkString + "</body></html>").getBytes("UTF-8"))
+          save(to, ("<html><body>" + passages.map(p => "<p>" + p + "</p>").mkString + "</body></html>").getBytes("UTF-8"))
         case "AnnualReport" =>
           val passages = "(?i)[^.]{0,400}contract life[^.]{0,300}\\.".r.findAllIn(text(Files.readString(from)))
-          save(to, ("<html><body>" + passages.map(p => "<p>" + escape(p.trim) + "</p>").mkString + "</body></html>").getBytes("UTF-8"))
+          save(to, ("<html><body>" + passages.map(p => "<p>" + p.trim + "</p>").mkString + "</body></html>").getBytes("UTF-8"))
         case "EarningsRelease" =>
           val tables = "(?is)<table.*?</table>".r.findAllIn(Files.readString(from)).filter(_.contains("EBITDA"))
           save(to, ("<html><body>" + tables.mkString + "</body></html>").getBytes("UTF-8"))
