@@ -15,7 +15,7 @@ lazy val root = (project in file(".")).settings(
     val jar = (Compile / packageBin).value
     val converter = fileConverter.value
     val dependencies = (Compile / dependencyClasspath).value.map(a => converter.toPath(a.data).toFile)
-    val out = target.value / "lib"
+    val out = baseDirectory.value / "target" / "lib"
     IO.delete(out)
     IO.createDirectory(out)
     (converter.toPath(jar).toFile +: dependencies).foreach(f => IO.copyFile(f, out / f.getName))
