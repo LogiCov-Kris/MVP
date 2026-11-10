@@ -37,8 +37,8 @@ jobs:
           [[ "$RELEASE_ENABLED" == true ]] || { echo 'Production release has not been enabled after client approval.' >&2; exit 1; }
           [[ "$APPROVED_COMMIT" =~ ^[a-f0-9]{40}$ ]] || exit 1
           [[ "$SOURCE_IMAGE" =~ ^us-central1-docker.pkg.dev/logicov/logicov-dev/server@sha256:[a-f0-9]{64}$ ]] || exit 1
-          gh api "repos/$REPOSITORY/actions/workflows/ci.yml/runs?head_sha=$APPROVED_COMMIT&status=success" > runs.json
-          python3 -c 'import json; assert any(r["head_branch"] == "master" for r in json.load(open("runs.json"))["workflow_runs"]), "Successful development CI required"'
+          verified=$(gh api "repos/$REPOSITORY/actions/workflows/ci.yml/runs?head_sha=$APPROVED_COMMIT&status=success" --jq 'any(.workflow_runs[]; .head_branch == "master")')
+          [[ "$verified" == true ]] || { echo 'Successful development CI required' >&2; exit 1; }
       - uses: actions/checkout@v4
       - uses: google-github-actions/auth@v3
         with:
@@ -61,8 +61,7 @@ jobs:
           echo "RELEASE_IMAGE=$promoted" >> "$GITHUB_ENV"
       - name: Record rollback revision
         run: |
-          gcloud run services describe "$GCP_SERVICE" --project="$GCP_PROJECT_ID" --region="$GCP_REGION" --format=json > prior-service.json
-          python3 -c 'import json; x=json.load(open("prior-service.json")); print("Prior traffic:",json.dumps(x["status"]["traffic"]))' >> "$GITHUB_STEP_SUMMARY"
+          gcloud run services describe "$GCP_SERVICE" --project="$GCP_PROJECT_ID" --region="$GCP_REGION" --format='json(status.traffic)' >> "$GITHUB_STEP_SUMMARY"
       - name: Migrate production database
         run: |
           gcloud run jobs update "$GCP_SERVICE-migrate" --image="$RELEASE_IMAGE" --project="$GCP_PROJECT_ID" --region="$GCP_REGION" --quiet

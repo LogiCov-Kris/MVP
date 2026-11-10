@@ -43,18 +43,21 @@ jobs:
           service_account: logicov-dev-deploy@logicov.iam.gserviceaccount.com
           project_id: logicov
       - uses: google-github-actions/setup-gcloud@v3
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: sbt/setup-sbt@v1
+      - name: Build and verify standalone operator tools
+        working-directory: maintenance
+        run: sbt --server -batch 'test; stage'
       - name: Install reviewed binary dependencies
         env:
           DEPENDENCIES_SHA256: be83d66dad6f046b042b1d0e58659b7e90cc17272221bf589c2e9e20aa84afe4
         run: |
           mkdir -p target/build-dependencies
           gcloud storage cp "gs://logicov-logicov-dev-build-dependencies/$DEPENDENCIES_SHA256.tar.gz" target/build-dependencies/dependencies.tar.gz
-          python3 deploy/install-dependencies.py target/build-dependencies/dependencies.tar.gz "$DEPENDENCIES_SHA256" "$HOME/.ivy2"
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '25'
-      - uses: sbt/setup-sbt@v1
+          ./deploy/tools.sh install-dependencies target/build-dependencies/dependencies.tar.gz "$DEPENDENCIES_SHA256" "$HOME/.ivy2"
       - uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: '1.14.0'
@@ -69,6 +72,15 @@ jobs:
         run: sbt --server -batch 'coreJs/compile; server/testFull; app/compile'
       - name: Package frontend and backend
         run: ./deploy/package.sh
+      - name: Verify retained financial sources and fixture trimming
+        run: |
+          for ticker in kmi wlk oxy; do
+            ./deploy/tools.sh trim-pack "server/src/test/resources/packs/$ticker" "target/maintenance-fixtures/$ticker" .
+            target/runtime/bin/logicov-server -main logicov.poc.DealApp "server/src/test/resources/packs/$ticker" target/maintenance-original-records
+            target/runtime/bin/logicov-server -main logicov.poc.DealApp "target/maintenance-fixtures/$ticker" target/maintenance-trimmed-records
+            ./deploy/tools.sh compare-records "target/maintenance-original-records/$ticker-deal.json" "target/maintenance-trimmed-records/$ticker-deal.json"
+          done
+          ./deploy/tools.sh verify-grid --records target/maintenance-original-records --packs server/src/test/resources/packs --output target/maintenance-grid-report.json
       - name: Build runtime image
         run: docker build --file deploy/Dockerfile --tag "logicov:$GITHUB_SHA" target/runtime
       - name: Install browser test tooling
@@ -98,7 +110,7 @@ jobs:
             if curl --fail --silent "$LOGICOV_TEST_URL/api/ready" >/dev/null; then break; fi
             sleep 2
           done
-          python3 deploy/smoke.py
+          ./deploy/tools.sh smoke
           node deploy/browser-smoke.cjs
           node deploy/workspace-smoke.cjs
           node deploy/profile-ui-smoke.cjs
@@ -108,9 +120,14 @@ jobs:
           LOGICOV_TEST_PASSWORD: Local-smoke-password-123!
           NODE_PATH: ./target/browser/node_modules
         run: |
-          python3 deploy/mail-capture.py &
+          ./deploy/tools.sh capture-mail &
           capture_pid=$!
           trap 'kill "$capture_pid"; docker stop logicov-email-smoke' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:18424/ready >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:18424/ready >/dev/null
           docker run -d --name logicov-email-smoke --network host -e PORT=18302 \
             -e LOGICOV_DB_URL -e LOGICOV_DB_USER -e LOGICOV_DB_PASSWORD -e LOGICOV_MASTER_KEY \
             -e LOGICOV_EMAIL_SIGNIN_ENABLED=true -e LOGICOV_EMAIL_DOMAIN=example.test \
@@ -132,7 +149,7 @@ jobs:
           gcloud auth configure-docker "$GCP_REGION-docker.pkg.dev" --quiet
           docker tag "logicov:$GITHUB_SHA" "$IMAGE_REPOSITORY:$GITHUB_SHA"
           docker push "$IMAGE_REPOSITORY:$GITHUB_SHA"
-          digest=$(docker inspect "$IMAGE_REPOSITORY:$GITHUB_SHA" --format '{{json .RepoDigests}}' | python3 -c 'import json,os,sys; print(next(d for d in json.load(sys.stdin) if d.startswith(os.environ["IMAGE_REPOSITORY"] + "@")))')
+          digest=$(gcloud artifacts docker images describe "$IMAGE_REPOSITORY:$GITHUB_SHA" --format='value(image_summary.fully_qualified_digest)')
           echo "RELEASE_IMAGE=$digest" >> "$GITHUB_ENV"
       - name: Migrate development database
         run: |

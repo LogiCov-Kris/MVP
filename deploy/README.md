@@ -6,7 +6,9 @@ This release includes saved deal uploads, sourced credit profiles, grid correcti
 
 ## Build and local verification
 
-Requirements: Java 25, sbt 2.0.9, Docker, Python 3; Terraform 1.14.0 for infrastructure checks. Node and Playwright 1.64.1 are needed for browser smoke tests. Some framework snapshots currently exist only in the local build repository. CI installs a reviewed binary dependency bundle from a private repository release before resolving the remaining dependencies. A GitHub Packages read token in `GITHUB_TOKEN` supports packages outside that bundle; the optional CI secret `OUTR_PACKAGES_TOKEN` must have access to those packages if the default repository token does not.
+Build the [operator tools](TOOLS.md) with `./deploy/tools.sh build` before running their commands below.
+
+Requirements: Java 25, sbt 2.0.9, Docker; Terraform 1.14.0 for infrastructure checks. Node and Playwright 1.64.1 are needed for browser smoke tests. Some framework snapshots currently exist only in the local build repository. CI installs a reviewed binary dependency bundle from a private repository release before resolving the remaining dependencies. A GitHub Packages read token in `GITHUB_TOKEN` supports packages outside that bundle; the optional CI secret `OUTR_PACKAGES_TOKEN` must have access to those packages if the default repository token does not.
 
 ```bash
 ./deploy/dev-postgres.sh
@@ -68,7 +70,7 @@ Against a running test instance with a provisioned test account:
 export LOGICOV_TEST_URL=http://127.0.0.1:18300
 export LOGICOV_TEST_EMAIL=smoke@example.test
 # Supply LOGICOV_TEST_PASSWORD through the local test environment.
-python3 deploy/smoke.py
+./deploy/tools.sh smoke
 npm install --prefix target/browser playwright@1.64.1
 NODE_PATH=./target/browser/node_modules CHROMIUM_PATH=/usr/bin/chromium node deploy/browser-smoke.cjs
 ```
@@ -82,7 +84,7 @@ The image's `chromium` wrapper disables the nested Chromium sandbox because the 
 Prepare the bundle on the machine with the working local dependencies:
 
 ```bash
-python3 deploy/prepare-dependencies.py
+./deploy/tools.sh prepare-dependencies
 ```
 
 This writes `target/build-dependencies/logicov-build-dependencies.tar.gz` and its SHA-256. It exports the binary artifacts and dependency metadata reachable from the build, including the build plugin. Source archives, documentation archives and dependency test binaries are excluded. Sigil remains object-code-only under its platform license. Treat the bundle as a private build artifact; do not publish it to a public release or include it in a memo review bundle.

@@ -24,7 +24,6 @@ AGENTS.md
 .env
 .env.*
 gha-creds-*.json
-__pycache__/
 
 .sbtboot/
 
