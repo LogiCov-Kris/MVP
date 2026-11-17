@@ -21,6 +21,10 @@ const { chromium } = require('playwright');
     const savedResponse = page.waitForResponse(r => r.url().endsWith('/api/deals') && r.request().method() === 'POST');
     await page.getByRole('button', { name: 'Ingest & Analyze', exact: true }).click();
     const saved = await (await savedResponse).json();
+    const baselineDenied = await page.request.post((process.env.LOGICOV_TEST_URL || 'http://127.0.0.1:18301') + '/api/deals/' + saved.id + '/policy-baseline', {
+      headers: { 'X-LogiCov-Request': '1' }, data: { revision: saved.revision, reason: 'Analyst cannot select policy' },
+    });
+    assert.equal(baselineDenied.status(), 403);
     await page.getByText('Inspect a value', { exact: true }).waitFor();
     if (process.env.LOGICOV_OTHER_EMAIL) {
       const other = await browser.newContext();

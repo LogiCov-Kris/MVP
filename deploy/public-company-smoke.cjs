@@ -21,7 +21,7 @@ const assert = require('node:assert/strict');
     for (const ticker of ['TRGP', 'VST', 'LYB', 'FDUS', 'EXE']) {
       await page.getByRole('button', {name: 'New Credit File', exact: true}).click();
       await page.getByRole('button', {name: 'Public company', exact: true}).click();
-      await page.getByPlaceholder('Ticker or SEC CIK', {exact: true}).fill(ticker);
+      await page.getByRole('textbox', {name: 'Ticker or SEC CIK', exact: true}).fill(ticker);
       const lookup = page.waitForResponse(r => r.url().endsWith('/api/deals/public-lookup'));
       await page.getByRole('button', {name: 'Find company', exact: true}).click();
       const issuer = await (await lookup).json();
@@ -32,13 +32,13 @@ const assert = require('node:assert/strict');
       let deal = await (await creation).json();
       assert(deal.id, 'Import must return its saved credit file');
       const deadline = Date.now() + 15 * 60000;
-      while (deal.stage === 'Importing' && Date.now() < deadline) {
+      while (deal.stage.split('.').at(-1) === 'Importing' && Date.now() < deadline) {
         await page.waitForTimeout(3000);
         const response = await context.request.get(`/api/deals/${deal.id}`);
         assert.equal(response.status(), 200);
         deal = await response.json();
       }
-      assert.equal(deal.stage, 'Review', deal.failure || 'Import did not complete');
+      assert.equal(deal.stage.split('.').at(-1), 'Review', deal.failure || 'Import did not complete');
       assert.equal(deal.publicIssuer.cik, issuer.cik);
       assert.equal(deal.record, null, 'Intake must not invent a credit profile');
       assert(deal.grid.values.length > 0);

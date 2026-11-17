@@ -171,8 +171,10 @@ class ImportPanel(width: () => Double, saved: WorkspaceDeal => Unit = _ => ()) e
 
   private def showPublic(): Unit = if (canLeave) {
     publicMode = true
+    steps.content @= "01  Find company     /     02  Import financials     /     03  Review grid"
     val back = WorkspaceStyle.button("Upload statements instead", () => if (!publicPanel.processing) {
       publicMode = false
+      steps.content @= "01  Upload statement     /     02  Review grid"
       body.children @= Vector(formLayout)
     })
     body.children @= Vector(back, publicPanel)
