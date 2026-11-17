@@ -62,7 +62,7 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
 
   def processing: Boolean = busy() || reviewPanel.exists(_.processing)
   def canLeave: Boolean = !processing && reviewPanel.forall(_.canLeave) && (!dirty || dom.window.confirm("Discard your unsaved changes?"))
-  private def editable: Boolean = deal.stage != DealStage.Generating
+  private def editable: Boolean = !Set(DealStage.Generating, DealStage.Importing, DealStage.ImportFailed).contains(deal.stage)
   private def field(label: String, value: String = ""): TextInput = {
     val input = new TextInput(label)
     input.value @= value
@@ -121,7 +121,7 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
       button
     }.toVector
     reviewPanel = None
-    content.children @= (tab match {
+    content.children @= (if (Set(DealStage.Importing, DealStage.ImportFailed).contains(deal.stage)) importProgress() else tab match {
       case "Overview" => overview()
       case "Financials" => financials()
       case "Judgments" => judgments()
@@ -129,9 +129,17 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
       case "Memo" => memo()
       case _ => history()
     })
-    if (deal.stage == DealStage.Generating) dom.window.setTimeout(() => {
-      if (node.el.isConnected && deal.stage == DealStage.Generating && !busy() && !dirty) reload()
+    if (deal.stage == DealStage.Generating || deal.stage == DealStage.Importing) dom.window.setTimeout(() => {
+      if (node.el.isConnected && Set(DealStage.Generating, DealStage.Importing).contains(deal.stage) && !busy() && !dirty) reload()
     }, 3000)
+  }
+
+  private def importProgress(): Vector[Component] = {
+    val retry = WorkspaceStyle.button("Retry SEC import", () => save("public-retry", DealActionRequest(deal.revision, "Retry SEC retrieval")))
+    retry.enabled := !busy() && (deal.stage == DealStage.ImportFailed || deal.lease.exists(_.expiresAt < System.currentTimeMillis()))
+    Vector(WorkspaceStyle.card(width,
+      WorkspaceStyle.text(WorkspaceStyle.stageLabel(deal.stage), 22.0, bold = true),
+      WorkspaceStyle.paragraph(deal.failure.getOrElse("Retrieving SEC filings and reported financial facts. This import is saved; you can return from the portfolio. No financial values or credit terms are invented."), inner), retry))
   }
 
   private def overview(): Vector[Component] = {
@@ -148,7 +156,7 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
         WorkspaceStyle.paragraph("Work through the financials, document your judgment, then approve the inputs for your memo. You can revisit any section before approval.", inner)),
       step("1. Financials and sources", s"${deal.grid.values.size} cited values · $unresolved extraction issues awaiting review. Inspect source evidence and record corrections here.", "Financials", "Review financials"),
       step("2. Credit judgment", if (deal.record.isEmpty) "Complete the credit profile before generating a full credit memo." else "Review the credit profile, risk rating, recommendation and sensitivity assumptions.", "Judgments", "Review judgments"),
-      step("3. Institution policy", deal.policy.fold("No institution policy configured. Add your institution's rules or document an exception during approval.")(p => s"Policy: ${p.name}. Review results and any exceptions before approval."), "Policy", "Review policy"),
+      step("3. Policy basis", deal.policy.fold(if (deal.policyBasis == PolicyBasis.GoldenSource) "Golden Source baseline selected. No institution overlay applies." else "Select the Golden Source baseline or add your institution's documented policy.")(p => s"Policy: ${p.name}. Review results and any exceptions before approval."), "Policy", "Review policy"),
       step("4. Approval and memo", s"$cleared of ${ReviewTopic.values.length} required checks cleared. Document the remaining checks, edit section narratives and approve the reviewed inputs. Downloads appear here when the memo is ready.", "Memo", "Review and prepare memo"),
       step("Review history", "See saved changes, evidence and approvals for this deal.", "History", "View history"))
   }
@@ -208,7 +216,8 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
       WorkspaceStyle.button(s"Download ${doc.name}", () => download(doc))
     }
     Vector(identity, WorkspaceStyle.button("Continue to credit review", () => if (canLeave) { tab = "Judgments"; render() }, primary = true), WorkspaceStyle.card(width, WorkspaceStyle.text("Data Verification", 20.0, bold = true), search, resultCount, grid), detail,
-      WorkspaceStyle.card(width, (Vector(WorkspaceStyle.text("Source documents", 18.0, bold = true)) ++ sources)*)) ++ issues
+      WorkspaceStyle.card(width, (Vector(WorkspaceStyle.text("Source documents", 18.0, bold = true)) ++ sources)*),
+      new MissingFinancialPanel(width, deal, () => busy(), r => save("financial-values", r), error => message @= error)) ++ issues
   }
 
   private def judgments(): Vector[Component] = deal.record match {
@@ -286,9 +295,13 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
       val result = deal.policyResults.find(_.rule == rule.id)
       WorkspaceStyle.paragraph(s"${rule.description}: ${rule.metric} ${rule.operator} ${rule.threshold} · ${result.fold("Pending")(_.status.toString)}", inner)
     }
-    Vector(WorkspaceStyle.card(width, (Vector(WorkspaceStyle.text("Institution policy", 20.0, bold = true),
+    val baseline = action("Use Golden Source only") { save("policy-baseline", DealActionRequest(deal.revision, reason.value())) }
+    Vector(WorkspaceStyle.card(width,
+      WorkspaceStyle.text("Policy basis", 20.0, bold = true),
+      WorkspaceStyle.paragraph(if (deal.policyBasis == PolicyBasis.GoldenSource && deal.policy.isEmpty) "Golden Source baseline is selected. No institution-specific overlay applies. Required analyst checks still apply." else "Use the Golden Source baseline for testing without an institution policy, or enter an institution's documented rules below. Selecting the baseline replaces an existing overlay and requires renewed approval.", inner)),
+      WorkspaceStyle.card(width, (Vector(WorkspaceStyle.text("Institution policy", 20.0, bold = true),
       WorkspaceStyle.paragraph("Rules are evaluated separately from the risk rating. Enter the institution's documented policy; no policy is assumed by default.", inner)) ++ rules)*),
-      WorkspaceStyle.card(width, WorkspaceStyle.text("Edit policy rules", 18.0, bold = true), name, version, source, chooseRule, description, metric, operator, threshold, reason,
+      WorkspaceStyle.card(width, WorkspaceStyle.text("Select baseline or edit policy rules", 18.0, bold = true), reason, baseline, name, version, source, chooseRule, description, metric, operator, threshold,
         action("Save policy rule") {
           Try(BigDecimal(threshold.value())).toOption match {
             case None => message @= "Enter a numeric policy threshold."

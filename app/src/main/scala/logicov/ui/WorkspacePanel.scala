@@ -35,7 +35,7 @@ class WorkspacePanel(width: () => Double) extends Container {
     val search = new TextInput("Search borrowers")
     search.value @= searchTerm
     search.size.width := width()
-    val stages = new Select(List("All deals", "Needs review", "Ready to generate", "Preparing memo", "Memo ready", "Needs attention", "Submitted for Approval"))
+    val stages = new Select(List("All deals", "Needs review", "Ready to generate", "Preparing memo", "Memo ready", "Needs attention", "Submitted for Approval", "Importing SEC financials", "Import needs attention"))
     stages.selected @= stageIndex
     stages.size.width := (if (width() >= 700.0) (width() - 16.0) / 2.0 else width())
     stages.size.height @= 46.0
@@ -52,7 +52,7 @@ class WorkspacePanel(width: () => Double) extends Container {
     val count = WorkspaceStyle.text("", 13.0, muted = true)
     val rows = Column(12.0)()
     def filter(): Unit = {
-      val selected = List(None, Some(DealStage.Review), Some(DealStage.Approved), Some(DealStage.Generating), Some(DealStage.Completed), Some(DealStage.Failed), Some(DealStage.Submitted))(stages.selected())
+      val selected = List(None, Some(DealStage.Review), Some(DealStage.Approved), Some(DealStage.Generating), Some(DealStage.Completed), Some(DealStage.Failed), Some(DealStage.Submitted), Some(DealStage.Importing), Some(DealStage.ImportFailed))(stages.selected())
       searchTerm = search.value()
       stageIndex = stages.selected()
       sortIndex = sort.selected()

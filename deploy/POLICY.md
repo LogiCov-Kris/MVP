@@ -19,3 +19,7 @@ LogiCov applies its financial definitions and risk-rating methodology in determi
 The required checks are human attestations, not automated sanctions searches or legal/compliance determinations. Pending and Stop checks cannot be bypassed by a financial-policy exception. Clearing a finding requires the analyst's evidence and is audited. Source changes invalidate relevant reviews and require renewed approval. Previously issued artifacts remain historical records.
 
 No institution policy or numeric limits are invented. Automatic conversion of arbitrary policy documents into executable rules is not currently provided. Analysts enter supported numerical rules through the reviewed form; qualitative stop conditions use the required checks. Additional policy concepts need explicit definitions and implementation before they can be evaluated automatically.
+
+## Golden Source baseline
+
+For a pilot without an institution-specific playbook, an administrator can explicitly select **Use Golden Source only** and record the reason. The deterministic financial and rating methodology and required analyst checks remain in effect. The memo reports that no institution overlay applies, rather than claiming that an institution's rules passed. Selecting the baseline clears any prior overlay and invalidates approval and generated output. Removing a policy without choosing the baseline returns the deal to an unconfigured policy state requiring review. Existing deals are not silently converted.

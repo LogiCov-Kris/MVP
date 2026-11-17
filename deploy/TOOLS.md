@@ -23,3 +23,13 @@ GitHub Actions runs the maintenance regression suite, stages the tools, installs
 | `verify-grid --records directory --packs directory --output report.json` | Independently reconcile the three reference records and peer grids against raw SEC facts and filing instances. Optional `--pack-suffix` supports alternate pack names. Unresolved values are written to the report and fail the command. |
 
 Use dedicated test accounts for smoke checks and restore drills. Verification is evidence of the checked state, not client acceptance or proof of arbitrary document-layout coverage. Keep credentials, private dependency archives, source packs and generated review artifacts out of version control.
+
+## Public-company intake verification
+
+`PublicIntakeCheck output-directory ticker...` is a packaged server entry point for retaining public SEC sources and a gap report without creating user records or assigning credit ratings. Supply `EDGAR_USER_AGENT`. For example:
+
+```bash
+target/runtime/bin/logicov-server -main logicov.publiccompany.PublicIntakeCheck /tmp/public-intake TRGP VST LYB FDUS EXE
+```
+
+`deploy/public-company-smoke.cjs` exercises the browser intake for those five issuers against a running hosted environment. It requires `LOGICOV_TEST_URL`, `LOGICOV_TEST_EMAIL`, `LOGICOV_TEST_PASSWORD` and Playwright. It creates five saved review files, so use a designated test workspace. It does not approve inputs, select policy or invent facility terms. SEC availability is an external dependency; this live check is separate from deterministic regression tests.

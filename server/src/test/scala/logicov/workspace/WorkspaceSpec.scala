@@ -6,9 +6,10 @@ import logicov.memo.{NarrativeBasis, NarrativeText}
 import logicov.config.DBConfig
 import logicov.analysis.SampleDeals
 import logicov.db.ManagedConnections
-import logicov.grid.GridCorrection
+import logicov.grid.{GridCorrection, LineItem, Period}
 import logicov.ingest.{AmountUnit, ImportColumn, ImportOptions, ImportRequest}
 import logicov.model.SessionView
+import logicov.publiccompany.{PublicIntake, PublicIntakeRequest, PublicIssuer, PublicSnapshot}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
@@ -30,6 +31,59 @@ class WorkspaceSpec extends AnyFlatSpec with Matchers with BeforeAndAfterAll {
   private def create(user: SessionView): WorkspaceDeal = workflow.create(user, CreateDealRequest("Private borrower", Some(ImportRequest(
     "financials.csv", Base64.getEncoder.encodeToString("Revenue,120\nCash,10\n".getBytes("UTF-8")),
     ImportOptions("Private borrower", AmountUnit.Millions, List(ImportColumn(2, "FY2025", LocalDate.of(2025, 1, 1), LocalDate.of(2025, 12, 31))))))))
+
+  "Public imports" should "retain sources, isolate tenants and reject stale workers after retry" in {
+    assume(enabled)
+    val user = session()
+    val other = session()
+    val intake = new PublicIntake(workflow)
+    val issuer = PublicIssuer(123, "EX", "Example", "1311", "1231")
+    val request = PublicIntakeRequest(123, UUID.randomUUID().toString)
+    val (first, created) = intake.begin(user, request, issuer)
+    created should be(true)
+    intake.begin(user, request, issuer)._2 should be(false)
+    intercept[NoSuchElementException](store.get(other.tenantId, first.id))
+    intercept[IllegalArgumentException](workflow.borrower(user, first.id, BorrowerRequest(first.revision, "Changed", "Test")))
+    val failed = intake.fail(user, first)
+    failed.stage should be(DealStage.ImportFailed)
+    val retry = intake.retry(user, first.id, failed.revision)
+    val snapshot = PublicSnapshot(issuer, SampleDeals.occidental.grid, List(("sec-facts.json", "application/json", "{}".getBytes("UTF-8"))))
+    intercept[WorkspaceConflict](intake.complete(user, first, snapshot))
+    val done = intake.complete(user, retry, snapshot)
+    done.stage should be(DealStage.Review)
+    done.record should be(None)
+    store.file(user.tenantId, done.id, done.documents.head.id)._2.toSeq should be("{}".getBytes("UTF-8").toSeq)
+    intercept[NoSuchElementException](store.file(other.tenantId, done.id, done.documents.head.id))
+  }
+
+  "Baseline policy selection" should "invalidate approval without inventing policy thresholds" in {
+    assume(enabled)
+    val user = session()
+    val initial = create(user)
+    val baseline = workflow.baselinePolicy(user, initial.id, DealActionRequest(initial.revision, "No institution pilot yet"))
+    baseline.policy should be(None)
+    baseline.policyResults.head.status should be(PolicyStatus.NotApplicable)
+    intercept[IllegalArgumentException](workflow.approve(user, baseline.id, DealActionRequest(baseline.revision)))
+    val checked = workflow.reviewStops(user, baseline.id, StopReviewRequest(baseline.revision, clearChecks))
+    val approved = workflow.approve(user, checked.id, DealActionRequest(checked.revision))
+    val changed = workflow.clearPolicy(user, approved.id, DealActionRequest(approved.revision, "Reconsider policy"))
+    changed.approval should be(None)
+    changed.policyResults.head.status should be(PolicyStatus.NotConfigured)
+  }
+
+  "Missing financial inputs" should "require a retained source and reject duplicate additions" in {
+    assume(enabled)
+    val user = session()
+    val initial = create(user)
+    val request = GridAdditionRequest(initial.revision, LineItem.InterestExpense, Period.fiscalYear(2025), 2,
+      initial.documents.head.id, "Note 4", "Explicit interest expense in the retained statement")
+    intercept[IllegalArgumentException](workflow.addValue(user, initial.id, request.copy(documentId = "not-retained")))
+    val updated = workflow.addValue(user, initial.id, request)
+    updated.grid(LineItem.InterestExpense, Period.fiscalYear(2025)) should be(BigDecimal(2))
+    updated.events.last.actor should be(user.email)
+    intercept[IllegalArgumentException](workflow.addValue(user, initial.id, request.copy(revision = updated.revision)))
+    intercept[NoSuchElementException](workflow.addValue(session(), initial.id, request.copy(revision = updated.revision)))
+  }
 
   override def beforeAll(): Unit = {
     super.beforeAll()

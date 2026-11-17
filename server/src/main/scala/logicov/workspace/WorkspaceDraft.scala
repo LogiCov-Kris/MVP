@@ -127,9 +127,9 @@ object WorkspaceDraft {
 
   def supplement(deal: WorkspaceDeal): String = {
     val policyRows = deal.policyResults.map { r =>
-      s"<tr><td>${escape(r.description)}</td><td>${r.status}</td><td>${r.actual.fold("Not available")(_.toString)}</td><td>${r.threshold.fold("")(_.toString)}</td></tr>"
+      s"<tr><td>${escape(r.description)}</td><td>${r.status.label}</td><td>${r.actual.fold("Not available")(_.toString)}</td><td>${r.threshold.fold("")(_.toString)}</td></tr>"
     }.mkString
-    val policy = s"""<section><h2>Policy evaluation</h2><p>${escape(deal.policy.fold("No institution policy configured")(p => s"${p.name}, version ${p.version}, source: ${p.source}"))}</p>
+    val policy = s"""<section><h2>Policy evaluation</h2><p>${escape(deal.policy.fold(if (deal.policyBasis == PolicyBasis.GoldenSource) "Golden Source baseline selected; no institution-specific overlay applies" else "No institution policy configured")(p => s"${p.name}, version ${p.version}, source: ${p.source}"))}</p>
       <table><tr><th>Rule</th><th>Result</th><th>Actual</th><th>Threshold</th></tr>$policyRows</table>
       <p>Approval exception: ${escape(deal.approval.fold("")(_.exception))}</p></section>"""
     val checks = deal.stopReviews.map(r => s"<tr><td>${escape(r.topic.label)}</td><td>${r.status}</td><td>${escape(r.evidence)}</td></tr>").mkString

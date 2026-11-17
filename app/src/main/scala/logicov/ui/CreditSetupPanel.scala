@@ -37,8 +37,9 @@ class CreditSetupPanel(width: () => Double, deal: WorkspaceDeal, busy: () => Boo
   private val sources = deal.documents.filterNot(_.name.startsWith("generated-"))
   private val source = select("Credit profile source", sources.map(_.name))
   private val citation = field("Source pages or section")
-  private val identifier = field("Borrower reference")
-  private val year = field("Latest fiscal year", deal.grid.values.map(_.period.end.getYear).maxOption.fold("")(_.toString))
+  private val identifier = field("Borrower reference", deal.publicIssuer.fold("")(_.ticker))
+  private val year = field("Latest fiscal year", deal.grid.values.filter(_.period.label.startsWith("FY")).map(_.period.end.getYear).maxOption
+    .orElse(deal.grid.values.map(_.period.end.getYear).maxOption).fold("")(_.toString))
   private val ebitda = field("Three annual EBITDA amounts, oldest first (USD millions)")
   private val facilityKind = field("Facility type")
   private val action = select("Facility action", FacilityAction.values.toList.map(_.label))
@@ -82,9 +83,10 @@ class CreditSetupPanel(width: () => Double, deal: WorkspaceDeal, busy: () => Boo
       case Right(request) => submit(request)
     }
   }, primary = true)
-  save.enabled := !busy()
+  save.enabled := !busy() && deal.publicIssuer.flatMap(_.methodologyIssue).isEmpty
   children @= Vector(
     WorkspaceStyle.card(width, WorkspaceStyle.text("Complete the credit profile", 20.0, bold = true),
+      WorkspaceStyle.paragraph(deal.publicIssuer.flatMap(_.methodologyIssue).getOrElse("Confirm the retained financials and complete the sourced inputs below. Missing grid values can be added in Financials."), inner),
       WorkspaceStyle.paragraph("Add sourced facility terms and analyst judgments to run the risk rating and actual covenant test. The grid must include three fiscal years of cash flow and capital expenditures, plus the latest debt, cash, equity, revenue, interest and dividends.", inner),
       WorkspaceStyle.paragraph("Attach supporting documents before filling out this form. Amounts are USD millions; do not enter a missing value as zero.", inner), attach, source, citation),
     WorkspaceStyle.card(width, WorkspaceStyle.text("Borrower and earnings", 18.0, bold = true), identifier, year, ebitda,

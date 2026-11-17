@@ -47,13 +47,13 @@ class WorkspaceWorkflow(val store: WorkspaceStore) {
   private def reason(value: String): Unit = require(value.trim.nonEmpty && value.length <= 2000, "A review reason is required (up to 2000 characters)")
 
   private def editable(deal: WorkspaceDeal): Unit =
-    require(deal.stage != DealStage.Generating, "Wait for memo generation to finish or resume an expired job before editing")
+    require(!Set(DealStage.Generating, DealStage.Importing, DealStage.ImportFailed).contains(deal.stage), "Finish or retry the active import or memo generation before editing")
 
   private def event(deal: WorkspaceDeal, session: SessionView, action: String, detail: String): List[WorkspaceEvent] =
     deal.events :+ WorkspaceEvent(now, session.email, action, detail, deal.revision + 1)
 
   private def revised(deal: WorkspaceDeal): WorkspaceDeal = deal.copy(stage = DealStage.Review, approval = None, lease = None, memo = None, failure = None, progress = GenerationProgress(), generatedNarratives = Map.empty, sectionReviews = Nil, submission = None,
-    policyResults = PolicyEngine.evaluate(deal.policy, deal.record))
+    policyResults = PolicyEngine.evaluate(deal.policy, deal.record, deal.policyBasis))
 
   def borrower(session: SessionView, id: String, request: BorrowerRequest): WorkspaceDeal = {
     reason(request.reason)
@@ -101,12 +101,31 @@ class WorkspaceWorkflow(val store: WorkspaceStore) {
     }
   }
 
+  def addValue(session: SessionView, id: String, request: GridAdditionRequest): WorkspaceDeal = {
+    reason(request.reason)
+    require(request.citation.trim.nonEmpty && request.citation.length <= 2000, "A source page or section is required")
+    require(request.value.abs <= BigDecimal("1000000000000"), "Financial amount exceeds the supported range")
+    store.change(session.tenantId, id, request.revision) { before =>
+      editable(before)
+      require(before.record.isEmpty, "Add missing values before completing the credit profile; use corrections for existing values")
+      require(before.grid.values.size < 10000 && before.grid.get(request.item, request.period).isEmpty, "This financial line already exists or the grid is full")
+      require(request.period.start.isDefined == request.item.flow && request.period.start.forall(!_.isAfter(request.period.end)), "Select a matching balance or income/cash-flow period")
+      val source = before.documents.find(d => d.id == request.documentId && !d.name.startsWith("generated-"))
+        .getOrElse(throw new IllegalArgumentException("Choose a retained source document"))
+      val value = GridValue(request.item, request.period, request.value, Source.Upload(source.name, source.sha256, request.citation, request.reason))
+      val grid = before.grid.copy(values = before.grid.values :+ value)
+      val issues = before.issues.filterNot(i => Set(ImportIssueKind.Duplicate, ImportIssueKind.Reconciliation).contains(i.kind)) ++ GridValidation.check(grid)
+      revised(before.copy(grid = grid, issues = issues, dispositions = Map.empty, stopReviews = Nil,
+        events = event(before, session, "Sourced financial value added", JsonFormatter.Compact(request.json))))
+    }
+  }
+
   def policy(session: SessionView, id: String, request: PolicyRequest): WorkspaceDeal = {
     request.policy.validate()
     reason(request.reason)
     store.change(session.tenantId, id, request.revision) { before =>
       editable(before)
-      revised(before.copy(policy = Some(request.policy), events = event(before, session, "Policy changed",
+      revised(before.copy(policy = Some(request.policy), policyBasis = PolicyBasis.Institution, events = event(before, session, "Policy changed",
         JsonFormatter.Compact(request.json))))
     }
   }
@@ -138,8 +157,17 @@ class WorkspaceWorkflow(val store: WorkspaceStore) {
     reason(request.reason)
     store.change(session.tenantId, id, request.revision) { before =>
       editable(before)
-      revised(before.copy(policy = None, events = event(before, session, "Policy removed",
+      revised(before.copy(policy = None, policyBasis = PolicyBasis.Unselected, events = event(before, session, "Policy removed",
         s"${request.reason}; prior policy: ${JsonFormatter.Compact(before.policy.json)}")))
+    }
+  }
+
+  def baselinePolicy(session: SessionView, id: String, request: DealActionRequest): WorkspaceDeal = {
+    reason(request.reason)
+    store.change(session.tenantId, id, request.revision) { before =>
+      editable(before)
+      revised(before.copy(policy = None, policyBasis = PolicyBasis.GoldenSource,
+        events = event(before, session, "Golden Source baseline selected", request.reason)))
     }
   }
 
@@ -233,10 +261,12 @@ class WorkspaceWorkflow(val store: WorkspaceStore) {
       require(request.reason.length <= 2000, "Approval explanation exceeds 2000 characters")
       require(before.record.forall(_.inputs.ratingReview.isEmpty), "Review the existing rating override after the financial correction before approval")
       require(before.grid.values.nonEmpty, "An empty grid cannot be approved")
+      before.publicIssuer.flatMap(_.methodologyIssue).foreach(issue => throw new IllegalArgumentException(issue))
+      require(before.publicIssuer.isEmpty || before.record.nonEmpty, "Complete the sourced credit profile before approving a public-company memo")
       require(before.issues.indices.forall(i => before.dispositions.contains(i.toString)), "Review and document every extraction issue before approval")
       StopReview.requireClear(before.stopReviews)
-      val results = PolicyEngine.evaluate(before.policy, before.record)
-      if (results.exists(_.status != PolicyStatus.Pass)) reason(request.reason)
+      val results = PolicyEngine.evaluate(before.policy, before.record, before.policyBasis)
+      if (results.exists(r => !Set(PolicyStatus.Pass, PolicyStatus.NotApplicable).contains(r.status))) reason(request.reason)
       before.copy(stage = DealStage.Approved, approval = Some(ApprovalRecord(session.email, now, before.revision, request.reason)),
         policyResults = results, failure = None, lease = None,
         events = event(before, session, "Approved", s"Approved revision ${before.revision}. Policy exception: ${request.reason}"))

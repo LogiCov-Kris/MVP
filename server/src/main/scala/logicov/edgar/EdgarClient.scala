@@ -5,9 +5,10 @@ import fabric.io.JsonParser
 
 import java.net.URI
 import java.net.http.{HttpClient, HttpRequest, HttpResponse}
+import java.time.Duration
 
 class EdgarClient(userAgent: String) {
-  private val client = HttpClient.newHttpClient()
+  private val client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build()
   private val Attempts = 4
 
   def companyFacts(cik: Long): CompanyFacts = CompanyFacts.parse(JsonParser(new String(companyFactsBytes(cik), "UTF-8")))
@@ -23,11 +24,14 @@ class EdgarClient(userAgent: String) {
   def bytes(url: String): Array[Byte] = attempt(url, 1)
 
   private def attempt(url: String, number: Int): Array[Byte] = {
+    EdgarPacing.awaitTurn()
     Thread.sleep(150L * number)
-    val request = HttpRequest.newBuilder(URI.create(url)).header("User-Agent", userAgent).build()
+    val request = HttpRequest.newBuilder(URI.create(url)).timeout(Duration.ofSeconds(45)).header("User-Agent", userAgent).build()
     val response = client.send(request, HttpResponse.BodyHandlers.ofByteArray())
     response.statusCode() match {
-      case 200 => response.body()
+      case 200 =>
+        require(response.body().length <= 50 * 1024 * 1024, "SEC document exceeds the 50 MB source limit")
+        response.body()
       case 429 | 503 if number < Attempts => attempt(url, number + 1)
       case status => throw new RuntimeException(s"EDGAR returned $status for $url")
     }

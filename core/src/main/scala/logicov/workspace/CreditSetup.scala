@@ -8,7 +8,8 @@ import logicov.source.{Source, Sourced}
 object CreditSetup {
   def build(deal: WorkspaceDeal, request: CreditSetupRequest): DealRecord = {
     require(deal.record.isEmpty, "This deal already has a credit profile")
-    require(request.identifier.matches("[A-Za-z0-9-]{1,20}"), "Use a borrower reference of 1 to 20 letters, digits or hyphens")
+    deal.publicIssuer.flatMap(_.methodologyIssue).foreach(issue => throw new IllegalArgumentException(issue))
+    require(request.identifier.matches("[A-Za-z0-9.-]{1,20}"), "Use a borrower reference of 1 to 20 letters, digits, periods or hyphens")
     require(request.year >= 1902 && request.year <= 2100, "Invalid fiscal year")
     require(List(request.facilityKind, request.maturity, request.agent, request.concentrationBasis, request.supportBasis, request.citation, request.reason)
       .forall(v => v.trim.nonEmpty && v.length <= 2000), "Complete the source reference, terms and judgment explanations")
@@ -21,9 +22,7 @@ object CreditSetup {
     val source = Source.Upload(document.name, document.sha256, request.citation, request.reason)
     val years = List(request.year - 2, request.year - 1, request.year)
     val yearEnd = Period.yearEnd(request.year)
-    val required = years.flatMap(y => List(LineItem.OperatingCashFlow, LineItem.CashCapex).map(_ -> Period.fiscalYear(y))) ++
-      List(LineItem.InterestExpense, LineItem.Revenue, LineItem.DividendsPaid).map(_ -> Period.fiscalYear(request.year)) ++
-      List(LineItem.DebtPrincipal, LineItem.CurrentDebt, LineItem.LongTermDebtCarrying, LineItem.Cash, LineItem.TotalEquity).map(_ -> yearEnd)
+    val required = CreditRequirements.required(request.year)
     val missing = required.filter((item, period) => deal.grid.get(item, period).isEmpty)
     require(missing.isEmpty, "The grid needs these cited values before credit analysis: " + missing.map((item, period) => s"$item (${period.label})").mkString(", "))
     require(deal.grid(LineItem.InterestExpense, Period.fiscalYear(request.year)) > 0 && KeyRatios.grossDebt(deal.grid, yearEnd) > 0,
@@ -36,11 +35,12 @@ object CreditSetup {
       years.zip(request.annualEbitda).map((year, amount) => AnnualFigure(year, amount, source)), Nil,
       Sourced(request.largestShare, source), Sourced(request.priceLinkedShare, source), request.concentrationBasis,
       None, None, request.customerOverTenPercent, request.support, Nil, None, Nil, Nil, None)
-    val identifier = request.identifier.toUpperCase
-    val inputs = AnalystInputs(identifier, 0, request.support, request.supportBasis, Nil, None,
+    val identifier = deal.publicIssuer.map(_.ticker).filter(_.nonEmpty).getOrElse(request.identifier.toUpperCase)
+    val cik = deal.publicIssuer.fold(0L)(_.cik)
+    val inputs = AnalystInputs(identifier, cik, request.support, request.supportBasis, Nil, None,
       request.customerOverTenPercent, None, EbitdaBasis(None, Some("Analyst-confirmed EBITDA"), None),
       false, None, Nil, None, Nil)
-    val record = DealRecord(deal.grid.entity, identifier, 0, SpreadPeriods(years, Period.fiscalYear(request.year), yearEnd),
+    val record = DealRecord(deal.grid.entity, identifier, cik, SpreadPeriods(years, Period.fiscalYear(request.year), yearEnd),
       deal.grid, profile, Map.empty, Nil, inputs)
     CreditAnalysis.run(record)
     record

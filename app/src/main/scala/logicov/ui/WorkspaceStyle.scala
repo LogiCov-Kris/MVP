@@ -22,6 +22,8 @@ object WorkspaceStyle {
     case DealStage.Completed => "Memo ready"
     case DealStage.Submitted => "Submitted for Approval"
     case DealStage.Failed => "Needs attention"
+    case DealStage.Importing => "Importing SEC financials"
+    case DealStage.ImportFailed => "Import needs attention"
   }
 
   def initialize(): Unit = Appearance.initialize()

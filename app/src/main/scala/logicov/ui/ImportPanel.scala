@@ -138,13 +138,14 @@ class ImportPanel(width: () => Double, saved: WorkspaceDeal => Unit = _ => ()) e
   preview.position.left := (if (fieldWidth() < 420.0) 0.0 else fieldWidth() - preview.size.width())
   preview.position.top := (if (fieldWidth() < 420.0) 54.0 else 0.0)
   formActions.children ++= Vector(settingsToggle, preview)
-  private val publicPath = WorkspaceStyle.button("Public entity · Coming soon", () => ())
-  publicPath.enabled @= false
-  private val paths = Row(12.0)(WorkspaceStyle.button("Private entity", () => (), primary = true), publicPath)
+  private var publicMode = false
+  private val publicPanel = new PublicCompanyPanel(formWidth, saved)
+  private val publicPath = WorkspaceStyle.button("Public company", () => showPublic())
+  private val paths = Row(12.0)(WorkspaceStyle.button("Upload statements", () => (), primary = true), publicPath)
   paths.layout := Some(if (fieldWidth() < 420.0) VerticalLayout(10.0) else HorizontalLayout(12.0))
   private val form = WorkspaceStyle.card(formWidth, paths,
     WorkspaceStyle.text("Private entity", 20.0, bold = true),
-    WorkspaceStyle.paragraph("Enter the borrower’s legal name and upload financial statements. Public entity onboarding is coming soon.", fieldWidth),
+    WorkspaceStyle.paragraph("Enter the borrower’s legal name and upload financial statements, or choose Public company to retrieve SEC financials.", fieldWidth),
     dropZone, entity, periodFields,
     WorkspaceStyle.paragraph("For example: 2025, 2024, 2023. Match the order of columns in your statement.", fieldWidth, 12.0),
     advanced, status, formActions)
@@ -164,9 +165,18 @@ class ImportPanel(width: () => Double, saved: WorkspaceDeal => Unit = _ => ()) e
   formLayout.children ++= Vector(form, guide)
   body.children @= Vector(formLayout)
 
-  def processing: Boolean = busy()
+  def processing: Boolean = busy() || publicPanel.processing
 
-  def canLeave: Boolean = !busy() && (exported || dom.window.confirm("Leave without saving this credit file?"))
+  def canLeave: Boolean = !processing && (publicMode || exported || dom.window.confirm("Leave without saving this credit file?"))
+
+  private def showPublic(): Unit = if (canLeave) {
+    publicMode = true
+    val back = WorkspaceStyle.button("Upload statements instead", () => if (!publicPanel.processing) {
+      publicMode = false
+      body.children @= Vector(formLayout)
+    })
+    body.children @= Vector(back, publicPanel)
+  }
 
   private def selectFile(file: dom.File): Unit = {
     if (file.size > 5 * 1024 * 1024) rejectFile("This file exceeds 5 MB. Choose a smaller statement.")

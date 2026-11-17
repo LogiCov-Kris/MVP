@@ -4,7 +4,8 @@ import logicov.analysis.CreditAnalysis
 import logicov.deal.DealRecord
 
 object PolicyEngine {
-  def evaluate(policy: Option[PolicySet], record: Option[DealRecord]): List[PolicyResult] = policy match {
+  def evaluate(policy: Option[PolicySet], record: Option[DealRecord], basis: PolicyBasis = PolicyBasis.Unselected): List[PolicyResult] = policy match {
+    case None if basis == PolicyBasis.GoldenSource => List(PolicyResult("baseline", "Golden Source baseline selected; no institution-specific overlay applies", PolicyStatus.NotApplicable, None, None))
     case None => List(PolicyResult("unconfigured", "Institution policy has not been configured", PolicyStatus.NotConfigured, None, None))
     case Some(set) =>
       set.validate()

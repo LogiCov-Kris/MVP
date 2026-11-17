@@ -3,6 +3,8 @@ package logicov.server
 import fabric.io.JsonParser
 import fabric.rw.*
 import logicov.auth.AuthService
+import logicov.edgar.EdgarClient
+import logicov.publiccompany.{IssuerLookup, PublicCompanySource, PublicIntake, PublicIntakeRequest}
 import logicov.model.{SessionView, UserRole}
 import logicov.workspace.*
 import rapid.Task
@@ -18,6 +20,9 @@ import scala.util.{Failure, Success, Try}
 object WorkspaceEndpoint extends ConnectionFilter {
   private val jobs = new Semaphore(1)
   private val writes = new Semaphore(2)
+  private lazy val publicSource = new PublicCompanySource(new EdgarClient(sys.env.getOrElse("EDGAR_USER_AGENT",
+    throw new IllegalStateException("EDGAR contact is not configured"))))
+  private lazy val intake = new PublicIntake(WorkspaceService.workflow)
 
   override def apply(exchange: HttpExchange)(using scribe.mdc.MDC): Task[FilterResponse] = {
     val parts = exchange.request.url.path.decoded.stripPrefix("/api/deals").split('/').filter(_.nonEmpty).toList
@@ -31,14 +36,24 @@ object WorkspaceEndpoint extends ConnectionFilter {
         case (HttpMethod.Get, List(id, "review")) => respond(exchange)(WorkspaceDraft.prepare(WorkspaceService.store.get(session.tenantId, id)).review)
         case (HttpMethod.Get, List(id, "files", file)) => download(exchange, session, id, file)
         case (HttpMethod.Post, Nil) => body[CreateDealRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.create(session, r)))
+        case (HttpMethod.Post, List("public-lookup")) => body[IssuerLookup](exchange)(r => respond(exchange)(publicSource.lookup(r.query)))
+        case (HttpMethod.Post, List("public")) => body[PublicIntakeRequest](exchange)(r => publicJob(exchange, session) {
+          require(r.cik > 0 && r.cik <= 9999999999L, "Invalid SEC CIK")
+          intake.begin(session, r, publicSource.lookup(r.cik.toString))
+        })
+        case (HttpMethod.Post, List(id, "public-retry")) => body[DealActionRequest](exchange)(r => publicJob(exchange, session) {
+          intake.retry(session, id, r.revision) -> true
+        })
         case (HttpMethod.Post, List(id, "identity")) => body[BorrowerRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.borrower(session, id, r)))
         case (HttpMethod.Post, List(id, "documents")) => body[DocumentRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.attach(session, id, r)))
         case (HttpMethod.Post, List(id, "profile")) => body[CreditSetupRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.setup(session, id, r)))
         case (HttpMethod.Post, List(id, "corrections")) => body[DealCorrectionRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.correct(session, id, r)))
+        case (HttpMethod.Post, List(id, "financial-values")) => body[GridAdditionRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.addValue(session, id, r)))
         case (HttpMethod.Post, List(id, "issues")) => body[IssueResolutionRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.resolve(session, id, r)))
-        case (HttpMethod.Post, List(_, "policy" | "policy-clear")) if session.role != UserRole.Admin =>
+        case (HttpMethod.Post, List(_, "policy" | "policy-clear" | "policy-baseline")) if session.role != UserRole.Admin =>
           WebEndpoint.error(exchange, 403, "Administrator access required to change policy.")
         case (HttpMethod.Post, List(id, "policy-clear")) => body[DealActionRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.clearPolicy(session, id, r)))
+        case (HttpMethod.Post, List(id, "policy-baseline")) => body[DealActionRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.baselinePolicy(session, id, r)))
         case (HttpMethod.Post, List(id, "policy")) => body[PolicyRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.policy(session, id, r)))
         case (HttpMethod.Post, List(id, "judgments")) => body[JudgmentRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.judgments(session, id, r)))
         case (HttpMethod.Post, List(id, "recommendation")) => body[RecommendationRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.recommendation(session, id, r)))
@@ -62,6 +77,28 @@ object WorkspaceEndpoint extends ConnectionFilter {
 
   private def respond[A: RW](exchange: HttpExchange)(value: => A): Task[FilterResponse] =
     Task(value).flatMap(v => WebEndpoint.json(exchange, 200, v))
+
+  private def publicJob(exchange: HttpExchange, session: SessionView)(claim: => (WorkspaceDeal, Boolean)): Task[FilterResponse] = Task.defer {
+    if (!jobs.tryAcquire()) WebEndpoint.error(exchange, 429, "An import or memo is running. Try again shortly.")
+    else Task(claim).attempt.flatMap {
+      case Failure(error) => jobs.release(); Task.error(error)
+      case Success((deal, false)) => jobs.release(); WebEndpoint.json(exchange, 200, deal)
+      case Success((deal, true)) =>
+        Task {
+          val issuer = deal.publicIssuer.getOrElse(throw new IllegalStateException("Import issuer missing"))
+          intake.complete(session, deal, publicSource.fetch(issuer.cik))
+        }.unit.handleError { error => Task {
+          scribe.error("Public financial import failed", error)
+          val detail = error match {
+            case invalid: IllegalArgumentException => Option(invalid.getMessage).map(_.stripPrefix("requirement failed: "))
+            case _ => None
+          }
+          try intake.fail(session, deal, detail)
+          catch { case conflict: WorkspaceConflict => scribe.warn("Public import revision superseded", conflict) }
+          ()
+        }}.guarantee(Task(jobs.release()).unit).start.flatMap(_ => WebEndpoint.json(exchange, 202, deal))
+    }
+  }
 
   private def body[A: RW](exchange: HttpExchange)(run: A => Task[FilterResponse]): Task[FilterResponse] = Task.defer {
     if (!writes.tryAcquire()) WebEndpoint.error(exchange, 429, "The workspace is busy. Try again shortly.")

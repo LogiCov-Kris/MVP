@@ -6,6 +6,13 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
 class PolicySpec extends AnyFlatSpec with Matchers {
+  "Golden Source baseline" should "be explicit and never suppress an existing institution rule" in {
+    PolicyEngine.evaluate(None, None, PolicyBasis.GoldenSource).head.status should be(PolicyStatus.NotApplicable)
+    PolicyEngine.evaluate(None, None).head.status should be(PolicyStatus.NotConfigured)
+    val rule = PolicyRule("limit", "Leverage limit", PolicyMetric.NetLeverage, PolicyOperator.AtMost, 0)
+    val policy = PolicySet("Institution", "1", "Manual", List(rule))
+    PolicyEngine.evaluate(Some(policy), Some(SampleDeals.occidental), PolicyBasis.GoldenSource).head.status should be(PolicyStatus.Breach)
+  }
   "Institution policy" should "distinguish unconfigured policy and unavailable financial inputs from passing rules" in {
     PolicyEngine.evaluate(None, None).head.status should be(PolicyStatus.NotConfigured)
     val rule = PolicyRule("leverage", "Maximum net leverage", PolicyMetric.NetLeverage, PolicyOperator.AtMost, 3)

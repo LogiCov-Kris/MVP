@@ -4,12 +4,15 @@ import fabric.io.{JsonFormatter, JsonParser}
 import fabric.rw.*
 import logicov.ingest.{ImportRequest, ImportResult}
 import logicov.workspace.*
+import logicov.publiccompany.{IssuerLookup, PublicIntakeRequest, PublicIssuer}
 import logicov.model.{ApiError, EmptyRequest, LoginRequest, SessionView, WorkspaceUser, UserRequest, ManagedWorkspace, WorkspaceRequest, AuthOptions, EmailSignInRequest, EmailSignInConfirmation, PasswordResetConfirmation}
 import org.scalajs.dom.XMLHttpRequest
 
 import scala.util.Try
 
 object ApiClient {
+  def publicLookup(value: IssuerLookup)(done: Either[String, PublicIssuer] => Unit): Unit = post("/api/deals/public-lookup", value)(done)
+  def publicCreate(value: PublicIntakeRequest)(done: Either[String, WorkspaceDeal] => Unit): Unit = post("/api/deals/public", value)(done)
   def users(done: Either[String, List[WorkspaceUser]] => Unit): Unit = get("/api/admin/users")(done)
   def workspaceUsers(id: String)(done: Either[String, List[WorkspaceUser]] => Unit): Unit = get(s"/api/admin/workspaces/$id/users")(done)
   def manageUser(value: UserRequest, workspaceId: String = "")(done: Either[String, List[WorkspaceUser]] => Unit): Unit =
