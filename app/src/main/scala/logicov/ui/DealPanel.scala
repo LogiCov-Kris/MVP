@@ -209,6 +209,10 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
         sortBy = Some(Ordering.by[Int, BigDecimal](i => deal.grid.values(i).value)))(i => deal.grid.values(i).value.toString)), rowHeight = 44.0)
     grid.size.width := inner()
     grid.size.height := visibleRows().size * 44.0 + 65.0
+    grid.hidden := (if (periodFilter.selected() > 0) Set("period") else Set.empty[String])
+    grid.widths := (if (inner() >= 620.0) Map.empty[String, Double]
+      else if (periodFilter.selected() > 0) Map("item" -> (inner() * 0.6), "value" -> (inner() * 0.4))
+      else Map("item" -> (inner() * 0.42), "period" -> (inner() * 0.3), "value" -> (inner() * 0.28)))
     grid.fills @= true
     grid.selection.multiple @= false
     grid.selection.keys.attach { selected => selected.headOption.flatMap(_.toIntOption).foreach { index =>
