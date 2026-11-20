@@ -63,7 +63,7 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
       else mobileTabs.selected @= tabNames.indexOf(tab)
     }
   }
-  children := Vector(toolbar, heading, state) ++ (if (width() < 700.0) Vector(mobileTabs) else Vector(tabs)) ++ Vector(status, content)
+  children := Vector(toolbar, heading, state) ++ Vector(mobileTabs, tabs) ++ Vector(status, content)
 
   def processing: Boolean = busy() || reviewPanel.exists(_.processing)
   def canLeave: Boolean = !processing && reviewPanel.forall(_.canLeave) && (!dirty || dom.window.confirm("Discard your unsaved changes?"))
@@ -116,7 +116,7 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
     link.click()
   }
   private def render(): Unit = {
-    children @= (if (deal.stage == DealStage.Generating) Vector(toolbar, status, content) else Vector(toolbar, heading, state) ++ (if (width() < 700.0) Vector(mobileTabs) else Vector(tabs)) ++ Vector(status, content))
+    children @= (if (deal.stage == DealStage.Generating) Vector(toolbar, status, content) else Vector(toolbar, heading, state) ++ Vector(mobileTabs, tabs) ++ Vector(status, content))
     heading.content @= deal.title
     state.content @= s"${WorkspaceStyle.stageLabel(deal.stage)} · Revision ${deal.revision} · ${deal.grid.values.size} cited values · ${deal.issues.indices.count(i => !deal.dispositions.contains(i.toString))} open review items"
     mobileTabs.selected @= tabNames.indexOf(tab)
