@@ -34,6 +34,11 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
   status.size.width := width()
   status.color := (if (saved()) WorkspaceStyle.Teal else Theme.danger())
   status.node.el.setAttribute("role", "status")
+  status.node.el.setAttribute("tabindex", "-1")
+  message.attach { value => if (value.nonEmpty) dom.window.setTimeout(() => {
+    status.node.el.scrollIntoView()
+    status.node.el.asInstanceOf[dom.html.Element].focus()
+  }, 50) }
   private val heading = WorkspaceStyle.text(deal.title, 28.0, bold = true)
   heading.size.width := width()
   heading.whiteSpace @= WhiteSpace.Normal
@@ -45,7 +50,7 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
   private val tabs = Row(8.0)()
   toolbar.layout := Some(if (width() < 280.0) VerticalLayout(8.0) else HorizontalLayout(10.0))
   tabs.visible := width() >= 700.0
-  private val tabNames = List("Overview", "Financials", "Judgments", "Policy", "Memo", "History")
+  private val tabNames = List("Overview", "Financials", "Judgments", "Memo", "History")
   private val mobileTabs = new Select(tabNames)
   mobileTabs.size.width := width()
   mobileTabs.size.height @= 46.0
@@ -125,7 +130,6 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
       case "Overview" => overview()
       case "Financials" => financials()
       case "Judgments" => judgments()
-      case "Policy" => policy()
       case "Memo" => memo()
       case _ => history()
     })
@@ -144,7 +148,6 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
 
   private def overview(): Vector[Component] = {
     val unresolved = deal.issues.indices.count(i => !deal.dispositions.contains(i.toString))
-    val cleared = ReviewTopic.values.count(topic => deal.stopReviews.exists(r => r.topic == topic && r.status == ReviewStatus.Clear && r.evidence.trim.nonEmpty))
     def step(title: String, detail: String, destination: String, label: String): Component = {
       WorkspaceStyle.card(width, WorkspaceStyle.text(title, 18.0, bold = true),
         WorkspaceStyle.paragraph(detail, inner), WorkspaceStyle.button(label, () => {
@@ -156,8 +159,7 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
         WorkspaceStyle.paragraph("Work through the financials, document your judgment, then approve the inputs for your memo. You can revisit any section before approval.", inner)),
       step("1. Financials and sources", s"${deal.grid.values.size} cited values · $unresolved extraction issues awaiting review. Inspect source evidence and record corrections here.", "Financials", "Review financials"),
       step("2. Credit judgment", if (deal.record.isEmpty) "Complete the credit profile before generating a full credit memo." else "Review the credit profile, risk rating, recommendation and sensitivity assumptions.", "Judgments", "Review judgments"),
-      step("3. Policy basis", deal.policy.fold(if (deal.policyBasis == PolicyBasis.GoldenSource) "Golden Source baseline selected. No institution overlay applies." else "Select the Golden Source baseline or add your institution's documented policy.")(p => s"Policy: ${p.name}. Review results and any exceptions before approval."), "Policy", "Review policy"),
-      step("4. Approval and memo", s"$cleared of ${ReviewTopic.values.length} required checks cleared. Document the remaining checks, edit section narratives and approve the reviewed inputs. Downloads appear here when the memo is ready.", "Memo", "Review and prepare memo"),
+      step("3. Approval and memo", "Review any remaining blockers, approve the financial inputs, then generate your draft. Bank-side screening is handled outside this underwriting workflow.", "Memo", "Review and prepare memo"),
       step("Review history", "See saved changes, evidence and approvals for this deal.", "History", "View history"))
   }
 
@@ -169,16 +171,36 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
     val detail = WorkspaceStyle.card(width, WorkspaceStyle.text("Inspect a value", 17.0, bold = true),
       WorkspaceStyle.paragraph("Select a financial line to see its citation or record a correction.", inner))
     def label(i: Int): String = deal.grid.values(i).item.toString.replaceAll("([a-z])([A-Z])", "$1 $2")
-    val visibleRows = Var(deal.grid.values.indices.toVector)
+    val visibleRows = Var(Vector.empty[Int])
+    val periods = deal.grid.values.map(_.period).distinct.sortBy(p => (-p.end.toEpochDay, p.label))
+    val periodFilter = select("Financial period", "All periods" :: periods.map(_.label), track = false)
+    var pageIndex = 0
+    val pageSize = 15
+    var matches = Vector.empty[Int]
     val search = new TextInput("Find a financial line or period")
     search.size.width := inner()
     val resultCount = WorkspaceStyle.text("", 13.0, muted = true)
+    lazy val previous = WorkspaceStyle.button("Previous values", () => { pageIndex -= 1; showPage() })
+    lazy val next = WorkspaceStyle.button("Next values", () => { pageIndex += 1; showPage() })
+    def showPage(): Unit = {
+      pageIndex = math.max(0, math.min(pageIndex, math.max(0, (matches.size - 1) / pageSize)))
+      visibleRows @= matches.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize)
+      previous.enabled @= pageIndex > 0
+      next.enabled @= (pageIndex + 1) * pageSize < matches.size
+      resultCount.content @= (if (matches.isEmpty) "No matching values" else s"Showing ${pageIndex * pageSize + 1}–${pageIndex * pageSize + visibleRows().size} of ${matches.size} matching values") + s" · ${deal.grid.values.size} total cited values"
+    }
     def filterRows(): Unit = {
       val query = search.value().trim.toLowerCase
-      visibleRows @= deal.grid.values.indices.filter(i => s"${label(i)} ${deal.grid.values(i).period.label}".toLowerCase.contains(query)).toVector
-      resultCount.content @= s"${visibleRows().size} of ${deal.grid.values.size} values · Select a row to inspect its source"
+      matches = deal.grid.values.indices.filter { i =>
+        val period = deal.grid.values(i).period
+        s"${label(i)} ${period.label}".toLowerCase.contains(query) &&
+          (periodFilter.selected() == 0 || periods.lift(periodFilter.selected() - 1).contains(period))
+      }.toVector.sortBy(i => (-deal.grid.values(i).period.end.toEpochDay, deal.grid.values(i).period.label, label(i)))
+      pageIndex = 0
+      showPage()
     }
     search.value.attach(_ => filterRows())
+    periodFilter.selected.attach(_ => filterRows())
     filterRows()
     val grid = new VirtualTable[Int](visibleRows, _.toString, label, Vector(
       GridColumn.text[Int]("item", "Financial line item", 280.0, sorts = true)(label),
@@ -186,7 +208,7 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
       GridColumn.text[Int]("value", "USD millions", 160.0, align = TextAlign.End,
         sortBy = Some(Ordering.by[Int, BigDecimal](i => deal.grid.values(i).value)))(i => deal.grid.values(i).value.toString)), rowHeight = 44.0)
     grid.size.width := inner()
-    grid.size.height @= math.min(440.0, deal.grid.values.size * 44.0 + 55.0)
+    grid.size.height := visibleRows().size * 44.0 + 65.0
     grid.fills @= true
     grid.selection.multiple @= false
     grid.selection.keys.attach { selected => selected.headOption.flatMap(_.toIntOption).foreach { index =>
@@ -215,14 +237,18 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
     val sources = deal.documents.filterNot(_.name.startsWith("generated-")).map { doc =>
       WorkspaceStyle.button(s"Download ${doc.name}", () => download(doc))
     }
-    Vector(identity, WorkspaceStyle.button("Continue to credit review", () => if (canLeave) { tab = "Judgments"; render() }, primary = true), WorkspaceStyle.card(width, WorkspaceStyle.text("Data Verification", 20.0, bold = true), search, resultCount, grid), detail,
+    Vector(identity, WorkspaceStyle.card(width, WorkspaceStyle.text("Financials by period", 20.0, bold = true),
+      WorkspaceStyle.paragraph("Latest periods appear first. Choose a period or use Previous / Next values to review the entire grid. Select a value for its source and corrections.", inner),
+      periodFilter, search, resultCount, grid, Row(12.0)(previous, next)), detail,
+      WorkspaceStyle.button("Continue to credit review", () => if (canLeave) { tab = "Judgments"; render() }, primary = true),
       WorkspaceStyle.card(width, (Vector(WorkspaceStyle.text("Source documents", 18.0, bold = true)) ++ sources)*),
       new MissingFinancialPanel(width, deal, () => busy(), r => save("financial-values", r), error => message @= error)) ++ issues
   }
 
   private def judgments(): Vector[Component] = deal.record match {
     case None => Vector(new CreditSetupPanel(width, deal, () => busy(), () => dirty = true, () => canLeave,
-      request => save("profile", request), request => save("documents", request), error => message @= error))
+      request => save("profile", request), request => save("documents", request), error => message @= error,
+      request => save("profile-draft", request)))
     case Some(record) =>
       val analysis = CreditAnalysis.run(record)
       val covenantLabel = record.profile.covenant.kind match {
@@ -271,61 +297,18 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
 
   }
 
-  private def policy(): Vector[Component] = {
-    val name = field("Policy name", deal.policy.fold("")(_.name))
-    val version = field("Policy version", deal.policy.fold("")(_.version))
-    val source = field("Policy source or reference", deal.policy.fold("")(_.source))
-    val description = field("Rule description")
-    val metric = select("Policy metric", PolicyMetric.values.toList.map(_.toString))
-    val operator = select("Rule comparison", List("At most", "At least"))
-    val threshold = field("Threshold")
-    val reason = field("Reason for policy change")
-    val existing = deal.policy.toList.flatMap(_.rules)
-    val chooseRule = select("Rule to edit", "New rule" :: existing.map(_.description), track = false)
-    chooseRule.selected.attach { index =>
-      val rule = existing.lift(index - 1)
-      description.value @= rule.fold("")(_.description)
-      metric.selected @= rule.fold(0)(r => PolicyMetric.values.indexOf(r.metric))
-      operator.selected @= rule.fold(0)(r => PolicyOperator.values.indexOf(r.operator))
-      threshold.value @= rule.fold("")(_.threshold.toString)
-    }
-    val clear = action("Remove institution policy") { save("policy-clear", DealActionRequest(deal.revision, reason.value())) }
-    clear.visible @= deal.policy.nonEmpty
-    val rules = existing.map { rule =>
-      val result = deal.policyResults.find(_.rule == rule.id)
-      WorkspaceStyle.paragraph(s"${rule.description}: ${rule.metric} ${rule.operator} ${rule.threshold} · ${result.fold("Pending")(_.status.toString)}", inner)
-    }
-    val baseline = action("Use Golden Source only") { save("policy-baseline", DealActionRequest(deal.revision, reason.value())) }
-    Vector(WorkspaceStyle.card(width,
-      WorkspaceStyle.text("Policy basis", 20.0, bold = true),
-      WorkspaceStyle.paragraph(if (deal.policyBasis == PolicyBasis.GoldenSource && deal.policy.isEmpty) "Golden Source baseline is selected. No institution-specific overlay applies. Required analyst checks still apply." else "Use the Golden Source baseline for testing without an institution policy, or enter an institution's documented rules below. Selecting the baseline replaces an existing overlay and requires renewed approval.", inner)),
-      WorkspaceStyle.card(width, (Vector(WorkspaceStyle.text("Institution policy", 20.0, bold = true),
-      WorkspaceStyle.paragraph("Rules are evaluated separately from the risk rating. Enter the institution's documented policy; no policy is assumed by default.", inner)) ++ rules)*),
-      WorkspaceStyle.card(width, WorkspaceStyle.text("Select baseline or edit policy rules", 18.0, bold = true), reason, baseline, name, version, source, chooseRule, description, metric, operator, threshold,
-        action("Save policy rule") {
-          Try(BigDecimal(threshold.value())).toOption match {
-            case None => message @= "Enter a numeric policy threshold."
-            case Some(value) =>
-              val selected = existing.lift(chooseRule.selected() - 1)
-              val rule = PolicyRule(selected.fold(s"rule-${deal.revision}")(_.id), description.value(), PolicyMetric.values(metric.selected()), PolicyOperator.values(operator.selected()), value)
-              val updated = if (selected.isEmpty) existing :+ rule else existing.map(r => if (r.id == rule.id) rule else r)
-              save("policy", PolicyRequest(deal.revision, PolicySet(name.value(), version.value(), source.value(), updated), reason.value()))
-          }
-        }, clear))
-  }
-
   private def requiredChecks(): Component = {
-    val rows = ReviewTopic.values.toVector.map { topic =>
+    val rows = deal.stopReviews.map(_.topic).distinct.toVector.map { topic =>
       val previous = deal.stopReviews.find(_.topic == topic)
       val state = select(s"${topic.label} status", List("Pending review", "Clear", "Stop"), previous.fold(0)(_.status.ordinal))
       val evidence = field(s"${topic.label} evidence", previous.fold("")(_.evidence))
       (topic, state, evidence)
     }
     WorkspaceStyle.card(width, (Vector(
-      WorkspaceStyle.text("Required checks", 20.0, bold = true),
-      WorkspaceStyle.paragraph("Document your screening and source review for each check. These are analyst attestations, not automated screening. Pending or stopped checks prevent memo generation.", inner)) ++
+      WorkspaceStyle.text("Previously recorded review issues", 20.0, bold = true),
+      WorkspaceStyle.paragraph("These entries were retained from earlier reviews. An explicit Stop must be resolved with evidence before approval; routine bank-side screening is not repeated here.", inner)) ++
       rows.flatMap { (topic, state, evidence) => Vector(WorkspaceStyle.text(topic.label, 14.0, bold = true), state, evidence) } ++
-      Vector(action("Save required checks") {
+      Vector(action("Save review issues") {
         save("checks", StopReviewRequest(deal.revision, rows.map { (topic, state, evidence) =>
           StopReview(topic, ReviewStatus.values(state.selected()), evidence.value())
         }.toList))
@@ -342,11 +325,34 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
     val approve = action("Approve reviewed inputs") { save("approve", DealActionRequest(deal.revision, reason.value())) }
     approve.enabled := !busy() && (deal.stage == DealStage.Review || deal.stage == DealStage.Failed)
     val generate = WorkspaceStyle.button("Generate memo", () => save("resume", DealActionRequest(deal.revision)), primary = true)
-    generate.enabled := !busy() && (deal.stage == DealStage.Approved || deal.stage == DealStage.Failed)
+    val policyChanged = Var(false)
+    generate.enabled := !busy() && !policyChanged() && (deal.stage == DealStage.Approved || deal.stage == DealStage.Failed)
     val ready = deal.stage == DealStage.Completed || deal.stage == DealStage.Submitted
-    val prepare = if (ready) Vector.empty else Vector(requiredChecks(), WorkspaceStyle.card(width,
+    val policySummary = Column(10.0)(WorkspaceStyle.paragraph("Loading workspace policy...", inner))
+    ApiClient.workspacePolicy {
+      case Left(error) => policySummary.children @= Vector(WorkspaceStyle.paragraph(error, inner))
+      case Right(settings) =>
+        val active = if (settings.revision == 0) deal.policy else settings.policy
+        val basis = if (active.nonEmpty) PolicyBasis.Institution else PolicyBasis.GoldenSource
+        val results = PolicyEngine.evaluate(active, deal.record, basis)
+        policyChanged @= deal.approval.nonEmpty && deal.workspacePolicyRevision.getOrElse(0L) != settings.revision
+        val reopen = WorkspaceStyle.button("Reopen input review", () => save("reopen", DealActionRequest(deal.revision, "Review the updated workspace policy")))
+        policySummary.children @= Vector(WorkspaceStyle.paragraph(active.fold("Golden Source guidance applies. No institution overlay is configured.")(p => s"Workspace policy: ${p.name}, version ${p.version}"), inner)) ++
+          results.filterNot(_.status == PolicyStatus.NotApplicable).map(r => WorkspaceStyle.paragraph(s"${r.description}: ${r.status.label}", inner)).toVector ++
+          (if (policyChanged()) Vector(WorkspaceStyle.paragraph("The workspace policy changed after input approval. Review it and approve the inputs again before generation or committee submission.", inner)) ++ (if (ready) Vector(reopen) else Vector.empty) else Vector.empty)
+    }
+    val blockers = Vector(
+      Option.when(deal.publicIssuer.nonEmpty && deal.record.isEmpty)("Complete and save the credit profile in Judgments."),
+      Option.when(deal.issues.indices.exists(i => !deal.dispositions.contains(i.toString)))("Resolve the extraction review items in Financials."),
+      deal.publicIssuer.flatMap(_.methodologyIssue),
+      Option.when(deal.record.exists(_.inputs.ratingReview.nonEmpty))("Review the existing risk-rating override in Judgments."),
+      Option.when(deal.stopReviews.exists(_.status == ReviewStatus.Stop))("Resolve the recorded stop condition before approval.")
+    ).flatten
+    approve.enabled := !busy() && blockers.isEmpty && (deal.stage == DealStage.Review || deal.stage == DealStage.Failed || deal.stage == DealStage.Approved)
+    val prepare = if (ready) Vector.empty else Vector(WorkspaceStyle.card(width,
       WorkspaceStyle.text("Prepare the memo", 20.0, bold = true),
-      WorkspaceStyle.paragraph(deal.failure.getOrElse("Confirm your source values, credit profile and required checks. Approving inputs prepares a draft; committee submission follows section-by-section review."), inner), reason, approve, generate))
+      WorkspaceStyle.paragraph(deal.failure.getOrElse("Review your financials and credit profile, approve the inputs, then generate the draft. Your workspace policy applies automatically. Bank-side screening is outside this workflow; existing recorded stops still require resolution."), inner),
+      WorkspaceStyle.paragraph(if (blockers.isEmpty) "Inputs are ready for analyst approval." else "Before approval:\n" + blockers.mkString("\n"), inner), reason, approve, generate))
     val document = if (deal.record.nonEmpty) {
       val panel = new MemoReviewPanel(width, deal, updated => {
         memoScroll = reviewPanel.fold(0.0)(_.scrollPosition)
@@ -367,7 +373,8 @@ class DealPanel(width: () => Double, initial: WorkspaceDeal, back: () => Unit, i
       }
       WorkspaceStyle.button(s"Download $label", () => download(document))
     })* ))
-    prepare ++ document ++ downloads
+    Vector(WorkspaceStyle.card(width, WorkspaceStyle.text("Applicable policy", 18.0, bold = true), policySummary)) ++
+      (if (deal.stopReviews.nonEmpty && !ready) Vector(requiredChecks()) else Vector.empty) ++ prepare ++ document ++ downloads
   }
 
   private def history(): Vector[Component] = deal.events.reverse.map { event =>

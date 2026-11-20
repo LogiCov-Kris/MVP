@@ -28,17 +28,20 @@ object CreditSetup {
     require(deal.grid(LineItem.InterestExpense, Period.fiscalYear(request.year)) > 0 && KeyRatios.grossDebt(deal.grid, yearEnd) > 0,
       "The current scorecard requires positive interest expense and gross debt; zero-debt or zero-interest cases require a separate methodology review")
     require(KeyRatios.grossDebt(deal.grid, yearEnd) + deal.grid(LineItem.TotalEquity, yearEnd) > 0, "Debt plus equity must be positive for capitalization analysis")
+    val calculated = ProfilePrefill.annualEbitda(deal.grid, request.year)
+      .filter(s => s.value.split(",").toList.map(v => BigDecimal(v.trim)) == request.annualEbitda)
+    val earningsSource = calculated.fold[Source](source)(s => Source.Derived(s.explanation + " " + s.sources.map(_.describe).mkString("; ")))
     val profile = CreditProfile(
       Facility(request.facilityKind, request.action, Sourced(request.maturity, source), Sourced(request.agent, source)),
       Sourced(request.commitment, source), Sourced(request.availability, source),
       Covenant(request.covenantKind, Sourced(request.covenantThreshold, source)), None,
-      years.zip(request.annualEbitda).map((year, amount) => AnnualFigure(year, amount, source)), Nil,
+      years.zip(request.annualEbitda).map((year, amount) => AnnualFigure(year, amount, earningsSource)), Nil,
       Sourced(request.largestShare, source), Sourced(request.priceLinkedShare, source), request.concentrationBasis,
       None, None, request.customerOverTenPercent, request.support, Nil, None, Nil, Nil, None)
     val identifier = deal.publicIssuer.map(_.ticker).filter(_.nonEmpty).getOrElse(request.identifier.toUpperCase)
     val cik = deal.publicIssuer.fold(0L)(_.cik)
     val inputs = AnalystInputs(identifier, cik, request.support, request.supportBasis, Nil, None,
-      request.customerOverTenPercent, None, EbitdaBasis(None, Some("Analyst-confirmed EBITDA"), None),
+      request.customerOverTenPercent, None, EbitdaBasis(None, Some(if (calculated.nonEmpty) "Analyst-confirmed unadjusted EBITDA" else "Analyst-confirmed EBITDA"), None),
       false, None, Nil, None, Nil)
     val record = DealRecord(deal.grid.entity, identifier, cik, SpreadPeriods(years, Period.fiscalYear(request.year), yearEnd),
       deal.grid, profile, Map.empty, Nil, inputs)

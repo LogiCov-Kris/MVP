@@ -8,6 +8,42 @@ import java.sql.Connection
 import scala.collection.mutable.ListBuffer
 
 class WorkspaceStore(val database: WorkspaceDatabase, cipher: TenantCipher) {
+  def policy(tenant: String): WorkspacePolicy = database.tenant(tenant)(policy(_, tenant))
+
+  private def policy(connection: Connection, tenant: String): WorkspacePolicy = {
+    val statement = connection.prepareStatement("SELECT payload FROM workspace_policy WHERE tenant_id = ?")
+    try {
+      statement.setString(1, tenant)
+      val rows = statement.executeQuery()
+      try {
+        if (!rows.next()) WorkspacePolicy()
+        else JsonParser(new String(cipher.decrypt(key(connection, tenant), s"policy:$tenant", rows.getBytes(1)), StandardCharsets.UTF_8)).as[WorkspacePolicy]
+      } finally rows.close()
+    } finally statement.close()
+  }
+
+  def savePolicy(tenant: String, value: WorkspacePolicy): WorkspacePolicy = database.tenant(tenant) { connection =>
+    policyLock(connection, tenant, shared = false)
+    val previous = policy(connection, tenant)
+    if (previous.revision != value.revision) throw new WorkspaceConflict("Workspace policy changed; reload before saving")
+    val updated = value.copy(revision = value.revision + 1,
+      history = previous.history :+ WorkspaceEvent(value.updatedAt, value.updatedBy, "Workspace policy changed",
+        s"${value.policy.fold("Golden Source only")(p => s"${p.name}, version ${p.version}")}: ${value.reason}", value.revision + 1))
+    val bytes = cipher.encrypt(key(connection, tenant), s"policy:$tenant", JsonFormatter.Compact(updated.json).getBytes(StandardCharsets.UTF_8))
+    val statement = connection.prepareStatement("INSERT INTO workspace_policy(tenant_id, revision, payload) VALUES (?, ?, ?) ON CONFLICT (tenant_id) DO UPDATE SET revision = EXCLUDED.revision, payload = EXCLUDED.payload WHERE workspace_policy.revision = ?")
+    try {
+      statement.setString(1, tenant); statement.setLong(2, updated.revision); statement.setBytes(3, bytes); statement.setLong(4, value.revision)
+      if (statement.executeUpdate() != 1) throw new WorkspaceConflict("Workspace policy changed; reload before saving")
+      updated
+    } finally statement.close()
+  }
+
+  private def policyLock(connection: Connection, tenant: String, shared: Boolean): Unit = {
+    val function = if (shared) "pg_advisory_xact_lock_shared" else "pg_advisory_xact_lock"
+    val statement = connection.prepareStatement(s"SELECT $function(1845249094, hashtext(?))")
+    try { statement.setString(1, tenant); statement.execute() } finally statement.close()
+  }
+
   private def key(connection: Connection, tenant: String): Array[Byte] = {
     val insert = connection.prepareStatement("INSERT INTO workspace_keys(tenant_id, wrapped_key) VALUES (?, ?) ON CONFLICT DO NOTHING")
     try {
@@ -75,7 +111,17 @@ class WorkspaceStore(val database: WorkspaceDatabase, cipher: TenantCipher) {
   }
 
   def change(tenant: String, id: String, expected: Long, files: List[(String, Array[Byte])] = Nil)
-            (change: WorkspaceDeal => WorkspaceDeal): WorkspaceDeal = database.tenant(tenant) { connection =>
+            (change: WorkspaceDeal => WorkspaceDeal): WorkspaceDeal = database.tenant(tenant)(update(_, tenant, id, expected, files)(change))
+
+  def changeWithPolicy(tenant: String, id: String, expected: Long)
+                      (change: (WorkspaceDeal, WorkspacePolicy) => WorkspaceDeal): WorkspaceDeal = database.tenant(tenant) { connection =>
+    policyLock(connection, tenant, shared = true)
+    val settings = policy(connection, tenant)
+    update(connection, tenant, id, expected, Nil)(deal => change(deal, settings))
+  }
+
+  private def update(connection: Connection, tenant: String, id: String, expected: Long, files: List[(String, Array[Byte])])
+                    (change: WorkspaceDeal => WorkspaceDeal): WorkspaceDeal = {
     val before = find(connection, tenant, id, true)
     if (before.revision != expected) throw new WorkspaceConflict("This deal changed. Reload it before saving.")
     val after = change(before).copy(revision = before.revision + 1)

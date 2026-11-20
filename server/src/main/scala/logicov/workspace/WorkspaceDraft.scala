@@ -134,7 +134,7 @@ object WorkspaceDraft {
       <p>Approval exception: ${escape(deal.approval.fold("")(_.exception))}</p></section>"""
     val checks = deal.stopReviews.map(r => s"<tr><td>${escape(r.topic.label)}</td><td>${r.status}</td><td>${escape(r.evidence)}</td></tr>").mkString
     val approval = s"""<section><h2>Analyst approval</h2><p>${escape(deal.approval.fold("")(a => s"${a.actor}, ${a.at}; reviewed revision ${a.revision}"))}</p>
-      <h3>Required analyst checks</h3><table><tr><th>Check</th><th>Result</th><th>Evidence</th></tr>$checks</table>
+      ${if (checks.nonEmpty) s"<h3>Recorded review issues</h3><table><tr><th>Check</th><th>Result</th><th>Evidence</th></tr>$checks</table>" else "<p>Bank-side onboarding and screening are outside this underwriting workflow. No screening completion is asserted by this memo.</p>"}
       <p>Approval records input review. This memo is not a commitment to lend.</p></section>"""
     val submission = deal.submission.fold("")(s => s"<section><h2>Submitted for Approval</h2><p>${escape(s.actor)} · ${escape(s.at)}</p><p>${escape(s.recommendation.label)}: ${escape(s.rationale)}</p></section>")
     policy + approval + submission

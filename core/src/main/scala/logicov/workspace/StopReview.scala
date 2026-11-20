@@ -10,9 +10,9 @@ object StopReview {
     require(reviews.forall(r => r.evidence.length <= 2000 && (r.status == ReviewStatus.Pending || r.evidence.trim.nonEmpty)), "Document the evidence for each reviewed check")
   }
 
-  def requireClear(reviews: List[StopReview]): Unit = {
+  def requireNoStops(reviews: List[StopReview]): Unit = {
     validate(reviews)
-    require(ReviewTopic.values.forall(topic => reviews.exists(r => r.topic == topic && r.status == ReviewStatus.Clear)),
-      "Complete all required checks and resolve every stop condition before approval or generation")
+    require(!reviews.exists(_.status == ReviewStatus.Stop),
+      "Resolve the recorded stop condition before approval or generation")
   }
 }

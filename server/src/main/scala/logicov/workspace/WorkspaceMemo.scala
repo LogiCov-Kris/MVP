@@ -14,7 +14,7 @@ object WorkspaceMemo {
   private def escape(value: String): String = value.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;")
 
   def generate(session: SessionView, deal: WorkspaceDeal, store: WorkspaceStore = WorkspaceService.store, progress: GenerationProgress => Unit = _ => ()): List[(WorkspaceDocument, Array[Byte])] = {
-    StopReview.requireClear(deal.stopReviews)
+    StopReview.requireNoStops(deal.stopReviews)
     val directory = Files.createTempDirectory("logicov-memo-")
     try {
       val base = sys.env.getOrElse("LOGICOV_PUBLIC_URL", "http://127.0.0.1:18300").stripSuffix("/")

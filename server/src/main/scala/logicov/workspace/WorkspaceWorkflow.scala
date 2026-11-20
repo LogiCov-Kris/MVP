@@ -55,6 +55,17 @@ class WorkspaceWorkflow(val store: WorkspaceStore) {
   private def revised(deal: WorkspaceDeal): WorkspaceDeal = deal.copy(stage = DealStage.Review, approval = None, lease = None, memo = None, failure = None, progress = GenerationProgress(), generatedNarratives = Map.empty, sectionReviews = Nil, submission = None,
     policyResults = PolicyEngine.evaluate(deal.policy, deal.record, deal.policyBasis))
 
+  def saveProfileDraft(session: SessionView, id: String, request: ProfileDraftRequest): WorkspaceDeal = {
+    require(request.entries.map(_.field).distinct.size == request.entries.size, "Duplicate profile fields")
+    require(request.entries.forall(_.value.length <= 2000), "Profile fields must be at most 2000 characters")
+    store.change(session.tenantId, id, request.revision) { before =>
+      editable(before)
+      require(before.record.isEmpty, "This deal already has a completed credit profile")
+      revised(before.copy(profileDraft = request.entries,
+        events = event(before, session, "Credit profile draft saved", "Partial inputs retained for continued review")))
+    }
+  }
+
   def borrower(session: SessionView, id: String, request: BorrowerRequest): WorkspaceDeal = {
     reason(request.reason)
     require(request.name.trim.nonEmpty && request.name.length <= 200, "Borrower legal name is required (up to 200 characters)")
@@ -62,7 +73,7 @@ class WorkspaceWorkflow(val store: WorkspaceStore) {
       editable(before)
       val name = request.name.trim
       val grid = before.grid.copy(entity = name)
-      revised(before.copy(title = name, grid = grid, record = before.record.map(_.copy(borrower = name, grid = grid)), stopReviews = Nil,
+      revised(before.copy(title = name, grid = grid, record = before.record.map(_.copy(borrower = name, grid = grid)), stopReviews = before.stopReviews.filter(_.status == ReviewStatus.Stop),
         events = event(before, session, "Borrower name corrected", s"${before.title} -> $name. ${request.reason}")))
     }
   }
@@ -86,7 +97,7 @@ class WorkspaceWorkflow(val store: WorkspaceStore) {
         if (v == matching.head) GridValue(v.item, v.period, correction.value, correction.source) else v
       }))(_.grid)
       val retainedIssues = before.issues.filterNot(i => Set(ImportIssueKind.Duplicate, ImportIssueKind.Reconciliation).contains(i.kind))
-      revised(before.copy(stopReviews = Nil, grid = grid, record = record, issues = retainedIssues ++ GridValidation.check(grid), dispositions = Map.empty,
+      revised(before.copy(stopReviews = before.stopReviews.filter(_.status == ReviewStatus.Stop), grid = grid, record = record, issues = retainedIssues ++ GridValidation.check(grid), dispositions = Map.empty,
         events = event(before, session, "Grid corrected", JsonFormatter.Compact(correction.json))))
     }
   }
@@ -115,7 +126,7 @@ class WorkspaceWorkflow(val store: WorkspaceStore) {
       val value = GridValue(request.item, request.period, request.value, Source.Upload(source.name, source.sha256, request.citation, request.reason))
       val grid = before.grid.copy(values = before.grid.values :+ value)
       val issues = before.issues.filterNot(i => Set(ImportIssueKind.Duplicate, ImportIssueKind.Reconciliation).contains(i.kind)) ++ GridValidation.check(grid)
-      revised(before.copy(grid = grid, issues = issues, dispositions = Map.empty, stopReviews = Nil,
+      revised(before.copy(grid = grid, issues = issues, dispositions = Map.empty, stopReviews = before.stopReviews.filter(_.status == ReviewStatus.Stop),
         events = event(before, session, "Sourced financial value added", JsonFormatter.Compact(request.json))))
     }
   }
@@ -139,7 +150,7 @@ class WorkspaceWorkflow(val store: WorkspaceStore) {
     store.change(session.tenantId, id, request.revision, List(metadata.id -> bytes)) { before =>
       editable(before)
       require(before.documents.count(d => !d.name.startsWith("generated-")) < 100, "This deal already has 100 source documents")
-      revised(before.copy(stopReviews = Nil, documents = before.documents :+ metadata,
+      revised(before.copy(stopReviews = before.stopReviews.filter(_.status == ReviewStatus.Stop), documents = before.documents :+ metadata,
         events = event(before, session, "Source attached", s"${metadata.name}; SHA-256 ${metadata.sha256}")))
     }
   }
@@ -149,7 +160,7 @@ class WorkspaceWorkflow(val store: WorkspaceStore) {
     store.change(session.tenantId, id, request.revision) { before =>
       editable(before)
       val record = CreditSetup.build(before, request)
-      revised(before.copy(stopReviews = Nil, record = Some(record), events = event(before, session, "Credit profile added", JsonFormatter.Compact(request.json))))
+      revised(before.copy(stopReviews = before.stopReviews.filter(_.status == ReviewStatus.Stop), record = Some(record), events = event(before, session, "Credit profile added", JsonFormatter.Compact(request.json))))
     }
   }
 
@@ -192,7 +203,7 @@ class WorkspaceWorkflow(val store: WorkspaceStore) {
           Some("Judgment changes affected the calculated risk rating; review the existing override before approval.")
         else record.inputs.ratingReview
       val reviewed = updated.copy(inputs = updated.inputs.copy(ratingReview = pending))
-      revised(before.copy(stopReviews = Nil, record = Some(reviewed), events = event(before, session, "Analyst judgments changed", JsonFormatter.Compact(request.json))))
+      revised(before.copy(stopReviews = before.stopReviews.filter(_.status == ReviewStatus.Stop), record = Some(reviewed), events = event(before, session, "Analyst judgments changed", JsonFormatter.Compact(request.json))))
     }
   }
 
@@ -221,7 +232,7 @@ class WorkspaceWorkflow(val store: WorkspaceStore) {
   private def requireReviewed(deal: WorkspaceDeal): Unit = {
     require(deal.stage == DealStage.Completed && deal.memo.nonEmpty, "Generate the current memo before committee review")
     require(WorkspaceDraft.sectionTitles.forall(title => deal.sectionReviews.exists(_.section == title)), "Review every memo section before choosing a recommendation or submitting")
-    StopReview.requireClear(deal.stopReviews)
+    StopReview.requireNoStops(deal.stopReviews)
   }
 
   def reviewSection(session: SessionView, id: String, request: SectionReviewRequest): WorkspaceDeal =
@@ -236,7 +247,8 @@ class WorkspaceWorkflow(val store: WorkspaceStore) {
   def submit(session: SessionView, id: String, request: SubmissionRequest): WorkspaceDeal = {
     reason(request.rationale)
     require(Set(CreditRecommendation.Approve, CreditRecommendation.Conditional, CreditRecommendation.Decline).contains(request.recommendation), "Choose Approve, Conditional or Decline")
-    store.change(session.tenantId, id, request.revision) { before =>
+    store.changeWithPolicy(session.tenantId, id, request.revision) { (before, settings) =>
+      require(before.workspacePolicyRevision.getOrElse(0L) == settings.revision, "Workspace policy changed. Reopen the input review and regenerate before submission.")
       requireReviewed(before)
       require(before.record.nonEmpty && before.approval.nonEmpty, "A complete approved credit record is required for committee submission")
       before.copy(stage = DealStage.Generating, lease = Some(JobLease(identifier(), System.currentTimeMillis() + 15 * 60 * 1000)),
@@ -246,35 +258,48 @@ class WorkspaceWorkflow(val store: WorkspaceStore) {
     }
   }
 
+  def reopen(session: SessionView, id: String, request: DealActionRequest): WorkspaceDeal =
+    store.change(session.tenantId, id, request.revision) { before =>
+      editable(before)
+      reason(request.reason)
+      revised(before.copy(events = event(before, session, "Input review reopened", request.reason)))
+    }
+
   def reviewStops(session: SessionView, id: String, request: StopReviewRequest): WorkspaceDeal = {
     StopReview.validate(request.reviews)
     store.change(session.tenantId, id, request.revision) { before =>
       editable(before)
+      require(before.stopReviews.filter(_.status == ReviewStatus.Stop).forall(old =>
+        request.reviews.exists(r => r.topic == old.topic && r.status != ReviewStatus.Pending && r.evidence.trim.nonEmpty)),
+        "Resolve each recorded stop with evidence; it cannot be removed or changed to pending")
       revised(before.copy(stopReviews = request.reviews,
         events = event(before, session, "Required checks reviewed", JsonFormatter.Compact(request.reviews.json))))
     }
   }
 
   def approve(session: SessionView, id: String, request: DealActionRequest): WorkspaceDeal =
-    store.change(session.tenantId, id, request.revision) { before =>
-      require(before.stage == DealStage.Review || before.stage == DealStage.Failed, "This revision is not awaiting approval")
+    store.changeWithPolicy(session.tenantId, id, request.revision) { (before, settings) =>
+      require(Set(DealStage.Review, DealStage.Failed, DealStage.Approved).contains(before.stage), "This revision is not awaiting approval")
       require(request.reason.length <= 2000, "Approval explanation exceeds 2000 characters")
       require(before.record.forall(_.inputs.ratingReview.isEmpty), "Review the existing rating override after the financial correction before approval")
       require(before.grid.values.nonEmpty, "An empty grid cannot be approved")
       before.publicIssuer.flatMap(_.methodologyIssue).foreach(issue => throw new IllegalArgumentException(issue))
       require(before.publicIssuer.isEmpty || before.record.nonEmpty, "Complete the sourced credit profile before approving a public-company memo")
       require(before.issues.indices.forall(i => before.dispositions.contains(i.toString)), "Review and document every extraction issue before approval")
-      StopReview.requireClear(before.stopReviews)
-      val results = PolicyEngine.evaluate(before.policy, before.record, before.policyBasis)
+      StopReview.requireNoStops(before.stopReviews)
+      val policy = if (settings.revision == 0) before.policy else settings.policy
+      val basis = if (policy.nonEmpty) PolicyBasis.Institution else PolicyBasis.GoldenSource
+      val results = PolicyEngine.evaluate(policy, before.record, basis)
       if (results.exists(r => !Set(PolicyStatus.Pass, PolicyStatus.NotApplicable).contains(r.status))) reason(request.reason)
       before.copy(stage = DealStage.Approved, approval = Some(ApprovalRecord(session.email, now, before.revision, request.reason)),
-        policyResults = results, failure = None, lease = None,
+        policy = policy, policyBasis = basis, workspacePolicyRevision = Some(settings.revision), policyResults = results, failure = None, lease = None,
         events = event(before, session, "Approved", s"Approved revision ${before.revision}. Policy exception: ${request.reason}"))
     }
 
   def claim(session: SessionView, id: String, request: DealActionRequest): WorkspaceDeal =
-    store.change(session.tenantId, id, request.revision) { before =>
-      StopReview.requireClear(before.stopReviews)
+    store.changeWithPolicy(session.tenantId, id, request.revision) { (before, settings) =>
+      require(before.workspacePolicyRevision.getOrElse(0L) == settings.revision, "Workspace policy changed. Review and approve the inputs again before generation.")
+      StopReview.requireNoStops(before.stopReviews)
       require(before.approval.nonEmpty, "Analyst approval is required before generation")
       require(before.stage == DealStage.Approved || before.stage == DealStage.Failed ||
         (before.stage == DealStage.Generating && before.lease.exists(_.expiresAt < System.currentTimeMillis())), "Generation is already active or this revision is complete")

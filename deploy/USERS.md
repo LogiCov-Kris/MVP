@@ -32,7 +32,7 @@ The platform interface manages workspace configuration and accounts. It does not
 
 ## Analyst review and submission
 
-The analyst starts a New Credit File with the borrower legal name and a source statement. Extraction saves the source and cited values together. Data Verification supports audited borrower-name and financial corrections. Credit-profile inputs, institution policy and required checks remain prerequisites to approval and generation.
+The analyst starts a New Credit File with the borrower legal name and a source statement. Extraction saves the source and cited values together. Data Verification supports audited borrower-name and financial corrections. Credit-profile inputs and unresolved extraction issues remain prerequisites to public-company memo approval. Workspace policy is configured once in Admin. Routine bank-side screening is not repeated; explicit recorded Stop conditions still require resolution.
 
 Memo Review presents one continuous document with section navigation and a linked source appendix. Inline narrative edits support shared values and references to another section's narrative; changing the underlying record updates those references throughout the document. Literal prose remains the analyst's responsibility. Financial corrections recalculate the deterministic analysis. Narrative, source, judgment and policy changes invalidate input approval, generated output and section review completion.
 

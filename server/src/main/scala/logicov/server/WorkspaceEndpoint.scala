@@ -4,7 +4,7 @@ import fabric.io.JsonParser
 import fabric.rw.*
 import logicov.auth.AuthService
 import logicov.edgar.EdgarClient
-import logicov.publiccompany.{IssuerLookup, PublicCompanySource, PublicIntake, PublicIntakeRequest}
+import logicov.publiccompany.{CreditDisclosures, IssuerLookup, PublicCompanySource, PublicIntake, PublicIntakeRequest}
 import logicov.model.{SessionView, UserRole}
 import logicov.workspace.*
 import rapid.Task
@@ -31,9 +31,26 @@ object WorkspaceEndpoint extends ConnectionFilter {
       case Some(session) if exchange.request.method == HttpMethod.Post && !WebEndpoint.mutationAllowed(exchange) =>
         WebEndpoint.error(exchange, 403, "Request not permitted.")
       case Some(session) => (exchange.request.method, parts) match {
+        case (HttpMethod.Get, List("workspace-policy")) => respond(exchange)(WorkspaceService.store.policy(session.tenantId))
+        case (HttpMethod.Post, List("workspace-policy")) if session.role != UserRole.Admin =>
+          WebEndpoint.error(exchange, 403, "Administrator access required to configure workspace policy.")
+        case (HttpMethod.Post, List("workspace-policy")) => body[WorkspacePolicy](exchange) { request => respond(exchange) {
+          request.policy.foreach(_.validate())
+          require(request.reason.trim.nonEmpty && request.reason.length <= 2000, "Explain the workspace policy change")
+          WorkspaceService.store.savePolicy(session.tenantId, request.copy(updatedBy = session.email, updatedAt = WorkspaceService.workflow.now))
+        }}
         case (HttpMethod.Get, Nil) => respond(exchange)(WorkspaceService.store.list(session.tenantId))
         case (HttpMethod.Get, List(id)) => respond(exchange)(WorkspaceService.store.get(session.tenantId, id))
         case (HttpMethod.Get, List(id, "review")) => respond(exchange)(WorkspaceDraft.prepare(WorkspaceService.store.get(session.tenantId, id)).review)
+        case (HttpMethod.Get, List(id, "credit-disclosures")) => respond(exchange) {
+          val deal = WorkspaceService.store.get(session.tenantId, id)
+          val accession = deal.grid.values.sortBy(v => -v.period.end.toEpochDay).flatMap(_.source.filing).headOption
+          val latest = deal.documents.find(d => d.contentType == "text/html" && accession.exists(a => d.name.startsWith(s"sec-$a-")))
+          latest.toList.flatMap { document =>
+            val (_, bytes) = WorkspaceService.store.file(session.tenantId, id, document.id)
+            CreditDisclosures.read(document, new String(bytes, StandardCharsets.UTF_8))
+          }
+        }
         case (HttpMethod.Get, List(id, "files", file)) => download(exchange, session, id, file)
         case (HttpMethod.Post, Nil) => body[CreateDealRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.create(session, r)))
         case (HttpMethod.Post, List("public-lookup")) => body[IssuerLookup](exchange)(r => respond(exchange)(publicSource.lookup(r.query)))
@@ -47,6 +64,7 @@ object WorkspaceEndpoint extends ConnectionFilter {
         case (HttpMethod.Post, List(id, "identity")) => body[BorrowerRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.borrower(session, id, r)))
         case (HttpMethod.Post, List(id, "documents")) => body[DocumentRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.attach(session, id, r)))
         case (HttpMethod.Post, List(id, "profile")) => body[CreditSetupRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.setup(session, id, r)))
+        case (HttpMethod.Post, List(id, "profile-draft")) => body[ProfileDraftRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.saveProfileDraft(session, id, r)))
         case (HttpMethod.Post, List(id, "corrections")) => body[DealCorrectionRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.correct(session, id, r)))
         case (HttpMethod.Post, List(id, "financial-values")) => body[GridAdditionRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.addValue(session, id, r)))
         case (HttpMethod.Post, List(id, "issues")) => body[IssueResolutionRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.resolve(session, id, r)))
@@ -62,6 +80,7 @@ object WorkspaceEndpoint extends ConnectionFilter {
         case (HttpMethod.Post, List(id, "submit")) => body[SubmissionRequest](exchange)(r => generate(exchange, session, WorkspaceService.workflow.submit(session, id, r)))
         case (HttpMethod.Post, List(id, "checks")) => body[StopReviewRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.reviewStops(session, id, r)))
         case (HttpMethod.Post, List(id, "approve")) => body[DealActionRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.approve(session, id, r)))
+        case (HttpMethod.Post, List(id, "reopen")) => body[DealActionRequest](exchange)(r => respond(exchange)(WorkspaceService.workflow.reopen(session, id, r)))
         case (HttpMethod.Post, List(id, "resume")) => body[DealActionRequest](exchange)(r => resume(exchange, session, id, r))
         case _ => WebEndpoint.error(exchange, 404, "Not found.")
       }

@@ -16,9 +16,14 @@ class WorkspaceDatabase(connections: ManagedConnections) {
         val rows = statement.executeQuery("SELECT version FROM workspace_schema WHERE id = 1")
         try { if (rows.next()) rows.getInt(1) else 0 } finally rows.close()
       } else 0
-      require(version <= 1, "Workspace schema is newer than this application")
+      require(version <= 2, "Workspace schema is newer than this application")
       if (version == 0) {
         val stream = getClass.getClassLoader.getResourceAsStream("db/workspace.sql")
+        val sql = try new String(stream.readAllBytes(), StandardCharsets.UTF_8) finally stream.close()
+        statement.execute(sql)
+      }
+      if (version < 2) {
+        val stream = getClass.getClassLoader.getResourceAsStream("db/workspace-v2.sql")
         val sql = try new String(stream.readAllBytes(), StandardCharsets.UTF_8) finally stream.close()
         statement.execute(sql)
       }
@@ -29,14 +34,14 @@ class WorkspaceDatabase(connections: ManagedConnections) {
     val statement = connection.createStatement()
     try {
       val schema = statement.executeQuery("SELECT version FROM workspace_schema WHERE id = 1")
-      try { require(schema.next() && schema.getInt(1) == 1, "Workspace migration version 1 is required") }
+      try { require(schema.next() && schema.getInt(1) == 2, "Workspace migration version 2 is required") }
       finally schema.close()
       statement.execute("SET LOCAL ROLE logicov_workspace")
       val role = statement.executeQuery("SELECT rolsuper OR rolbypassrls FROM pg_roles WHERE rolname = current_user")
       try { require(role.next() && !role.getBoolean(1), "Workspace role must not bypass row-level security") }
       finally role.close()
-      val result = statement.executeQuery("SELECT count(*) FROM pg_class WHERE relnamespace = 'public'::regnamespace AND relname IN ('workspace_keys','workspace_deals','workspace_files') AND relrowsecurity AND relforcerowsecurity")
-      try { require(result.next() && result.getInt(1) == 3, "Workspace row-level security migration is required") }
+      val result = statement.executeQuery("SELECT count(*) FROM pg_class WHERE relnamespace = 'public'::regnamespace AND relname IN ('workspace_keys','workspace_deals','workspace_files','workspace_policy') AND relrowsecurity AND relforcerowsecurity")
+      try { require(result.next() && result.getInt(1) == 4, "Workspace row-level security migration is required") }
       finally result.close()
     } finally statement.close()
   }

@@ -25,6 +25,9 @@ const { chromium } = require('playwright');
       headers: { 'X-LogiCov-Request': '1' }, data: { revision: saved.revision, reason: 'Analyst cannot select policy' },
     });
     assert.equal(baselineDenied.status(), 403);
+    assert.equal((await page.request.post((process.env.LOGICOV_TEST_URL || 'http://127.0.0.1:18301') + '/api/deals/workspace-policy', {
+      headers: { 'X-LogiCov-Request': '1' }, data: { revision: 0, policy: null, reason: 'Forbidden analyst change' }
+    })).status(), 403);
     await page.getByText('Inspect a value', { exact: true }).waitFor();
     if (process.env.LOGICOV_OTHER_EMAIL) {
       const other = await browser.newContext();
@@ -47,11 +50,6 @@ const { chromium } = require('playwright');
     await page.getByText('125', { exact: true }).filter({ visible: true }).first().waitFor();
     await page.getByRole('button', { name: 'Memo', exact: true }).click();
     assert.equal(await page.getByRole('button', { name: 'Generate memo', exact: true }).getAttribute('aria-disabled'), 'true');
-    await page.getByRole('button', { name: 'Approve reviewed inputs', exact: true }).click();
-    await page.getByText(/Complete all required checks and resolve every stop condition/).waitFor();
-    await require('./review-checks.cjs')(page);
-    await page.getByRole('button', { name: 'Approve reviewed inputs', exact: true }).click();
-    await page.getByText('requirement failed: A review reason is required (up to 2000 characters)', { exact: true }).waitFor();
     await page.getByRole('textbox', { name: 'Approval explanation or policy exception', exact: true }).fill('Financial review approved; institution policy not yet supplied');
     await page.getByRole('button', { name: 'Approve reviewed inputs', exact: true }).click();
     await page.getByRole('button', { name: 'Generate memo', exact: true }).click();

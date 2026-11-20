@@ -42,18 +42,7 @@ const { chromium } = require('playwright');
     await saveAction('Save judgments', 'judgments');
     await page.getByRole('textbox', { name: 'Additional EBITDA reduction (%)', exact: true }).fill('25');
     await saveAction('Add sensitivity', 'judgments');
-    console.log('Edit policy');
-    await page.getByRole('button', { name: 'Policy', exact: true }).click();
-    for (const [name, value] of Object.entries({ 'Policy name': 'Validation policy', 'Policy version': '1', 'Policy source or reference': 'Synthetic test policy', 'Rule description': 'Maximum leverage', 'Threshold': '0.1', 'Reason for policy change': 'Verify a breach is visible' })) {
-      await page.getByRole('textbox', { name, exact: true }).fill(value);
-    }
-    await saveAction('Save policy rule', 'policy');
-    await page.getByText(/Maximum leverage:.*Breach/).waitFor();
-    await page.getByLabel('Rule to edit', { exact: true }).selectOption({ label: 'Maximum leverage' });
-    await page.getByRole('textbox', { name: 'Threshold', exact: true }).fill('99');
-    await page.getByRole('textbox', { name: 'Reason for policy change', exact: true }).fill('Verify editing the rule and passing threshold');
-    await saveAction('Save policy rule', 'policy');
-    await page.getByText(/Maximum leverage:.*Pass/).waitFor();
+    assert.equal(await page.getByRole('button', { name: 'Policy', exact: true }).count(), 0);
     console.log('Edit narrative');
     await page.getByRole('button', { name: 'Memo', exact: true }).click();
     await page.getByRole('button',{name:'Edit Key Risk Factors and Mitigants',exact:true}).click();
@@ -68,8 +57,6 @@ const { chromium } = require('playwright');
     await page.getByText('Narrative edited', { exact: true }).waitFor();
     const updated = await (await page.request.get(base + '/api/deals/' + created.id)).json();
     assert(updated.narratives['Key Risk Factors and Mitigants'].startsWith('Risk: Second'));
-    assert.equal(updated.policy.rules.length, 1);
-    assert.equal(updated.policy.rules[0].threshold, 99);
     assert.equal(updated.recommendation, 'CreditRecommendation.Pending');
     assert(updated.record.inputs.stressScenarios.some(s => s.ebitdaChange === -0.25));
     assert.equal(updated.approval, null);
@@ -81,6 +68,6 @@ const { chromium } = require('playwright');
     }
     if (process.env.LOGICOV_SCREENSHOT) await page.screenshot({ path: process.env.LOGICOV_SCREENSHOT });
     assert.deepEqual(errors, []);
-    console.log('Reference UI passed: judgments, sensitivity, recommendation, policy breach/edit/pass, risk ordering, saved audit and mobile controls');
+    console.log('Reference UI passed: judgments, sensitivity, recommendation, risk ordering, saved audit and mobile controls');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

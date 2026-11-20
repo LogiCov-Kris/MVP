@@ -1,5 +1,5 @@
 package logicov.ui
 
 enum WorkspaceArea {
-  case Deals, Users, Workspaces
+  case Deals, Users, Workspaces, Policy
 }

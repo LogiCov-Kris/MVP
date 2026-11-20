@@ -5,6 +5,7 @@ import everyui.app.screen.{ScreenManager, UIScreen}
 import everyui.async.Task
 import everyui.component.{Column, Component, Container, Row, ScrollContainer, TextInput, TextView}
 import everyui.component.types.{Autofill, Semantics, TextOverflow, WhiteSpace}
+import everyui.layout.{HorizontalLayout, VerticalLayout}
 import everyui.net.URLPath
 import everyui.theme.Theme
 import logicov.model.{SessionView, UserRole}
@@ -309,11 +310,13 @@ class HomeScreen(administrationMode: Boolean = false) extends UIScreen {
     lazy val panel = new WorkspacePanel(width)
     var administration = Option.empty[UserAdminPanel]
     var workspaceAdministration = Option.empty[WorkspaceAdminPanel]
+    var policyAdministration = Option.empty[PolicyAdminPanel]
     val area = Var(if (administrationMode) WorkspaceArea.Users else WorkspaceArea.Deals)
     def canLeaveWorkspace: Boolean = area() match {
       case WorkspaceArea.Deals => panel.canLeave
       case WorkspaceArea.Users => administration.forall(_.canLeave)
       case WorkspaceArea.Workspaces => workspaceAdministration.forall(_.canLeave)
+      case WorkspaceArea.Policy => policyAdministration.forall(_.canLeave)
     }
     val page = Column(14.0)()
     val sectionSwitch = WorkspaceStyle.button(if (administrationMode) "Exit Admin" else "Admin", () => if (canLeaveWorkspace) {
@@ -339,7 +342,15 @@ class HomeScreen(administrationMode: Boolean = false) extends UIScreen {
     workspacesButton.visible @= session.platformAdmin
     workspacesButton.backgroundColor := (if (area() == WorkspaceArea.Workspaces) WorkspaceStyle.Soft else Theme.surface())
     usersButton.backgroundColor := (if (area() == WorkspaceArea.Users) WorkspaceStyle.Soft else Theme.surface())
-    val navigation = Row(10.0)(usersButton, workspacesButton)
+    val policyButton = WorkspaceStyle.button("Underwriting policy", () => if (canLeaveWorkspace) {
+      val policy = new PolicyAdminPanel(width)
+      policyAdministration = Some(policy)
+      area @= WorkspaceArea.Policy
+      activeLabel.content @= "Underwriting policy"
+      page.children @= Vector(policy)
+    })
+    val navigation = Row(10.0)(usersButton, workspacesButton, policyButton)
+    navigation.layout := Some(if (width() < 600.0) VerticalLayout(8.0) else HorizontalLayout(10.0))
     navigation.visible @= administrationMode
     val signOut = WorkspaceStyle.button("Sign out", () => if (canLeaveWorkspace) {
       busy @= true
@@ -358,6 +369,7 @@ class HomeScreen(administrationMode: Boolean = false) extends UIScreen {
       case WorkspaceArea.Deals => !panel.processing
       case WorkspaceArea.Users => administration.forall(!_.processing)
       case WorkspaceArea.Workspaces => workspaceAdministration.forall(!_.processing)
+      case WorkspaceArea.Policy => policyAdministration.forall(!_.processing)
     })
     if (administrationMode) {
       val users = new UserAdminPanel(width, session)

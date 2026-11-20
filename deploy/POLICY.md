@@ -1,25 +1,13 @@
 # Policy and analyst review
 
-LogiCov applies its financial definitions and risk-rating methodology in deterministic code. Institution policy is a separate, versioned rule set entered in the Policy screen. Each rule records its source, comparison and threshold. Supported metrics are net leverage, interest coverage, liquidity cover, debt to capitalization, composite rating, net debt and EBITDA.
+Financial definitions, ratios, covenant arithmetic and risk ratings are deterministic. Institution policy is a separate versioned rule set configured once per workspace under **Admin → Underwriting policy**. Analysts do not select policy on each deal.
 
-| Requirement | Application behavior |
-|---|---|
-| Financial spreads, ratios, covenant arithmetic and risk rating | Calculated from the cited record; model output cannot change the calculations |
-| Missing or inconsistent extracted values | Review issues require a documented analyst disposition before approval |
-| Rating override | Explicit analyst review, one-notch limit, retained explanation and approval invalidation after relevant edits |
-| Institution policy | Pass, breach, unavailable or unconfigured results; exceptions require an explanation and appear in the memo |
-| Sanctions screening | Required analyst clearance with evidence; unresolved findings stop approval and generation |
-| Going-concern opinion | Required analyst review of the applicable opinion; unresolved concerns stop approval and generation |
-| Financial-statement currency | Required analyst review against the applicable freshness requirement; no universal age threshold is assumed |
-| Borrower and holding-company identity | Required identification and source evidence before approval |
-| Dividend use of proceeds | Required review and documented resolution before approval |
-| Final credit recommendation | Explicit analyst decision and rationale, separate from approving the financial inputs |
-| Narrative drafting | Hosted drafts use independently retrieved public SEC evidence only; private inputs remain within the workspace |
+Supported policy metrics are net leverage, interest coverage, liquidity cover, debt to capitalization, composite rating, net debt and EBITDA. Each rule records its source, comparison and threshold. Breaches and unavailable metrics require an approval explanation. No institution-specific limits are invented; Golden Source guidance applies without an institutional overlay until one is configured. Legacy deal-specific policies remain effective until an administrator configures the workspace policy.
 
-The required checks are human attestations, not automated sanctions searches or legal/compliance determinations. Pending and Stop checks cannot be bypassed by a financial-policy exception. Clearing a finding requires the analyst's evidence and is audited. Source changes invalidate relevant reviews and require renewed approval. Previously issued artifacts remain historical records.
+Approval snapshots the applicable policy and its workspace revision. A later policy change requires renewed input approval before generation. Existing artifacts remain historical records. Policy changes are tenant-isolated, encrypted, revision-checked and audited.
 
-No institution policy or numeric limits are invented. Automatic conversion of arbitrary policy documents into executable rules is not currently provided. Analysts enter supported numerical rules through the reviewed form; qualitative stop conditions use the required checks. Additional policy concepts need explicit definitions and implementation before they can be evaluated automatically.
+Routine bank-side onboarding and screening are outside this underwriting workflow. Missing screening attestations do not block a memo, and the application does not claim these checks have been completed. Previously recorded Stop conditions remain visible and block approval or generation until resolved with evidence. Extraction discrepancies, unsupported methodology and unreviewed rating overrides still prevent approval. Committee submission still requires review of every memo section and an explicit analyst recommendation.
 
-## Golden Source baseline
+Public-company financial inputs and supported facility disclosures retain citations. Unadjusted EBITDA suggestions identify their calculation and must be reviewed for the appropriate basis. Partial credit-profile drafts may be saved without approval. Unsupported values, facility choices and subjective judgments are never silently filled with zero or treated as approved.
 
-For a pilot without an institution-specific playbook, an administrator can explicitly select **Use Golden Source only** and record the reason. The deterministic financial and rating methodology and required analyst checks remain in effect. The memo reports that no institution overlay applies, rather than claiming that an institution's rules passed. Selecting the baseline clears any prior overlay and invalidates approval and generated output. Removing a policy without choosing the baseline returns the deal to an unconfigured policy state requiring review. Existing deals are not silently converted.
+Arbitrary policy-document conversion is not provided. Administrators enter supported numerical rules in the reviewed form; additional concepts require explicit definitions and implementation.

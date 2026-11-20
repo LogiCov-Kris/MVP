@@ -11,6 +11,8 @@ import org.scalajs.dom.XMLHttpRequest
 import scala.util.Try
 
 object ApiClient {
+  def workspacePolicy(done: Either[String, WorkspacePolicy] => Unit): Unit = get("/api/deals/workspace-policy")(done)
+  def saveWorkspacePolicy(value: WorkspacePolicy)(done: Either[String, WorkspacePolicy] => Unit): Unit = post("/api/deals/workspace-policy", value)(done)
   def publicLookup(value: IssuerLookup)(done: Either[String, PublicIssuer] => Unit): Unit = post("/api/deals/public-lookup", value)(done)
   def publicCreate(value: PublicIntakeRequest)(done: Either[String, WorkspaceDeal] => Unit): Unit = post("/api/deals/public", value)(done)
   def users(done: Either[String, List[WorkspaceUser]] => Unit): Unit = get("/api/admin/users")(done)
@@ -22,6 +24,7 @@ object ApiClient {
 
   def deals(done: Either[String, List[DealSummary]] => Unit): Unit = get("/api/deals")(done)
   def deal(id: String)(done: Either[String, WorkspaceDeal] => Unit): Unit = get(s"/api/deals/$id")(done)
+  def creditDisclosures(id: String)(done: Either[String, List[ProfileDisclosure]] => Unit): Unit = get(s"/api/deals/$id/credit-disclosures")(done)
   def memoReview(id: String)(done: Either[String, MemoReviewDocument] => Unit): Unit = get(s"/api/deals/$id/review")(done)
   def create(value: CreateDealRequest)(done: Either[String, WorkspaceDeal] => Unit): Unit = post("/api/deals", value)(done)
   def action[A: RW](id: String, action: String, value: A)(done: Either[String, WorkspaceDeal] => Unit): Unit =

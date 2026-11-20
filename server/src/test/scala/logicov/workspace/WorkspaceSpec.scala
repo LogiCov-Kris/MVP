@@ -32,6 +32,53 @@ class WorkspaceSpec extends AnyFlatSpec with Matchers with BeforeAndAfterAll {
     "financials.csv", Base64.getEncoder.encodeToString("Revenue,120\nCash,10\n".getBytes("UTF-8")),
     ImportOptions("Private borrower", AmountUnit.Millions, List(ImportColumn(2, "FY2025", LocalDate.of(2025, 1, 1), LocalDate.of(2025, 12, 31))))))))
 
+  "Credit profile drafts" should "persist partial inputs, reject stale saves and remain tenant isolated" in {
+    assume(enabled)
+    val user = session()
+    val deal = create(user)
+    val request = ProfileDraftRequest(deal.revision, List(ProfileEntry(ProfileField.Commitment, "25")))
+    val saved = workflow.saveProfileDraft(user, deal.id, request)
+    store.get(user.tenantId, deal.id).profileDraft should be(request.entries)
+    saved.record should be(None)
+    intercept[WorkspaceConflict](workflow.saveProfileDraft(user, deal.id, request))
+    intercept[NoSuchElementException](workflow.saveProfileDraft(session(), deal.id, request.copy(revision = saved.revision)))
+    intercept[IllegalArgumentException](workflow.saveProfileDraft(user, deal.id, request.copy(revision = saved.revision, entries = request.entries ++ request.entries)))
+  }
+
+  "Recorded stops" should "survive financial corrections without requiring unrelated bank attestations" in {
+    assume(enabled)
+    val user = session()
+    val deal = create(user)
+    val stopped = workflow.reviewStops(user, deal.id, StopReviewRequest(deal.revision,
+      List(StopReview(ReviewTopic.GoingConcern, ReviewStatus.Stop, "Unresolved source finding"))))
+    val cell = stopped.grid.values.head
+    val corrected = workflow.correct(user, deal.id, DealCorrectionRequest(stopped.revision,
+      GridCorrection(cell.item, cell.period, cell.value, cell.value + 1, cell.source, "Corrected source amount", "", "")))
+    corrected.stopReviews should be(stopped.stopReviews)
+    intercept[IllegalArgumentException](workflow.approve(user, deal.id, DealActionRequest(corrected.revision)))
+    val resolved = workflow.reviewStops(user, deal.id, StopReviewRequest(corrected.revision,
+      List(StopReview(ReviewTopic.GoingConcern, ReviewStatus.Clear, "Source finding resolved and documented"))))
+    workflow.approve(user, deal.id, DealActionRequest(resolved.revision)).stage should be(DealStage.Approved)
+  }
+
+  "Workspace policy" should "isolate configuration and require renewed approval after policy changes" in {
+    assume(enabled)
+    val user = session()
+    val other = session()
+    val deal = create(user)
+    val approved = workflow.approve(user, deal.id, DealActionRequest(deal.revision))
+    approved.stopReviews should be(Nil)
+    approved.policyBasis should be(PolicyBasis.GoldenSource)
+    val settings = store.savePolicy(user.tenantId, WorkspacePolicy(reason = "Institution configuration changed"))
+    store.policy(other.tenantId) should be(WorkspacePolicy())
+    store.policy(user.tenantId) should be(settings)
+    intercept[WorkspaceConflict](store.savePolicy(user.tenantId, WorkspacePolicy(reason = "Stale settings")))
+    intercept[IllegalArgumentException](workflow.claim(user, deal.id, DealActionRequest(approved.revision)))
+    val renewed = workflow.approve(user, deal.id, DealActionRequest(approved.revision))
+    renewed.workspacePolicyRevision should be(Some(settings.revision))
+    workflow.claim(user, deal.id, DealActionRequest(renewed.revision)).stage should be(DealStage.Generating)
+  }
+
   "Public imports" should "retain sources, isolate tenants and reject stale workers after retry" in {
     assume(enabled)
     val user = session()
@@ -63,7 +110,6 @@ class WorkspaceSpec extends AnyFlatSpec with Matchers with BeforeAndAfterAll {
     val baseline = workflow.baselinePolicy(user, initial.id, DealActionRequest(initial.revision, "No institution pilot yet"))
     baseline.policy should be(None)
     baseline.policyResults.head.status should be(PolicyStatus.NotApplicable)
-    intercept[IllegalArgumentException](workflow.approve(user, baseline.id, DealActionRequest(baseline.revision)))
     val checked = workflow.reviewStops(user, baseline.id, StopReviewRequest(baseline.revision, clearChecks))
     val approved = workflow.approve(user, checked.id, DealActionRequest(checked.revision))
     val changed = workflow.clearPolicy(user, approved.id, DealActionRequest(approved.revision, "Reconsider policy"))
@@ -149,8 +195,6 @@ class WorkspaceSpec extends AnyFlatSpec with Matchers with BeforeAndAfterAll {
     val user = session()
     val deal = create(user)
     intercept[IllegalArgumentException](workflow.claim(user, deal.id, DealActionRequest(deal.revision)))
-    intercept[IllegalArgumentException](workflow.approve(user, deal.id, DealActionRequest(deal.revision)))
-    intercept[IllegalArgumentException](workflow.approve(user, deal.id, DealActionRequest(deal.revision, "Policy exception cannot bypass checks")))
     val checked = workflow.reviewStops(user, deal.id, StopReviewRequest(deal.revision, clearChecks))
     val approved = workflow.approve(user, deal.id, DealActionRequest(checked.revision, "Policy not yet configured; analyst reviewed the source"))
     val cell = approved.grid.values.head
@@ -202,6 +246,9 @@ class WorkspaceSpec extends AnyFlatSpec with Matchers with BeforeAndAfterAll {
     val stopped = workflow.reviewStops(user, deal.id, StopReviewRequest(deal.revision,
       clearChecks.map(r => if (r.topic == ReviewTopic.Sanctions) r.copy(status = ReviewStatus.Stop, evidence = "Unresolved screening match") else r)))
     stopped.stopReviews.exists(_.evidence == "Unresolved screening match") should be(true)
+    intercept[IllegalArgumentException](workflow.reviewStops(user, deal.id, StopReviewRequest(stopped.revision, Nil)))
+    intercept[IllegalArgumentException](workflow.reviewStops(user, deal.id, StopReviewRequest(stopped.revision,
+      List(StopReview(ReviewTopic.Sanctions, ReviewStatus.Pending, "")))))
     intercept[IllegalArgumentException](workflow.approve(user, deal.id, DealActionRequest(stopped.revision, "Cannot override a stop")))
     intercept[IllegalArgumentException](workflow.reviewStops(user, deal.id, StopReviewRequest(stopped.revision,
       List(StopReview(ReviewTopic.Sanctions, ReviewStatus.Clear, "")))))

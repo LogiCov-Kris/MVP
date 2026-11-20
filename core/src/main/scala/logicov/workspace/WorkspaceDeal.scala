@@ -15,4 +15,5 @@ case class WorkspaceDeal(id: String, title: String, stage: DealStage, revision: 
   lease: Option[JobLease] = None, memo: Option[String] = None, failure: Option[String] = None,
   narratives: Map[String, String] = Map.empty,
                          recommendation: CreditRecommendation = CreditRecommendation.Pending, recommendationBasis: String = "", stopReviews: List[StopReview] = Nil, sectionReviews: List[SectionReview] = Nil, submission: Option[SubmissionRecord] = None, progress: GenerationProgress = GenerationProgress(), generatedNarratives: Map[String, NarrativeText] = Map.empty,
-                         publicIssuer: Option[PublicIssuer] = None, policyBasis: PolicyBasis = PolicyBasis.Unselected) derives RW
+                         publicIssuer: Option[PublicIssuer] = None, policyBasis: PolicyBasis = PolicyBasis.Unselected,
+                         profileDraft: List[ProfileEntry] = Nil, workspacePolicyRevision: Option[Long] = None) derives RW
